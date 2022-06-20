@@ -5,7 +5,7 @@
                 <h4 class="alert-heading">Error <%=err.statusCode%>: <%=err.message%>
                 </h4>
                 <hr>
-                <% if (currentUser.isSuper) { %>
+                <% if (currentUser && currentUser.isSuper) { %>
                     <p>
                         <%= err.stack %>
                     </p>
