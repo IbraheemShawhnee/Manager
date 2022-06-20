@@ -1,0 +1,37 @@
+<% layout("layouts/cardplate")%>
+
+	<h5 class="card-title mb-3">Add a Bill</h5>
+	<hr>
+	<form action="/bills" method="POST" novalidate class="needs-validation">
+		<div class="mb-3">
+			<label class="form-label" for="date">Date</label>
+			<input class="form-control" type="date" name="bill[date]" value=<%=date %>
+			id="date"
+			required
+			style="height: 60px;"
+			>
+		</div>
+		<div class="input-group mb-3">
+			<span class="input-group-text">₪</span>
+			<div class="form-floating flex-grow-1">
+				<input class="form-control" type="text" name="bill[value]" id="value" placeholder="Bill Value"
+					pattern="[1-9,-]{1}[0-9]{0,7}" required autofocus>
+				<label class="form-label" for="value">Value</label>
+			</div>
+		</div>
+		<div class="form-floating mb-3">
+			<input class="form-control" type="text" name="bill[description]" id="description"
+				placeholder="Bill Description" required>
+			<label for="description">Description</label>
+			<div class="invalid-feedback">Description can't be blank</div>
+		</div>
+		<div class="form-floating mb-3">
+			<textarea class="form-control" name="bill[extraNotes]" id="notes" placeholder="Leave any extra notes here"
+				style="height: 100px"></textarea>
+			<label for="notes">Leave any extra notes here</label>
+		</div>
+		<div class="mb-3">
+			<button class="btn btn-lg btn-success w-100">Submit</button>
+		</div>
+	</form>
+	<a href="/bills" class="btn btn-dark" role="button" aria-pressed="true">Back</a>

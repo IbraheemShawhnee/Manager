@@ -1,0 +1,28 @@
+<% layout("layouts/cardplate")%>
+
+	<h5 class="card-title mb-3">Log for "<%= log.worker.name %>"</h5>
+	<hr>
+	<h4>Log Worker Name: <%= log.worker.name %>
+	</h4>
+	<h4>Log Date: <%= log.date.toISOString().substring(0, 10)%>
+	</h4>
+	<h4>Log Payment: ₪<%= log.payment %>
+	</h4>
+	<h4>Log Time: <%= log.time %>
+	</h4>
+	<h4>Log Overtime: <%= log.overtime %>
+	</h4>
+	<h4>Log Overtime: <%= log.overtimeValue %>
+	</h4>
+	<h4>Log Extra Notes: <%= log.extraNotes %>
+	</h4>
+	<h4>Log Is Absence: <%= log.isAbsence %>
+	</h4>
+
+	<a href="/logs/<%=logID%>/edit" class="btn btn-lg btn-warning w-100 my-3 text-white" role="button">Edit</a>
+	<a href="/logs" class="btn btn-lg btn-dark active w-100 mb-3" role="button">Back</a>
+	<form class="mb-3" method="POST" action="/logs/<%=logID%>?_method=DELETE">
+		<button class="btn btn-lg btn-outline-danger w-100">
+			Delete
+		</button>
+	</form>

@@ -1,0 +1,41 @@
+<% layout("layouts/boilerplate")%>
+	<h1 class="text-center">
+		Deleted Payees Cheques
+		<a href="/cheques" class="btn btn-dark active" role="button">Back</a>
+	</h1>
+	<div class="row">
+		<table class="table table-striped table-hovers mt-3">
+			<thead>
+				<th>Date</th>
+				<th>Serial</th>
+				<th>Value</th>
+				<th>Description</th>
+				<th></th>
+			</thead>
+			<tbody>
+				<% for(let cheque of cheques) {%>
+					<tr>
+						<th>
+							<%= cheque.dueDate.toISOString().substring(0, 10)%>
+						</th>
+						<th>
+							<%= cheque.serial%>
+						</th>
+						<th>₪<%= cheque.value%>
+						</th>
+						<th>
+							<%= cheque.description%>
+						</th>
+						<th>
+							<a class="btn btn-primary btn-sm" href="/cheques/<%=cheque._id%>">View</a>
+							<form class="d-inline px-3" method="POST" action="/cheques/<%=cheque._id%>?_method=DELETE">
+								<button class="btn btn-sm btn-outline-danger">
+									Delete
+								</button>
+							</form>
+						</th>
+					</tr>
+					<% } %>
+			</tbody>
+		</table>
+	</div>
