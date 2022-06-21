@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const catchAsync = require("../utils/catchAsync");
 const bills = require("../controllers/bills");
-const { validateBill } = require("../middleware");
+const { validateBill } = require("../middlewares/validations");
 
 router.route('/')
     //	Index - GET

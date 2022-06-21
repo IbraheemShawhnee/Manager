@@ -20,7 +20,7 @@ const MongoStore = require("connect-mongo");
 const User = require("./models/user");
 
 // Routes
-const { isLoggedIn, isAdmin, } = require("./middleware");
+const { isLoggedIn, isAdmin } = require("./middlewares/middleware");
 const billsRoutes = require("./routes/bills")
 const workersRoutes = require("./routes/workers")
 const logsRoutes = require("./routes/logs")
@@ -67,7 +67,6 @@ mongoose.connection.once("open", async () => {
 
 const secret = process.env.SECRET || "whatawonderfullsecret!"
 const secure = process.env.SECURE_COOKIES || false;
-console.log(secure)
 
 const store = MongoStore.create({
 	mongoUrl: dbUrl,

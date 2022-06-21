@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const catchAsync = require("../utils/catchAsync");
-const { validateCheque } = require("../middleware");
+const { validateCheque } = require("../middlewares/validations");
 const cheques = require("../controllers/cheques");
 
 //		CHEQUES

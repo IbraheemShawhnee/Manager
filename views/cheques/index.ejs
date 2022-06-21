@@ -28,7 +28,14 @@
 				<th>Value</th>
 				<th>Total:₪<%= sum %>
 				</th>
-				<!-- <th></th> -->
+				<th>
+					<% if(pages.pervious) { %>
+						<a class="btn btn-primary btn-sm" href="/cheques/?page=<%=pages.pervious%>">Pervious</a>
+						<% } %>
+							<% if(pages.next) { %>
+								<a class="btn btn-primary btn-sm" href="/cheques/?page=<%=pages.next%>">Next</a>
+								<% } %>
+				</th>
 			</thead>
 			<tbody>
 				<% for(let cheque of cheques) {%>
@@ -58,6 +65,7 @@
 								</button>
 							</form>
 						</th>
+						<th></th>
 					</tr>
 					<% } %>
 			</tbody>

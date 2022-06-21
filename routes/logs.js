@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const catchAsync = require("../utils/catchAsync");
-const { isAdmin, validateLog } = require("../middleware");
+const { validateLog } = require("../middlewares/validations");
+const { isAdmin } = require("../middlewares/middleware");
 const logs = require("../controllers/logs");
 
 

@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const catchAsync = require("../utils/catchAsync");
-const { isSuper, validateUser } = require("../middleware");
+const { validateUser } = require("../middlewares/validations");
+const { isSuper } = require("../middlewares/middleware");
 const workers = require("../controllers/workers");
 
 //  Index - GET

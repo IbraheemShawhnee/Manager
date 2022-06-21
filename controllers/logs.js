@@ -1,34 +1,47 @@
-const { isAdminV } = require('../middleware');
+const { isAdminV, LogsPaginatedResult } = require('../middlewares/middleware');
 const User = require("../models/user");
 const Log = require("../models/log");
 
 
 module.exports.all = async (req, res, next) => {
-	const pageNumber = 1;
-	const pageSize = 31;
+	let page = parseInt(req.query.page)
+	if (!page) {
+		page = 1
+	}
+	const date = new Date();
+	const limit = req.query.limit || date.getDate();
+	const startIndex = (page - 1) * limit;
+	const endInex = page * limit;
+	const pages = await LogsPaginatedResult(page, startIndex, endInex)
 	if (!await isAdminV(req)) {
 		return res.redirect("/logs/myLogs")
 	}
 	const logs = await Log
 		.find({})
-		.skip((pageNumber - 1) * pageSize)
-		.limit(pageSize)
+		.skip(startIndex)
+		.limit(limit)
 		.sort({ date: -1 })
 		.populate("worker")
-	return res.render("logs/index", { logs: logs, pageTitle: "Manager - Logs" })
+	return res.render("logs/index", { pages: pages, logs: logs, pageTitle: "Manager - Logs" })
 
 }
 
 module.exports.mine = async (req, res, next) => {
-	const pageNumber = 1;
-	const pageSize = 31;
+	let page = parseInt(req.query.page)
+	if (!page) {
+		page = 1
+	}
+	const limit = req.query.limit || date.getDate();
+	const startIndex = (page - 1) * limit;
+	const endInex = page * limit;
+	const pages = LogsPaginatedResult(page, startIndex, endInex)
 	const { user } = req;
 	await user
 		.populate("logs")
-		.skip((pageNumber - 1) * pageSize)
-		.limit(pageSize)
+		.skip(startIndex)
+		.limit(limit)
 	const logs = user.logs
-	return res.render("logs/index", { logs: logs, pageTitle: "Manager - My Logs" })
+	return res.render("logs/index", { pages: pages, logs: logs, pageTitle: "Manager - My Logs" })
 }
 
 module.exports.renderNewForn = async (req, res, next) => {

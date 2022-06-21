@@ -1,9 +1,16 @@
 const Payee = require("../models/payee");
 const Cheque = require("../models/cheque");
+const { chequesPaginatedResult } = require("../middlewares/middleware");
 
 module.exports.all = async (req, res, next) => {
-	const pageNumber = 1;
-	const pageSize = 10;
+	let page = parseInt(req.query.page)
+	if (!page) {
+		page = 1
+	}
+	const limit = 10;
+	const startIndex = (page - 1) * limit;
+	const endInex = page * limit;
+	const pages = await chequesPaginatedResult(page, startIndex, endInex)
 	const cheques = await Cheque
 		.find({
 			isCancelled: false,
@@ -11,9 +18,9 @@ module.exports.all = async (req, res, next) => {
 			// 	$gte: "2022-06-01",
 			// 	$lte: ,
 			// }
-		}) 
-		.skip((pageNumber - 1) * pageSize)
-		.limit(pageSize)
+		})
+		.skip(startIndex)
+		.limit(limit)
 		.sort({ serial: -1 })
 		.populate("payee")
 	const _id = cheques.map(({ _id }) => _id)
@@ -35,7 +42,7 @@ module.exports.all = async (req, res, next) => {
 	if (sum.length < 1) {
 		sum = [{ total: 0 }];
 	}
-	res.render("cheques/index", { cheques: cheques, sum: sum[0].total, pageTitle: "Manager - Cheques" })
+	res.render("cheques/index", { pages: pages, cheques: cheques, sum: sum[0].total, pageTitle: "Manager - Cheques" })
 }
 
 module.exports.cancelled = async (req, res, next) => {

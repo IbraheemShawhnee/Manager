@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const catchAsync = require("../utils/catchAsync");
-const { validatePayee } = require("../middleware");
+const { validatePayee } = require("../middlewares/validations");
 const payees = require("../controllers/payees");
 
 router.route('/')
