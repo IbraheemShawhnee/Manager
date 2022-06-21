@@ -7,6 +7,7 @@ Manager App
 * "passport" keeps forcing an "email" to be unique and users without email can be treated as duplicates
 * For now one page of logs can only view up to 31 logs and cheques page can view up to 10 cheques (paging is underworking)
 * still no quries implementation to anything yet
+* you still have to set admin and super user via your db directly
 
 # Important notes:
 
