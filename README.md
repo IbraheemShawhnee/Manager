@@ -16,9 +16,10 @@ Manager App
 * Payee to Cheques is One to many relationship
 
 # Env Var
-* DB_PORT: Mongod port (auto default: 27017)
-* DB_URL : Your Mongo Database URL (auto default: mongodb://localhost: + DB_PORT / managerDB)
-* SECRET: Secret for cookies/sessions (auto default: ""whatawonderfullsecret!")
+* DB_PORT: Mongod port (default: 27017)
+* DB_URL : Your Mongo Database URL (default: mongodb://localhost: + DB_PORT / managerDB)
+* SECRET: Secret for cookies/sessions (default: ""whatawonderfullsecret!")
+* SECURE_COOKIES: Secure property for cookies (default: false)
 * PORT: The port the app will be listening at (auto default: 80)
 
 # INIT VARS
