@@ -11,7 +11,7 @@ Manager App
 
 # Important notes:
 
-* Make sure you set the ENV Vars for the admin when you run the app for the first time see INIT VARS below for more info
+* Make sure you set the ENV Vars for the admin when you run the app for the first time see [INIT VARS](https://github.com/AssadAnabosi/Manager#init-vars) below for more info
 * Worker to Logs is One to many relationship
 * Payee to Cheques is One to many relationship
 
