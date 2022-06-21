@@ -1,6 +1,9 @@
 # Manager
-Manager App
-
+Manager App Quick walk-through:
+* Worker (normal user) can only view their own logs.
+* Admin can access bills, payees, cheaques and add workers.
+* Super can set passwords and delete workers.
+* All users including admin and super are considered workers.
 
 # Currently known issues:
 
@@ -12,8 +15,8 @@ Manager App
 # Important notes:
 
 * Make sure you set the ENV Vars for the admin when you run the app for the first time see [INIT VARS](https://github.com/AssadAnabosi/Manager#init-vars) below for more info
-* Worker to Logs is One to many relationship
-* Payee to Cheques is One to many relationship
+* Worker to Logs is One to many relationship.
+* Payee to Cheques is One to many relationship.
 
 # Env Var
 * DB_PORT: Mongod port (default: 27017)
