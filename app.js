@@ -19,28 +19,6 @@ const helmet = require("helmet");
 const MongoStore = require("connect-mongo");
 const User = require("./models/user");
 
-
-async function init() {
-	const clear = await User.find({})
-	if (!clear.length){
-		let email = process.env.ADMIN_EMAIL || "";
-		let name = process.env.ADNMIN_USERNAME || "admin"
-		let password = process.env.ADMIN_PASSWORD || "admin";
-		let phoneNumber = process.env.ADMIN_PHONE_NUMBER || "";
-		let admin = true;
-		try{
-		const user = new User({ name: name, email: email, phoneNumber: phoneNumber, isAdmin: admin, isSuper: admin, username: name });
-		const newAdmin = await User.register(user, password);
-		console.log("username: " + name)
-		console.log("password: "  + password)
-		}
-		catch(e){
-			console.log(e)
-		}
-	}
-}
-init();
-
 // Routes
 const { isLoggedIn, isAdmin, } = require("./middleware");
 const billsRoutes = require("./routes/bills")
@@ -62,14 +40,34 @@ mongoose.connect(dbUrl, {
 	useUnifiedTopology: true
 })
 	.then(() => {
-		console.log("Connection to DB was established successfully!")
+		console.log("Connection to the Database was established successfully!")
 	})
 	.catch(err => {
-		console.log("An ERROR occurred while attempting to connect to the DB")
+		console.log("An ERROR occurred while attempting to connect to the Database")
 		console.log(err)
 	})
+mongoose.connection.once("open", async () => {
+	if (await User.countDocuments().exec() < 1) {
+		let email = process.env.ADMIN_EMAIL || "";
+		let name = process.env.ADNMIN_USERNAME || "admin"
+		let password = process.env.ADMIN_PASSWORD || "admin";
+		let phoneNumber = process.env.ADMIN_PHONE_NUMBER || "";
+		let admin = true;
+		try {
+			const user = new User({ name: name, email: email, phoneNumber: phoneNumber, isAdmin: admin, isSuper: admin, username: name });
+			const newAdmin = await User.register(user, password);
+			console.log("username: " + name)
+			console.log("password: " + password)
+		}
+		catch (e) {
+			console.log(e)
+		}
+	}
+})
 
 const secret = process.env.SECRET || "whatawonderfullsecret!"
+const secure = process.env.SECURE_COOKIES || false;
+console.log(secure)
 
 const store = MongoStore.create({
 	mongoUrl: dbUrl,
@@ -87,7 +85,7 @@ const sessionConfig = {
 	saveUninitialized: true,
 	cookie: {
 		httpOnly: true,
-		// secure: true,
+		secure: secure,
 		expires: Date.now() + (1000 * 60 * 60 * 24 * 7),
 		maxAge: (1000 * 60 * 60 * 24 * 7),
 	}
