@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
-const { isLoggedIn, isAdmin } = require('../middleware');
+const { isLoggedIn, isAdmin, isSuper } = require('../middleware');
 const passport = require("passport");
 const users = require("../controllers/users");
 
@@ -14,5 +14,12 @@ router.route("/login")
     .post(passport.authenticate('local', { failureFlash: true, failureRedirect: "/login", keepSessionInfo: true }), users.login)
 
 router.get("/logout", isLoggedIn, catchAsync(users.logout))
+
+router.route("/changePassword")
+    .get(isLoggedIn, users.renderChangePassowrdForm)
+    .post(isLoggedIn, catchAsync(users.passwordChange))
+
+router.put("/changePassword/:id", isLoggedIn, isSuper, catchAsync(users.passwordSet))
+
 
 module.exports = router;

@@ -4,17 +4,29 @@ const Log = require("../models/log");
 
 
 module.exports.all = async (req, res, next) => {
+	const pageNumber = 1;
+	const pageSize = 31;
 	if (!await isAdminV(req)) {
 		return res.redirect("/logs/myLogs")
 	}
-	const logs = await Log.find({}).sort({ date: -1 }).populate("worker")
+	const logs = await Log
+		.find({})
+		.skip((pageNumber - 1) * pageSize)
+		.limit(pageSize)
+		.sort({ date: -1 })
+		.populate("worker")
 	return res.render("logs/index", { logs: logs, pageTitle: "Manager - Logs" })
 
 }
 
 module.exports.mine = async (req, res, next) => {
+	const pageNumber = 1;
+	const pageSize = 31;
 	const { user } = req;
-	await user.populate("logs")
+	await user
+		.populate("logs")
+		.skip((pageNumber - 1) * pageSize)
+		.limit(pageSize)
 	const logs = user.logs
 	return res.render("logs/index", { logs: logs, pageTitle: "Manager - My Logs" })
 }

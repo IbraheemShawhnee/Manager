@@ -7,7 +7,7 @@ module.exports.renderRegisterForm = ((req, res) => {
 module.exports.create = async (req, res, next) => {
     try {
         let { name, email, phoneNumber, username, password } = req.body;
-        if (!email.length) {
+        if (email && !email.length) {
             email = null;
         }
         const user = new User({ name, email, phoneNumber, username });
@@ -39,6 +39,69 @@ module.exports.login = (req, res) => {
     const redirectUrl = req.session.returnTo || "/";
     delete req.session.returnTo
     res.redirect(redirectUrl);
+}
+
+module.exports.renderChangePassowrdForm = ((req, res) => {
+    res.render("users/changePassword", { pageTitle: "Manager - Change Password" })
+})
+
+module.exports.passwordChange = async (req, res, next) => {
+    User.findOne({ _id: req.user._id }, (err, user) => {
+        if (err) {
+            req.flash("error", err.message);
+            return res.redirect("/changePassword");
+        } else {
+            user.changePassword(req.body.oldpassword, req.body.password, function (err) {
+                if (err) {
+                    if (err.name === 'IncorrectPasswordError') {
+                        req.flash("error", err.name);
+                        return res.redirect("/changePassword");
+                    } else {
+                        req.flash("error", "Something went wrong!! Please try again after sometimes.");
+                        return res.redirect("/changePassword");
+                    }
+                } else {
+                    req.flash("success", "Password Changed Successfully")
+                    return res.redirect("/changePassword");
+                }
+            })
+        }
+
+    });
+}
+
+module.exports.passwordSet = async (req, res, next) => {
+    const { id } = req.params;
+    const user = await User.findOne({ _id: id });
+    if (!user) {
+        req.flash("error", "User Not Found");
+        return res.redirect("/workers");
+    }
+    try {
+        await user.setPassword(req.body.password);
+        await user.save();
+        req.flash("success", "Password Changed Successfully")
+        return res.redirect("/workers");
+    } catch (err) {
+        req.flash("error", err.message);
+            return res.redirect("/workers");
+    }
+    // User.findOne({ _id: id }, (err, user) => {
+    //     if (err) {
+    //         req.flash("error", err.message);
+    //         return res.redirect("/workers");
+    //     } else {
+    //         user.setPassword(req.body.password, function (err) {
+    //             if (err) {
+    //                 req.flash("error", "Something went wrong!! Please try again after sometimes.");
+    //                 return res.redirect("/workers");
+    //             } else {
+    //                 req.flash("success", "Password Changed Successfully")
+    //                 return res.redirect("/workers");
+    //             }
+    //         })
+    //     }
+    // });
 }
 
 module.exports.logout = async (req, res, next) => {

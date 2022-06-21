@@ -2,8 +2,36 @@ const Payee = require("../models/payee");
 const Cheque = require("../models/cheque");
 
 module.exports.all = async (req, res, next) => {
-	const cheques = await Cheque.find({ isCancelled: false }).sort({ date: -1 }).populate("payee")
-	let sum = await Cheque.aggregate([{ $group: { _id: null, total: { $sum: "$value" } } }])
+	const pageNumber = 1;
+	const pageSize = 10;
+	const cheques = await Cheque
+		.find({
+			isCancelled: false,
+			// dueDate: {
+			// 	$gte: "2022-06-01",
+			// 	$lte: ,
+			// }
+		}) 
+		.skip((pageNumber - 1) * pageSize)
+		.limit(pageSize)
+		.sort({ serial: -1 })
+		.populate("payee")
+	const _id = cheques.map(({ _id }) => _id)
+	let sum = await Cheque.aggregate([
+		{
+			$match:
+			{
+				_id: { "$in": _id }
+			}
+		},
+		{
+			$group:
+			{
+				_id: null,
+				total: { $sum: "$value" }
+			}
+		}
+	])
 	if (sum.length < 1) {
 		sum = [{ total: 0 }];
 	}
@@ -11,12 +39,12 @@ module.exports.all = async (req, res, next) => {
 }
 
 module.exports.cancelled = async (req, res, next) => {
-	const cheques = await Cheque.find({ isCancelled: true }).sort({ date: -1 })
+	const cheques = await Cheque.find({ isCancelled: true }).sort({ serial: -1 })
 	res.render("cheques/cancelled", { cheques: cheques, pageTitle: "Manager - Cheques" })
 }
 
 module.exports.deleted = async (req, res, next) => {
-	const cheques = await Cheque.find({ isDeleted: true }).sort({ date: -1 })
+	const cheques = await Cheque.find({ isDeleted: true }).sort({ serial: -1 })
 	res.render("cheques/deleted", { cheques: cheques, pageTitle: "Manager - Cheques" })
 }
 

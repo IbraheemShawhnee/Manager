@@ -1,5 +1,5 @@
 if (process.env.NODE_ENV !== "production") {
-    require('dotenv').config();
+	require('dotenv').config();
 }
 const PORT = process.env.PORT || 80;
 const MONGOD_PORT = process.env.DB_PORT || 27017;
@@ -19,8 +19,30 @@ const helmet = require("helmet");
 const MongoStore = require("connect-mongo");
 const User = require("./models/user");
 
+
+async function init() {
+	const clear = await User.find({})
+	if (!clear.length){
+		let email = process.env.ADMIN_EMAIL || "";
+		let name = process.env.ADNMIN_USERNAME || "admin"
+		let password = process.env.ADMIN_PASSWORD || "admin";
+		let phoneNumber = process.env.ADMIN_PHONE_NUMBER || "";
+		let admin = true;
+		try{
+		const user = new User({ name: name, email: email, phoneNumber: phoneNumber, isAdmin: admin, isSuper: admin, username: name });
+		const newAdmin = await User.register(user, password);
+		console.log("username: " + name)
+		console.log("password: "  + password)
+		}
+		catch(e){
+			console.log(e)
+		}
+	}
+}
+init();
+
 // Routes
-const { isLoggedIn, isAdmin, isAdminV } = require("./middleware");
+const { isLoggedIn, isAdmin, } = require("./middleware");
 const billsRoutes = require("./routes/bills")
 const workersRoutes = require("./routes/workers")
 const logsRoutes = require("./routes/logs")
@@ -34,7 +56,7 @@ const catchAsync = require("./utils/catchAsync");
 
 //	DB CONNECTION
 
-dbUrl = process.env.DB ||  "mongodb://localhost:"+MONGOD_PORT+"/managerDB"
+dbUrl = process.env.DB_URL || "mongodb://localhost:" + MONGOD_PORT + "/managerDB"
 mongoose.connect(dbUrl, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true
@@ -47,14 +69,14 @@ mongoose.connect(dbUrl, {
 		console.log(err)
 	})
 
-const secret = "whatawonderfullsecret!"
+const secret = process.env.SECRET || "whatawonderfullsecret!"
 
 const store = MongoStore.create({
-    mongoUrl: dbUrl,
-    touchAfter: 24 * 60 * 60,
-    crypto: {
-        secret
-    }
+	mongoUrl: dbUrl,
+	touchAfter: 24 * 60 * 60,
+	crypto: {
+		secret
+	}
 });
 
 const sessionConfig = {
@@ -91,15 +113,10 @@ app.use(passport.session());
 
 const scriptSrcUrls = [
 	"https://stackpath.bootstrapcdn.com",
-	// "https://kit.fontawesome.com",
-	// "https://cdnjs.cloudflare.com",
 	"https://cdn.jsdelivr.net",
 ];
 const styleSrcUrls = [
-	// "https://kit-free.fontawesome.com",
 	"https://stackpath.bootstrapcdn.com",
-	// "https://fonts.googleapis.com",
-	// "https://use.fontawesome.com",
 	"https://cdn.jsdelivr.net/"
 ];
 const connectSrcUrls = [
@@ -122,7 +139,6 @@ app.use(
 				"'self'",
 				"blob:",
 				"data:",
-				// "https://res.cloudinary.com/douqbebwk/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT! 
 				"https://images.unsplash.com",
 			],
 			fontSrc: ["'self'", ...fontSrcUrls],
@@ -166,7 +182,7 @@ app.all('*', (req, res, next) => {
 app.use((err, req, res, next) => {
 	const { statusCode = 500 } = err;
 	if (!err.message) err.message = "Oh No, Something Went Wrong!"
-	res.status(statusCode).render("error", { pageTitle: "Error", err: err })
+	return res.status(statusCode).render("error", { pageTitle: "Error", err: err })
 })
 
 app.listen(PORT, () => {

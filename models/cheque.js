@@ -4,6 +4,7 @@ const { Schema } = mongoose;
 const chequeSchema = new Schema({
 	serial: {
 		type: Number,
+		unique: true,
 		required: [true, "Cheque Serial-Number is required!"]
 	},
 	dueDate: {

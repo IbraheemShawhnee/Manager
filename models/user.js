@@ -16,7 +16,8 @@ const userSchema = new Schema({
     },
     phoneNumber: {
         type: String,
-        required: false
+        required: false,
+        unique: false,
     },
     isAdmin: {
         type: Boolean,
