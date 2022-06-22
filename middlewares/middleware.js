@@ -13,7 +13,7 @@ module.exports.isLoggedIn = (req, res, next) => {
 
 module.exports.isAdmin = async (req, res, next) => {
 	const user = await User.findById(req.user._id);
-	if (!user.isAdmin) {
+	if (!user.isAdmin && !user.isSuper) {
 		req.flash("error", "You do not have permission to access this!");
 		return res.redirect("/");
 	}
@@ -36,7 +36,7 @@ module.exports.isSuper = async (req, res, next) => {
 
 module.exports.isSuperV = async (req) => {
 	const user = await User.findById(req.user._id);
-	return user.isAdmin;
+	return user.isSuper;
 }
 
 module.exports.chequesPaginatedResult = async (page, startIndex, endInex) => {

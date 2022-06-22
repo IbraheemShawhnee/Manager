@@ -49,13 +49,13 @@ mongoose.connect(dbUrl, {
 mongoose.connection.once("open", async () => {
 	if (await User.countDocuments().exec() < 1) {
 		let email = process.env.ADMIN_EMAIL || "";
-		let name = process.env.ADNMIN_USERNAME || "admin"
+		let name = process.env.ADMIN_USERNAME || "admin"
 		let password = process.env.ADMIN_PASSWORD || "admin";
 		let phoneNumber = process.env.ADMIN_PHONE_NUMBER || "";
 		let admin = true;
 		try {
 			const user = new User({ name: name, email: email, phoneNumber: phoneNumber, isAdmin: admin, isSuper: admin, username: name });
-			const newAdmin = await User.register(user, password);
+			await User.register(user, password);
 			console.log("username: " + name)
 			console.log("password: " + password)
 		}
@@ -66,7 +66,7 @@ mongoose.connection.once("open", async () => {
 })
 
 const secret = process.env.SECRET || "whatawonderfullsecret!"
-const secure = process.env.SECURE_COOKIES || false;
+const secure = process.env.SECURE_COOKIES === "true" || false;
 
 const store = MongoStore.create({
 	mongoUrl: dbUrl,
@@ -142,10 +142,6 @@ app.use(
 		},
 	})
 );
-
-
-
-
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());

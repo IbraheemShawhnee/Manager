@@ -12,6 +12,7 @@ module.exports.create = async (req, res, next) => {
         }
         const user = new User({ name, email, phoneNumber, username });
         const newUser = await User.register(user, password);
+        //  Auto sign-in after registering
         //  Disabled because only Admins can add users
         // req.login(newUser, err => {
         //     if(err) return next(err);
@@ -84,24 +85,22 @@ module.exports.passwordSet = async (req, res, next) => {
         return res.redirect("/workers");
     } catch (err) {
         req.flash("error", err.message);
-            return res.redirect("/workers");
+        return res.redirect("/workers");
     }
-    // User.findOne({ _id: id }, (err, user) => {
-    //     if (err) {
-    //         req.flash("error", err.message);
-    //         return res.redirect("/workers");
-    //     } else {
-    //         user.setPassword(req.body.password, function (err) {
-    //             if (err) {
-    //                 req.flash("error", "Something went wrong!! Please try again after sometimes.");
-    //                 return res.redirect("/workers");
-    //             } else {
-    //                 req.flash("success", "Password Changed Successfully")
-    //                 return res.redirect("/workers");
-    //             }
-    //         })
-    //     }
-    // });
+}
+
+module.exports.updatePermissions = async (req, res, next) => {
+    const { id } = req.params;
+    let { permissions } = req.body
+    permissions.isAdmin = !!permissions.isAdmin;
+    permissions.isSuper = !!permissions.isSuper;
+    const worker = await User.findByIdAndUpdate(id, { isAdmin: permissions.isAdmin, isSuper: permissions.isSuper }, { new: true, runValidators: true })
+    if (!worker) {
+        req.flash("error", "Cannot find that worker!");
+        return res.redirect("/workers");
+    }
+    req.flash("success", "Permissions Updated Successfully");
+    res.redirect("/workers/" + id)
 }
 
 module.exports.logout = async (req, res, next) => {

@@ -21,5 +21,7 @@ router.route("/changePassword")
 
 router.put("/changePassword/:id", isLoggedIn, isSuper, catchAsync(users.passwordSet))
 
+router.put("/updatePermissions/:id", isLoggedIn, isSuper, catchAsync(users.updatePermissions))
+
 
 module.exports = router;

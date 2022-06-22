@@ -14,28 +14,28 @@
 					<li class="nav-item">
 						<a class="nav-link" href="/logs">Logs</a>
 					</li>
-					<% if(currentUser.isAdmin) {%> 
-					<li class="nav-item">
-						<a class="nav-link" href="/bills">Bills</a>
-					</li>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/workers">Workers</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/payees">Payees</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/cheques">Cheques</a>
-					</li>
-					
-					<% }} %>
+					<% if(currentUser.isAdmin || currentUser.isSuper) {%>
+						<li class="nav-item">
+							<a class="nav-link" href="/bills">Bills</a>
+						</li>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/workers">Workers</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/payees">Payees</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/cheques">Cheques</a>
+						</li>
+
+						<% }} %>
 			</ul>
 			<% if (!currentUser) {%>
 				<a class="btn btn-outline-success btn-lg" type="button" href="/login">Login</a>
 				<% } else { %>
 					<div class="px-3">
-						<% if(currentUser.isAdmin) {%>
+						<% if(currentUser.isAdmin || currentUser.isSuper) {%>
 							<a class="btn btn-outline-success btn-lg" style="display:none;" id="new-btn" type="button"
 								href="#"></a>
 							<% } %>

@@ -24,18 +24,40 @@
 			<button class="btn btn-lg btn-primary w-100">Update</button>
 		</div>
 	</form>
-	<% if(currentUser.isSuper) { %> 
-	<h5 class="card-title mb-3">Change Password for <%= worker.name %>
-	</h5>
-	<form method="POST" action="/changePassword/<%=worker._id%>?_method=PUT" novalidate class="needs-validation">
-		<div class="form-floating mb-3">
-			<input class="form-control" type="password" name="password" id="password" placeholder="New Password" required>
-			<label for="password">New Password <span style="color: red;">*</span></label>
-			<div class="invalid-feedback">can't be blank</div>
-		</div>
-		<div class="mb-3">
-			<button class="btn btn-lg btn-outline-danger w-100">Change Password</button>
-		</div>
-	</form>
-	<% } %> 
-	<a href="/workers/<%=worker._id%>" class="btn btn-dark" role="button">Cancel</a>
+	<% if(currentUser.isSuper) { %>
+		<h5 class="card-title mb-3">Change Password for <%= worker.name %>
+		</h5>
+		<form method="POST" action="/changePassword/<%=worker._id%>?_method=PUT" novalidate class="needs-validation">
+			<div class="form-floating mb-3">
+				<input class="form-control" type="password" name="password" id="password" placeholder="New Password"
+					required>
+				<label for="password">New Password <span style="color: red;">*</span></label>
+				<div class="invalid-feedback">can't be blank</div>
+			</div>
+			<div class="mb-3">
+				<button class="btn btn-lg btn-outline-danger w-100">Change Password</button>
+			</div>
+		</form>
+		<form method="POST" action="/updatePermissions/<%=worker._id%>?_method=PUT" novalidate class="needs-validation">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="permissions[isAdmin]" id="isAdmin" <%
+					if(worker.isAdmin) {%>
+				checked
+				<% } %>
+					>
+					<label class="form-check-label" for="isAdmin">Admin</label>
+			</div>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="permissions[isSuper]" id="isSuper" <%
+					if(worker.isSuper) {%>
+				checked
+				<% } %>
+					>
+					<label class="form-check-label" for="isSuper">Super</label>
+			</div>
+			<div class="mb-3">
+				<button class="btn btn-lg btn-outline-warning w-100">Update Permissions</button>
+			</div>
+		</form>
+		<% } %>
+			<a href="/workers/<%=worker._id%>" class="btn btn-dark" role="button">Cancel</a>
