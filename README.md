@@ -21,7 +21,7 @@ Manager App Quick walk-through:
 * DB_PORT: Mongod port (default: 27017)
 * DB_URL : Your Mongo Database URL (default: mongodb://localhost: + DB_PORT / managerDB)
 * SECRET: Secret for cookies/sessions (default: ""whatawonderfullsecret!")
-* SECURE_COOKIES: Secure property for cookies (default: false) to make true Key Value must be === "true"
+* SECURE_COOKIES: Secure property for cookies (default: false) to make true set Key Value === "true"
 * PORT: The port the app will be listening at (auto default: 80)
 
 # INIT VARS
