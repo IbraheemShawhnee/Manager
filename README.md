@@ -2,7 +2,7 @@
 Manager App Quick walk-through:
 * Worker (normal user) can only view their own logs.
 * Admin can access bills, payees, cheaques and add workers.
-* Super can set passwords and delete workers.
+* Super can set passwords, delete workers and change permissions.
 * All users including admin and super are considered workers.
 
 # Currently known issues:
