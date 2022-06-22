@@ -22,7 +22,7 @@ module.exports.isAdmin = async (req, res, next) => {
 
 module.exports.isAdminV = async (req) => {
 	const user = await User.findById(req.user._id);
-	return user.isAdmin;
+	return user.isAdmin || user.isSuper;
 }
 
 module.exports.isSuper = async (req, res, next) => {

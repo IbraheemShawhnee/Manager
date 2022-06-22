@@ -20,8 +20,8 @@
                     <% if(!currentUser) { %>
                         <a class="nav-link" href="/login">Login</a>
                         <% } else { %>
-                            <a class="nav-link" href="/logs">Logs</a>
                             <% if(currentUser && (currentUser.isAdmin || currentUser.isSuper)) {%>
+                                <a class="nav-link" href="/logs">Logs</a>
                                 <a class="nav-link" href="/bills">Bills</a>
                                 <a class="nav-link" href="/workers">Workers</a>
                                 <a class="nav-link" href="/payees">Payees</a>
@@ -51,7 +51,7 @@
                                 Your Work Logs</a>
         </main>
         <footer class="mt-auto text-white-50">
-            <p>&copy; Assad Anabosi 2022 - <% if(currentUser) { %>Currently logged in as <%=currentUser.username%>
+            <p>&copy; Assad Anabosi 2022<% if(currentUser) { %> - Currently logged in as <%=currentUser.username%>
                         <% } %>
             </p>
         </footer>
