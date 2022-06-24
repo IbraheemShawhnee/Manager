@@ -55,7 +55,7 @@ module.exports.passwordChange = async (req, res, next) => {
             user.changePassword(req.body.oldpassword, req.body.password, function (err) {
                 if (err) {
                     if (err.name === 'IncorrectPasswordError') {
-                        req.flash("error", err.name);
+                        req.flash("error", "Incorrect Password");
                         return res.redirect("/changePassword");
                     } else {
                         req.flash("error", "Something went wrong!! Please try again after sometimes.");
@@ -63,7 +63,7 @@ module.exports.passwordChange = async (req, res, next) => {
                     }
                 } else {
                     req.flash("success", "Password Changed Successfully")
-                    return res.redirect("/changePassword");
+                    return res.redirect("/");
                 }
             })
         }
@@ -91,9 +91,16 @@ module.exports.passwordSet = async (req, res, next) => {
 
 module.exports.updatePermissions = async (req, res, next) => {
     const { id } = req.params;
-    let { permissions } = req.body
-    permissions.isAdmin = !!permissions.isAdmin;
-    permissions.isSuper = !!permissions.isSuper;
+    let { permissions } = req.body;
+    if (!permissions){
+        permissions = {
+            isAdmin: false,
+            isSuper: false
+        }
+    } else {
+        permissions.isAdmin = !!permissions.isAdmin;
+        permissions.isSuper = !!permissions.isSuper;
+    }
     const worker = await User.findByIdAndUpdate(id, { isAdmin: permissions.isAdmin, isSuper: permissions.isSuper }, { new: true, runValidators: true })
     if (!worker) {
         req.flash("error", "Cannot find that worker!");

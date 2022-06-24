@@ -17,11 +17,11 @@ router.get("/logout", isLoggedIn, catchAsync(users.logout))
 
 router.route("/changePassword")
     .get(isLoggedIn, users.renderChangePassowrdForm)
-    .post(isLoggedIn, catchAsync(users.passwordChange))
+    .patch(isLoggedIn, catchAsync(users.passwordChange))
 
-router.put("/changePassword/:id", isLoggedIn, isSuper, catchAsync(users.passwordSet))
+router.patch("/changePassword/:id", isLoggedIn, isSuper, catchAsync(users.passwordSet))
 
-router.put("/updatePermissions/:id", isLoggedIn, isSuper, catchAsync(users.updatePermissions))
+router.patch("/updatePermissions/:id", isLoggedIn, isSuper, catchAsync(users.updatePermissions))
 
 
 module.exports = router;

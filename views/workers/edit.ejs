@@ -27,7 +27,7 @@
 	<% if(currentUser.isSuper) { %>
 		<h5 class="card-title mb-3">Change Password for <%= worker.name %>
 		</h5>
-		<form method="POST" action="/changePassword/<%=worker._id%>?_method=PUT" novalidate class="needs-validation">
+		<form method="POST" action="/changePassword/<%=worker._id%>?_method=PATCH" novalidate class="needs-validation">
 			<div class="form-floating mb-3">
 				<input class="form-control" type="password" name="password" id="password" placeholder="New Password"
 					required>
@@ -38,7 +38,7 @@
 				<button class="btn btn-lg btn-outline-danger w-100">Change Password</button>
 			</div>
 		</form>
-		<form method="POST" action="/updatePermissions/<%=worker._id%>?_method=PUT" novalidate class="needs-validation">
+		<form method="POST" action="/updatePermissions/<%=worker._id%>?_method=PATCH" novalidate class="needs-validation">
 			<div class="form-check">
 				<input class="form-check-input" type="checkbox" name="permissions[isAdmin]" id="isAdmin" <%
 					if(worker.isAdmin) {%>
