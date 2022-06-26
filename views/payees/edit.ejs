@@ -3,7 +3,7 @@
 	<h5 class="card-title mb-3">Edit <%= payee.name %>
 	</h5>
 	<hr>
-	<form method="POST" action="/payees/<%=payeeID%>?_method=PUT" novalidate class="needs-validation">
+	<form method="POST" action="/payees/<%=payee._id%>?_method=PUT" novalidate class="needs-validation">
 		<div class="form-floating mb-3">
 			<input class="form-control" type="text" name="payee[name]" id="name" value="<%= payee.name %>"
 				placeholder="Payee Name" required autofocus>
@@ -31,4 +31,4 @@
 			<button class="btn btn-lg btn-primary w-100">Update</button>
 		</div>
 	</form>
-	<a href="/payees/<%=payeeID%>" class="btn btn-dark" role="button">Cancel</a>
+	<a href="/payees/<%=payee._id%>" class="btn btn-dark" role="button">Cancel</a>

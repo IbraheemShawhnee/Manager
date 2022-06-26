@@ -2,7 +2,7 @@
 
 	<h5 class="card-title mb-3">Edit log for "<%= log.worker.name%>"</h5>
 	<hr>
-	<form action="/logs/<%=logID%>?_method=PUT" method="POST" novalidate class="needs-validation">
+	<form action="/logs/<%=log._id%>?_method=PUT" method="POST" novalidate class="needs-validation">
 		<div class="mb-3">
 			<label class="form-label" for="date">Date</label>
 			<input class="form-control" type="date" name="log[date]"
@@ -61,4 +61,4 @@
 			<button class="btn btn-lg btn-primary w-100">Update</button>
 		</div>
 	</form>
-	<a href="/logs/<%=logID%>" class="btn btn-dark" role="button">Cancel</a>
+	<a href="/logs/<%=log._id%>" class="btn btn-dark" role="button">Cancel</a>

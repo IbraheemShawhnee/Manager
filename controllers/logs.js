@@ -1,4 +1,4 @@
-const { isAdminV, LogsPaginatedResult } = require('../middlewares/middleware');
+const { isAdminV, logsPaginatedResult } = require('../middlewares/middleware');
 const User = require("../models/user");
 const Log = require("../models/log");
 
@@ -12,7 +12,7 @@ module.exports.all = async (req, res, next) => {
 	const limit = req.query.limit || date.getDate();
 	const startIndex = (page - 1) * limit;
 	const endInex = page * limit;
-	const pages = await LogsPaginatedResult(page, startIndex, endInex)
+	const pages = await logsPaginatedResult(page, startIndex, endInex)
 	if (!await isAdminV(req)) {
 		return res.redirect("/logs/myLogs")
 	}
@@ -22,7 +22,11 @@ module.exports.all = async (req, res, next) => {
 		.limit(limit)
 		.sort({ date: -1 })
 		.populate("worker")
-	return res.render("logs/index", { pages: pages, logs: logs, pageTitle: "Manager - Logs" })
+	return res.render("logs/index", {
+		pageTitle: "Manager - Logs",
+		logs: logs,
+		pages: pages,
+	})
 
 }
 
@@ -35,16 +39,16 @@ module.exports.mine = async (req, res, next) => {
 	// const limit = req.query.limit || date.getDate();
 	// const startIndex = (page - 1) * limit;
 	// const endInex = page * limit;
-	// const pages = LogsPaginatedResult(page, startIndex, endInex)
+	// const pages = logsPaginatedResult(page, startIndex, endInex)
 	const { user } = req;
 	await user.populate("logs")
 	// .skip(startIndex)
 	// .limit(limit)
 	const logs = user.logs
 	return res.render("logs/index", {
-		// pages: pages,
+		pageTitle: "Manager - My Logs",
 		logs: logs,
-		pageTitle: "Manager - My Logs"
+		// pages: pages,
 	})
 }
 
@@ -52,7 +56,11 @@ module.exports.renderNewForn = async (req, res, next) => {
 	const date = new Date();
 	const workers = await User.find({})
 	const defaultDate = String(date.getFullYear()) + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
-	res.render("logs/new", { pageTitle: "Manager - Logs", date: defaultDate, workers: workers })
+	res.render("logs/new", {
+		pageTitle: "Manager - Insert New Log",
+		date: defaultDate,
+		workers: workers
+	})
 }
 
 module.exports.create = async (req, res, next) => {
@@ -82,7 +90,10 @@ module.exports.view = async (req, res, next) => {
 		req.flash("error", "You do not have permission to access this!");
 		return res.redirect("/logs/myLogs");
 	}
-	return res.render("logs/show", { log: log, logID: logID, pageTitle: "Manager - Logs" })
+	return res.render("logs/show", {
+		pageTitle: "Manager - Log",
+		log: log,
+	})
 
 }
 
@@ -94,7 +105,11 @@ module.exports.renderEditForm = async (req, res, next) => {
 		req.flash("error", "Cannot find that log!");
 		return res.redirect("/logs");
 	}
-	res.render("logs/edit", { logID: logID, log: log, workers: workers, pageTitle: "Manager - Logs" });
+	res.render("logs/edit", {
+		pageTitle: "Manager - Log",
+		log: log,
+		workers: workers
+	});
 }
 
 module.exports.update = async (req, res, next) => {

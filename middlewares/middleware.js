@@ -1,3 +1,4 @@
+const Bill = require("../models/bill");
 const Cheque = require("../models/cheque");
 const Log = require("../models/log");
 const User = require("../models/user");
@@ -50,9 +51,20 @@ module.exports.chequesPaginatedResult = async (page, startIndex, endInex) => {
 	return pages;
 }
 
-module.exports.LogsPaginatedResult = async (page, startIndex, endInex) => {
+module.exports.logsPaginatedResult = async (page, startIndex, endInex) => {
 	let pages = {}
 	if (endInex < await Log.countDocuments().exec()) {
+		pages.next = page + 1;
+	}
+	if (startIndex > 0) {
+		pages.pervious = page - 1;
+	}
+	return pages;
+}
+
+module.exports.billsPaginatedResult = async (page, startIndex, endInex) => {
+	let pages = {}
+	if (endInex < await Bill.countDocuments().exec()) {
 		pages.next = page + 1;
 	}
 	if (startIndex > 0) {

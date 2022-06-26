@@ -12,7 +12,14 @@
 				<th>Extra notes</th>
 				<th>Total:₪<%= sum %>
 				</th>
-				<th></th>
+				<th>
+					<% if(pages.pervious) { %>
+						<a class="btn btn-primary btn-sm" href="?page=<%=pages.pervious%>">Pervious</a>
+						<% } %>
+							<% if(pages.next) { %>
+								<a class="btn btn-primary btn-sm" href="?page=<%=pages.next%>">Next</a>
+								<% } %>
+				</th>
 			</thead>
 			<tbody>
 				<% for(let bill of bills) {%>

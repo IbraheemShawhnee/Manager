@@ -3,7 +3,19 @@ const Cheque = require("../models/cheque");
 const { chequesPaginatedResult } = require("../middlewares/middleware");
 
 module.exports.all = async (req, res, next) => {
-	let page = parseInt(req.query.page)
+	// const dates = {
+	// 	null: false,
+	// 	since: req.query.since,
+	// 	till: req.query.till
+	// };
+	// if (!dates.since && !dates.till) {
+	// 	dates.null = true;
+	// 	dates.since = "1980-01-01"
+	// 	dates.till = "3000-12-31"
+	// }else if (!dates.till) {
+	// 	dates.till = dates.since;
+	// }
+	let page = parseInt(req.query.page);
 	if (!page) {
 		page = 1
 	}
@@ -15,8 +27,8 @@ module.exports.all = async (req, res, next) => {
 		.find({
 			isCancelled: false,
 			// dueDate: {
-			// 	$gte: "2022-06-01",
-			// 	$lte: ,
+			// 	$gte: dates.since,
+			// 	$lte: dates.till,
 			// }
 		})
 		.skip(startIndex)
@@ -42,24 +54,40 @@ module.exports.all = async (req, res, next) => {
 	if (sum.length < 1) {
 		sum = [{ total: 0 }];
 	}
-	res.render("cheques/index", { pages: pages, cheques: cheques, sum: sum[0].total, pageTitle: "Manager - Cheques" })
+	res.render("cheques/index", {
+		pageTitle: "Manager - Cheques",
+		cheques: cheques,
+		sum: sum[0].total,
+		pages: pages,
+		// dates: dates,
+	})
 }
 
 module.exports.cancelled = async (req, res, next) => {
 	const cheques = await Cheque.find({ isCancelled: true }).sort({ serial: -1 })
-	res.render("cheques/cancelled", { cheques: cheques, pageTitle: "Manager - Cheques" })
+	res.render("cheques/cancelled", {
+		pageTitle: "Manager - Cancelled Cheques",
+		cheques: cheques,
+	})
 }
 
 module.exports.deleted = async (req, res, next) => {
 	const cheques = await Cheque.find({ isDeleted: true }).sort({ serial: -1 })
-	res.render("cheques/deleted", { cheques: cheques, pageTitle: "Manager - Cheques" })
+	res.render("cheques/deleted", {
+		pageTitle: "Manager - Cheques",
+		cheques: cheques
+	})
 }
 
 module.exports.renderNewForm = async (req, res, next) => {
 	const date = new Date();
 	const payees = await Payee.find({})
 	const defaultDate = String(date.getFullYear()) + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + 30;
-	res.render("cheques/new", { pageTitle: "Manager - Cheques", date: defaultDate, payees: payees })
+	res.render("cheques/new", {
+		pageTitle: "Manager - Insert New Cheque",
+		date: defaultDate,
+		payees: payees
+	})
 }
 
 module.exports.create = async (req, res, next) => {
@@ -88,7 +116,10 @@ module.exports.view = async (req, res, next) => {
 		req.flash("error", "Cannot find that cheque!");
 		return res.redirect("/cheques");
 	}
-	res.render("cheques/show", { cheque: cheque, chequeID: chequeID, pageTitle: "Manager - Cheques" })
+	res.render("cheques/show", {
+		pageTitle: `Manager - Cheques #${cheque.serial}`,
+		cheque: cheque
+	})
 }
 
 module.exports.renderEditForm = async (req, res, next) => {
@@ -99,7 +130,11 @@ module.exports.renderEditForm = async (req, res, next) => {
 		req.flash("error", "Cannot find that cheque!");
 		return res.redirect("/cheques");
 	}
-	res.render("cheques/edit", { chequeID: chequeID, cheque: cheque, payees: payees, pageTitle: "Manager - Cheques" });
+	res.render("cheques/edit", {
+		pageTitle: `Manager - Cheques #${cheque.serial}`,
+		cheque: cheque,
+		payees: payees,
+	});
 }
 
 module.exports.update = async (req, res, next) => {

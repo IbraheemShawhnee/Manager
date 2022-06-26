@@ -3,7 +3,7 @@
 	<h5 class="card-title mb-3">Edit Cheque #<%= cheque.serial%>
 	</h5>
 	<hr>
-	<form action="/cheques/<%=chequeID%>?_method=PUT" method="POST" novalidate class="needs-validation">
+	<form action="/cheques/<%=cheque._id%>?_method=PUT" method="POST" novalidate class="needs-validation">
 		<div class="mb-3">
 			<label class="form-label" for="dueDate">Date</label>
 			<input class="form-control" type="date" name="cheque[dueDate]"
@@ -57,4 +57,4 @@
 			<button class="btn btn-lg btn-primary w-100">Update</button>
 		</div>
 	</form>
-	<a href="/cheques/<%=chequeID%>" class="btn btn-dark" role="button">Cancel</a>
+	<a href="/cheques/<%=cheque._id%>" class="btn btn-dark" role="button">Cancel</a>

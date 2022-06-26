@@ -2,11 +2,16 @@ const Payee = require("../models/payee");
 
 module.exports.all = async (req, res, next) => {
 	const payees = await Payee.find({})
-	res.render("payees/index", { payees: payees, pageTitle: "Manager - Payee" })
+	res.render("payees/index", {
+		pageTitle: "Manager - Payees",
+		payees: payees
+	})
 }
 
 module.exports.renderNewForm = (req, res) => {
-	res.render("payees/new", { pageTitle: "Manager - Payee" })
+	res.render("payees/new", {
+		pageTitle: "Manager - Insert New Payee"
+	})
 }
 
 module.exports.create = async (req, res, next) => {
@@ -23,7 +28,10 @@ module.exports.view = async (req, res, next) => {
 		req.flash("error", "Cannot find that payee!");
 		return res.redirect("/payees");
 	}
-	res.render("payees/show", { payee: payee, payeeID: payeeID, pageTitle: "Manager - Payee" })
+	res.render("payees/show", {
+		pageTitle: "Manager - Payee",
+		payee: payee
+	})
 }
 
 module.exports.renderEditForm = async (req, res, next) => {
@@ -33,7 +41,10 @@ module.exports.renderEditForm = async (req, res, next) => {
 		req.flash("error", "Cannot find that payee!");
 		return res.redirect("/payees");
 	}
-	res.render("payees/edit", { payeeID: payeeID, payee: payee, pageTitle: "Manager - Payee" });
+	res.render("payees/edit", {
+		pageTitle: "Manager - Payee",
+		payee: payee
+	});
 }
 
 module.exports.update = async (req, res, next) => {

@@ -18,9 +18,9 @@
 	</h4>
 	<h4>Cheque Description: <%= cheque.description %>
 	</h4>
-	<a href="/cheques/<%=chequeID%>/edit" class="btn btn-lg btn-warning w-100 my-3 text-white" role="button">Edit</a>
+	<a href="/cheques/<%=cheque._id%>/edit" class="btn btn-lg btn-warning w-100 my-3 text-white" role="button">Edit</a>
 	<a href="/cheques" class="btn btn-lg btn-dark active w-100 mb-3" role="button">Back</a>
-	<form class="mb-3" method="POST" action="/cheques/<%=chequeID%>?_method=DELETE">
+	<form class="mb-3" method="POST" action="/cheques/<%=cheque._id%>?_method=DELETE">
 		<button class="btn btn-lg btn-outline-danger w-100">
 			Delete
 		</button>

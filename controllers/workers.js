@@ -16,7 +16,10 @@ module.exports.view = async (req, res, next) => {
 		req.flash("error", "Cannot find that worker!");
 		return res.redirect("/workers");
 	}
-	res.render("workers/show", { worker: worker, pageTitle: "Manager - " + worker.name })
+	res.render("workers/show", {
+		pageTitle: "Manager - " + worker.name,
+		worker: worker
+	})
 }
 
 module.exports.renderEditForm = async (req, res, next) => {
@@ -26,7 +29,10 @@ module.exports.renderEditForm = async (req, res, next) => {
 		req.flash("error", "Cannot find that worker!");
 		return res.redirect("/workers");
 	}
-	res.render("workers/edit", { worker: worker, pageTitle: "Manager - " + worker.name });
+	res.render("workers/edit", {
+		pageTitle: "Manager - Edit " + worker.name,
+		worker: worker
+	});
 }
 
 module.exports.update = async (req, res, next) => {

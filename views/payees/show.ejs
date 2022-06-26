@@ -28,7 +28,7 @@
 						<%= payee.extraNotes%>
 					</th>
 					<th>
-						<a href="/payees/<%=payeeID%>/edit" class="btn btn-warning btn-sm" role="button">Edit</a>
+						<a href="/payees/<%=payee._id%>/edit" class="btn btn-warning btn-sm" role="button">Edit</a>
 						<form class="d-inline px-3" method="POST" action="/payees/<%=payee._id%>?_method=DELETE">
 							<button class="btn btn-sm btn-outline-danger">
 								Delete

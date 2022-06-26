@@ -32,7 +32,9 @@ module.exports.renderLoginPage = (req, res) => {
         req.flash('success', "You are already logged in!");
         return res.redirect("/")
     }
-    res.render("users/login", { pageTitle: "Manager - Login" })
+    res.render("users/login", {
+        pageTitle: "Manager - Login"
+    })
 }
 
 module.exports.login = (req, res) => {
@@ -43,7 +45,9 @@ module.exports.login = (req, res) => {
 }
 
 module.exports.renderChangePassowrdForm = ((req, res) => {
-    res.render("users/changePassword", { pageTitle: "Manager - Change Password" })
+    res.render("users/changePassword", {
+        pageTitle: "Manager - Change Password"
+    })
 })
 
 module.exports.passwordChange = async (req, res, next) => {
@@ -92,7 +96,7 @@ module.exports.passwordSet = async (req, res, next) => {
 module.exports.updatePermissions = async (req, res, next) => {
     const { id } = req.params;
     let { permissions } = req.body;
-    if (!permissions){
+    if (!permissions) {
         permissions = {
             isAdmin: false,
             isSuper: false
