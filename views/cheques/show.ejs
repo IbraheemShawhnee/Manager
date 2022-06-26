@@ -3,21 +3,24 @@
 	<h5 class="card-title mb-3">Cheque #<%= cheque.serial %>
 	</h5>
 	<hr>
-	<h4>Cheque Payee Name:
-		<% if(cheque.isCancelled){ %>
-			Cancelled Cheque
-			<% } else if (cheque.isDeleted){ %>
-				Deleted Payee
-				<% } else {%>
-					<%= cheque.payee.name %>
-						<% } %>
-	</h4>
-	<h4>Cheque Due Date: <%= cheque.dueDate.toISOString().substring(0, 10) %>
-	</h4>
-	<h4>Cheque Value: ₪<%= cheque.value %>
-	</h4>
-	<h4>Cheque Description: <%= cheque.description %>
-	</h4>
+	<dt>Cheque Payee Name:
+	</dt>
+	<dd><% if(cheque.isCancelled){ %>
+		Cancelled Cheque
+		<% } else if (cheque.isDeleted){ %>
+			Deleted Payee
+			<% } else {%>
+				<%= cheque.payee.name %>
+					<% } %></dd>
+	<dt>Cheque Due Date: 
+	</dt>
+	<dd><%= cheque.dueDate.toISOString().substring(0, 10) %></dd>
+	<dt>Cheque Value: 
+	</dt>
+	<dd>₪<%= cheque.value %></dd>
+	<dt>Cheque Description: 
+	</dt>
+	<dd><%= cheque.description %></dd>
 	<a href="/cheques/<%=cheque._id%>/edit" class="btn btn-lg btn-warning w-100 my-3 text-white" role="button">Edit</a>
 	<a href="/cheques" class="btn btn-lg btn-dark active w-100 mb-3" role="button">Back</a>
 	<form class="mb-3" method="POST" action="/cheques/<%=cheque._id%>?_method=DELETE">
