@@ -1,7 +1,7 @@
 if (process.env.NODE_ENV !== "production") {
 	require('dotenv').config();
 }
-const PORT = process.env.PORT || 80;
+const BACKEND_PORT = process.env.PORT || 5000;
 const MONGOD_PORT = process.env.DB_PORT || 27017;
 
 //	PACKAGES
@@ -178,6 +178,6 @@ app.use((err, req, res, next) => {
 	return res.status(statusCode).render("error", { pageTitle: "Error", err: err })
 })
 
-app.listen(PORT, () => {
-	console.log("Server has started on PORT:" + PORT);
+app.listen(BACKEND_PORT, () => {
+	console.log("Server has started on PORT:" + BACKEND_PORT);
 })
