@@ -1,5 +1,4 @@
-# Manager [Go to "OLD" branch for working version]
-
+# Manager
 Manager App Quick walk-through:
 * Worker (normal user) can only view their own logs.
 * Admin can access bills, payees, cheaques and add workers.

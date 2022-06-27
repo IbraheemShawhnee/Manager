@@ -1,7 +1,7 @@
 if (process.env.NODE_ENV !== "production") {
 	require('dotenv').config();
 }
-const BACKEND_PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 80;
 const MONGOD_PORT = process.env.DB_PORT || 27017;
 
 //	PACKAGES
@@ -17,7 +17,6 @@ const LocalStrategy = require("passport-local")
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
 const MongoStore = require("connect-mongo");
-const cors = require("cors");	
 const User = require("./models/user");
 
 // Routes
@@ -105,8 +104,6 @@ app.use(helmet());
 app.use(mongoSanitize({
 	replaceWith: '_'
 }));
-app.use(express.json());
-app.use(cors());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -181,6 +178,6 @@ app.use((err, req, res, next) => {
 	return res.status(statusCode).render("error", { pageTitle: "Error", err: err })
 })
 
-app.listen(BACKEND_PORT, () => {
-	console.log("Server has started on PORT:" + BACKEND_PORT);
+app.listen(PORT, () => {
+	console.log("Server has started on PORT:" + PORT);
 })
