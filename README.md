@@ -19,8 +19,8 @@ Manager App Quick walk-through:
 
 # Important notes:
 
-* Some configuration needed, so take a look at [ENV VARS](https://github.com/AssadAnabosi/Manager#env-vars) below for more info
-* Make sure you set the ENV Vars for the admin when you run the app for the first time see [INIT VARS](https://github.com/AssadAnabosi/Manager#init-vars) below for more info
+* Some configuration needed, so take a look at [ENV VARS](https://github.com/AssadAnabosi/Manager/tree/react#env-vars) below for more info
+* Make sure you set the ENV Vars for the admin when you run the app for the first time see [INIT VARS](https://github.com/AssadAnabosi/Manager/tree/react#init-vars) below for more info
 * Express server rendering responses still works (Legacy code)
 
 # ENV VARS
