@@ -1,0 +1,21 @@
+nav{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    min-height: 10vh;
+    background: rgb(44, 39, 65);
+    color: white;
+}
+
+.nav-links{
+    width: 40%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    list-style: none;
+}
+
+.link{
+    color: inherit;
+    text-decoration: none;
+}

@@ -1,9 +1,13 @@
 # Manager
+
 Manager App Quick walk-through:
+* MERN Stack Application
 * Worker (normal user) can only view their own logs.
 * Admin can access bills, payees, cheaques and add workers.
 * Super can set passwords, delete workers and change permissions.
-* All users including admin and super are considered workers.
+* All users including admin and super are considered to be workers as well.
+* When a worker gets deleted his logs gets deleted
+* When a payee gets deleted, all cheqeues related to this payee gets set as "Deleted Payee cheques"
 
 # Currently known issues:
 
@@ -13,6 +17,7 @@ Manager App Quick walk-through:
 # Important notes:
 
 * Make sure you set the ENV Vars for the admin when you run the app for the first time see [INIT VARS](https://github.com/AssadAnabosi/Manager#init-vars) below for more info
+* If you
 * Worker to Logs is One to many relationship.
 * Payee to Cheques is One to many relationship.
 * Admins and Supers can be set via the edit worker page
@@ -22,7 +27,8 @@ Manager App Quick walk-through:
 * DB_URL : Your Mongo Database URL (default: mongodb://localhost: + DB_PORT / managerDB)
 * SECRET: Secret for cookies/sessions (default: ""whatawonderfullsecret!")
 * SECURE_COOKIES: Secure property for cookies (default: false) to make true set Key Value === "true"
-* PORT: The port the app will be listening at (auto default: 80)
+* PORT: The port frontend server will be listening at (auto default: 80)
+* BACKEND_PORT: The port backend server will be listing at (auto default: 5000, if changed it must be changed in "/client/package.json" proxy)
 
 # INIT VARS
 * ADMIN_EMAIL: default: ""

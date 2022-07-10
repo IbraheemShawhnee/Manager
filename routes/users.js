@@ -11,7 +11,14 @@ router.route("/register")
 
 router.route("/login")
     .get(users.renderLoginPage)
-    .post(passport.authenticate('local', { failureFlash: true, failureRedirect: "/login", keepSessionInfo: true }), users.login)
+    .post(passport.authenticate('local', { failureFlash: true, failureRedirect: "/login", keepSessionInfo: true }),
+        // function (req, res, next) {
+        //     console.log(req.body.username)
+        //     console.log(req.body.password)
+        //     next();
+        // },
+        users.login
+    );
 
 router.get("/logout", isLoggedIn, catchAsync(users.logout))
 

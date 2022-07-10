@@ -2,6 +2,7 @@ body {
   background: #49BCF6;
   background: -webkit-linear-gradient(to right, #49BCF6, #49DEB2);
   background: linear-gradient(to right, #49BCF6, #49DEB2);
+  /* background-image: url("../images/bg.png"); */
 }
 
 #extraNotes {
