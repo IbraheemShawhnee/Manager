@@ -1,7 +1,7 @@
-const Bill = require("../../models/bill");
-const Cheque = require("../../models/cheque");
-const Log = require("../../models/log");
 const User = require("../../models/user");
+// const Bill = require("../../models/bill");
+// const Cheque = require("../../models/cheque");
+// const Log = require("../../models/log");
 
 module.exports.isLoggedIn = (req, res, next) => {
 	if (!req.isAuthenticated()) {

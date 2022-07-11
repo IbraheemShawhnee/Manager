@@ -7,19 +7,14 @@ const logs = require("../controllers/logs");
 
 
 router.route('/')
-    //	Index - GET
     .get(catchAsync(logs.all))
-    //	Create - POST
     .post(validateLog, isAdmin, catchAsync(logs.create))
 
 router.get("/myLogs", catchAsync(logs.mine))
 
 router.route("/:logID")
-    //	Show - GET
     .get(catchAsync(logs.view))
-    //	Update - PUT
     .put(isAdmin, validateLog, catchAsync(logs.update))
-    //	Destory - DELETE
     .delete(isAdmin, catchAsync(logs.delete))
 
 

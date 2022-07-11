@@ -7,7 +7,7 @@ function Payee() {
     let params = useParams();
     const [payee, setPayee] = useState(null);
     const [cheques, setCheques] = useState(null);
-    const [total, setTotal] = useState(0);
+    const [total, setTotal] = useState(null);
     useEffect(() => {
         const getPayee = async () => {
             try {
@@ -90,7 +90,7 @@ function Payee() {
                                     Value
                                 </th>
                                 <th>
-                                    {(total > 0) && <span>Total: ₪{total}</span>}
+                                    {total && <span>Total: ₪{total}</span>} 
                                 </th>
                             </tr>
                         </thead>

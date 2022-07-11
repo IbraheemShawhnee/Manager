@@ -9,20 +9,19 @@ const NavBar = (props) => {
     };
     return (
         <nav>
-            <h2>Manager
-                {
-                    props.user ? (<span> - {props.user.name}</span>) : (<span></span>)
-                }
-            </h2>
+            <Link className="link" to="/">
+                <h2>Manager
+                    {
+                        props.user ? (<span> - {props.user.name}</span>) : (<span></span>)
+                    }
+                </h2>
+            </Link>
             <ul className="nav-links">
                 {
                     props.user ? (
                         <>
-                            {(props.user.isAdmin || props.user.isSuper) &&
+                            {(props.user.isAdmin || props.user.isSuper) ?
                                 (<>
-                                    <Link className="link" to="/">
-                                        <li>Home</li>
-                                    </Link>
                                     <Link className="link" to="/bills">
                                         <li>Bills</li>
                                     </Link>
@@ -38,7 +37,14 @@ const NavBar = (props) => {
                                     <Link className="link" to="/cheques">
                                         <li>Cheques</li>
                                     </Link>
+                                    <Link className="link" to="/workers/new">
+                                        <li>Register</li>
+                                    </Link>
                                 </>
+                                ) : (
+                                    <Link className="link" to="/myLogs">
+                                        <li>My Logs</li>
+                                    </Link>
                                 )
                             }
                             <Link className="link" to="/">
@@ -50,11 +56,6 @@ const NavBar = (props) => {
                             <li>Login</li>
                         </Link>
                     )
-                }
-                {props.user && (props.user.isAdmin || props.user.isSuper) &&
-                    <Link className="link" to="/register">
-                        <li>Register</li>
-                    </Link>
                 }
             </ul>
         </nav>

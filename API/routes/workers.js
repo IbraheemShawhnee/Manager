@@ -8,13 +8,9 @@ const workers = require("../controllers/workers");
 //  Index - GET
 router.get('/', catchAsync(workers.all))
 
-
 router.route("/:id")
-    //	Show - GET
     .get(catchAsync(workers.view))
-    //	Update - PUT
     .put(validateUser, catchAsync(workers.update))
-    //	Destory - DELETE
     .delete(isSuper, catchAsync(workers.delete))
 
 

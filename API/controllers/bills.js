@@ -30,23 +30,15 @@ module.exports.all = async (req, res) => {
 	// })
 }
 
-// module.exports.renderNewForm = (req, res) => {
-// 	const date = new Date();
-// 	const defaultDate = String(date.getFullYear()) + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
-// 	res.render("bills/new", {
-// 		pageTitle: "Manager - Insert New Bill",
-// 		date: defaultDate
-// 	});
-// }
-
-// module.exports.create = async (req, res, next) => {
-// 	if (req.body.bill.value < 0)
-// 		req.body.bill.isExpenses = false;
-// 	const bill = new Bill(req.body.bill)
-// 	await bill.save();
-// 	req.flash("success", "Bill Added Successfully");
-// 	res.redirect("/bills")
-// }
+module.exports.create = async (req, res, next) => {
+	if (req.body.value < 0)
+		req.body.isExpenses = false;
+	const bill = new Bill(req.body)
+	await bill.save()
+	return res.status(201).json({
+		message: "Bill Added Successfully",
+	});
+}
 
 module.exports.view = async (req, res, next) => {
 	const { id } = req.params
@@ -64,9 +56,9 @@ module.exports.view = async (req, res, next) => {
 
 module.exports.update = async (req, res, next) => {
 	const { id } = req.params;
-	if (req.body.bill.value < 0)
-		req.body.bill.isExpenses = false;
-	const bill = await Bill.findByIdAndUpdate(id, { ...req.body.bill }, { new: true, runValidators: true })
+	if (req.body.value < 0)
+		req.body.isExpenses = false;
+	const bill = await Bill.findByIdAndUpdate(id, { ...req.body }, { new: true, runValidators: true })
 	if (!bill) {
 		return res.status(404).json({
 			message: "Cannot find that bill!"

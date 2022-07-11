@@ -9,7 +9,7 @@ module.exports.all = async (req, res, next) => {
 }
 
 module.exports.create = async (req, res, next) => {
-	const payee = new Payee(req.body.payee)
+	const payee = new Payee(req.body)
 	await payee.save();
 	return res.status(201).json({ message: "Payee Added Successfully" });
 }
