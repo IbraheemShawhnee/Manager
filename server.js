@@ -1,9 +1,8 @@
 if (process.env.NODE_ENV !== "production") {
 	require('dotenv').config();
 }
-const PORT = process.env.PORT || 80;
-const CLIENT = `http://localhost:${PORT}`;
-const BACKEND_PORT = process.env.BACKEND_PORT || 5000;
+const PORT = process.env.PORT || 5000;
+const CLIENT = `http://localhost:3000`;
 const MONGOD_PORT = process.env.DB_PORT || 27017;
 
 //	PACKAGES
@@ -188,22 +187,22 @@ app.use((req, res, next) => {
 
 //	Routes and Authorizations
 app.use("/api", APIRoutes)
-app.use("/bills", isLoggedIn, isAdmin, billsRoutes);
-app.use("/payees", isLoggedIn, isAdmin, payeesRoutes);
-app.use("/workers", isLoggedIn, isAdmin, workersRoutes);
-app.use("/logs", isLoggedIn, logsRoutes)
-app.use("/cheques", isLoggedIn, isAdmin, chequesRoutes);
-app.use("/", usersRoutes)
+// app.use("/bills", isLoggedIn, isAdmin, billsRoutes);
+// app.use("/payees", isLoggedIn, isAdmin, payeesRoutes);
+// app.use("/workers", isLoggedIn, isAdmin, workersRoutes);
+// app.use("/logs", isLoggedIn, logsRoutes)
+// app.use("/cheques", isLoggedIn, isAdmin, chequesRoutes);
+// app.use("/", usersRoutes)
 
 //		Home page;
-app.get("/", (req, res) => {
-	res.render("home")
-})
+// app.get("/", (req, res) => {
+// 	res.render("home")
+// })
 
-app.all('*', (req, res, next) => {
-	console.log(`(404)Request at: ${req.originalUrl}`);
-	next(new ExpressError("Page  Not Found", 404));
-})
+// app.all('*', (req, res, next) => {
+// 	console.log(`(404)Request at: ${req.originalUrl}`);
+// 	next(new ExpressError("Page  Not Found", 404));
+// })
 
 
 app.use((err, req, res, next) => {
@@ -211,7 +210,15 @@ app.use((err, req, res, next) => {
 	if (!err.message) err.message = "Oh No, Something Went Wrong!"
 	return res.status(statusCode).render("error", { pageTitle: "Error", err: err })
 })
+
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static("client/build"));
+	app.get("*", (req, res) => {
+		res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+	});
+}
+
 // Start server
-app.listen(BACKEND_PORT, () => {
-	console.log(`Server has started on PORT: ${BACKEND_PORT}`);
+app.listen(PORT, () => {
+	console.log(`Server has started on PORT: ${PORT}`);
 })

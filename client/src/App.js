@@ -39,6 +39,7 @@ function App() {
 					if (res.status === 200) {
 						return res.data;
 					}
+					console.log("no");
 					throw new Error("Not logged in");
 				}).then(res => {
 					console.log(res.user);

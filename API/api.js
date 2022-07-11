@@ -1,8 +1,3 @@
-if (process.env.NODE_ENV !== "production") {
-    require('dotenv').config();
-}
-const PORT = process.env.PORT || 80
-
 const express = require("express");
 const { isLoggedIn, isAdmin } = require('./middlewares/middleware');
 const router = express.Router();

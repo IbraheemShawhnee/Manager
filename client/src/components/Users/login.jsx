@@ -15,8 +15,8 @@ const Login = () => {
         setData({ ...data, [input.name]: input.value });
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (event) => {
+        event.preventDefault();
         if (data.username.length && data.password.length) {
             try {
                 const url = "/api/login";

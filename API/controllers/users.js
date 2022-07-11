@@ -1,8 +1,6 @@
 if (process.env.NODE_ENV !== "production") {
     require('dotenv').config();
 }
-const PORT = process.env.PORT || 80
-const CLIENT = `http://localhost:${PORT}/`
 const User = require("../../models/user");
 
 module.exports.create = async (req, res, next) => {
@@ -46,9 +44,12 @@ module.exports.logout = async (req, res, next) => {
     req.logout((err) => {
         if (err) {
             console.log(err);
-            return res.redirect(`${CLIENT}500`)
+            return res.redirect("/500")
         }
-        return res.redirect(CLIENT);
+        return res.status(200).json({
+            message: "Good Bye!",
+            user: null
+        });
     });
 }
 
