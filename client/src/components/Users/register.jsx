@@ -26,7 +26,6 @@ const Register = () => {
             const { data: res } = await axios.post(url, username);
             console.log(res);
             if (res.available) {
-                console.log("a7a")
                 setMessage("");
                 setAvailable(true);
             }
@@ -36,13 +35,21 @@ const Register = () => {
             }
         }
     };
-
+    const checkPassword = ()=>{
+        if (data.password === data.confirmPassword){
+            setMessage("");
+            return true;
+        }
+        else{
+            setMessage("Password feilds are not the same!");
+            return false;
+        }
+    }
     function validate() {
         if (
             data.name &&
             (data.username.length && available) &&
-            data.password.length &&
-            (data.password === data.confirmPassword)
+            data.password.length && checkPassword()
         ) {
             return true;
         }
@@ -78,7 +85,7 @@ const Register = () => {
                         <input onChange={handleChange} name="name" type="text" placeholder="FULL NAME" />
                         <input onChange={handleChange} name="username" type="text" placeholder="USERNAME" onBlur={checkUsername}/>
                         <input onChange={handleChange} name="password" type="password" placeholder="PASSWORD" />
-                        <input onChange={handleChange} name="confirmPassword" type="password" placeholder="CONFIRM PASSWORD" />
+                        <input onChange={handleChange} name="confirmPassword" type="password" placeholder="CONFIRM PASSWORD" onBlur={checkPassword}/>
                         <input onChange={handleChange} name="email" type="text" placeholder="E-MAIL" />
                         <input onChange={handleChange} name="phoneNumber" type="text" placeholder="PHONE NUMBER" />
                         <button type="submit" className="opacity">Register</button>

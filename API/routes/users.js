@@ -3,12 +3,13 @@ const router = express.Router();
 const catchAsync = require('../../utils/catchAsync');
 const passport = require("passport");
 const users = require("../controllers/users");
+const { isLoggedIn, isAdmin, isSuper } = require("../middlewares/middleware");
 
 router.route("/checkUsername")
-    .post(catchAsync(users.checkUsername))
+    .post(isLoggedIn, isAdmin, catchAsync(users.checkUsername))
 
 router.route("/register")
-    .post(catchAsync(users.create))
+    .post(isLoggedIn, isAdmin, catchAsync(users.create))
 
 router.route("/login")
     .post(passport.authenticate('local', {
@@ -23,14 +24,13 @@ router.route("/login/failed")
     .get(users.failedLogin);
 
 router.route("/logout")
-    .get(users.logout)
+    .get(isLoggedIn, users.logout)
+    
+router.route("/changePassword")
+    .patch(isLoggedIn, catchAsync(users.passwordChange))
 
-// router.route("/changePassword")
-//     .get(isLoggedIn, users.renderChangePassowrdForm)
-//     .patch(isLoggedIn, catchAsync(users.passwordChange))
+router.patch("/changePassword/:id", isLoggedIn, isSuper, catchAsync(users.passwordSet))
 
-// router.patch("/changePassword/:id", isLoggedIn, isSuper, catchAsync(users.passwordSet))
-
-// router.patch("/updatePermissions/:id", isLoggedIn, isSuper, catchAsync(users.updatePermissions))
+router.patch("/updatePermissions/:id", isLoggedIn, isSuper, catchAsync(users.updatePermissions))
 
 module.exports = router;

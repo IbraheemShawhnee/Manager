@@ -52,54 +52,57 @@ module.exports.logout = async (req, res, next) => {
     });
 }
 
-// module.exports.renderChangePassowrdForm = ((req, res) => {
-//     res.render("users/changePassword", {
-//         pageTitle: "Manager - Change Password"
-//     })
-// })
 
-// module.exports.passwordChange = async (req, res, next) => {
-//     User.findOne({ _id: req.user._id }, (err, user) => {
-//         if (err) {
-//             req.flash("error", err.message);
-//             return res.redirect("/changePassword");
-//         } else {
-//             user.changePassword(req.body.oldpassword, req.body.password, function (err) {
-//                 if (err) {
-//                     if (err.name === 'IncorrectPasswordError') {
-//                         req.flash("error", "Incorrect Password");
-//                         return res.redirect("/changePassword");
-//                     } else {
-//                         req.flash("error", "Something went wrong!! Please try again after sometimes.");
-//                         return res.redirect("/changePassword");
-//                     }
-//                 } else {
-//                     req.flash("success", "Password Changed Successfully")
-//                     return res.redirect("/");
-//                 }
-//             })
-//         }
+module.exports.passwordChange = async (req, res, next) => {
+    User.findOne({ _id: req.user._id }, (err, user) => {
+        if (err) {
+            return res.status(500).json({
+                message: err.message
+            })
+        } else {
+            user.changePassword(req.body.oldPassword, req.body.password, function (err) {
+                if (err) {
+                    if (err.name === 'IncorrectPasswordError') {
+                        return res.status(401).json({
+                            message: "Incorrect Password"
+                        })
+                    } else {
+                        console.log(err.name)
+                        return res.status(500).json({
+                            message: "Something went wrong!! Please try again after sometimes."
+                        })
+                    }
+                } else {
+                    return res.status(201).json({
+                        message: "Password Changed Successfully"
+                    })
+                }
+            })
+        }
 
-//     });
-// }
+    });
+}
 
-// module.exports.passwordSet = async (req, res, next) => {
-//     const { id } = req.params;
-//     const user = await User.findOne({ _id: id });
-//     if (!user) {
-//         req.flash("error", "User Not Found");
-//         return res.redirect("/workers");
-//     }
-//     try {
-//         await user.setPassword(req.body.password);
-//         await user.save();
-//         req.flash("success", "Password Changed Successfully")
-//         return res.redirect("/workers");
-//     } catch (err) {
-//         req.flash("error", err.message);
-//         return res.redirect("/workers");
-//     }
-// }
+module.exports.passwordSet = async (req, res, next) => {
+    const { id } = req.params;
+    const user = await User.findOne({ _id: id });
+    if (!user) {
+        return res.status(404).json({
+            message: "User Not Found"
+        });
+    }
+    try {
+        await user.setPassword(req.body.password);
+        await user.save();
+        return res.status(201).json({
+            message: "Password Changed Successfully"
+        })
+    } catch (err) {
+        return res.status(500).json({
+            message: err.message
+        })
+    }
+}
 
 // module.exports.updatePermissions = async (req, res, next) => {
 //     const { id } = req.params;
@@ -122,13 +125,4 @@ module.exports.logout = async (req, res, next) => {
 //     res.redirect("/workers/" + id)
 // }
 
-// module.exports.logout = async (req, res, next) => {
-//     req.logout((err) => {
-//         if (err) {
-//             return next(err);
-//         }
-//         req.flash('success', "Goodbye!");
-//         res.redirect('/');
-//     });
-// }
 

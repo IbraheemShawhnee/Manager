@@ -17,11 +17,11 @@ module.exports.create = async (req, res, next) => {
 module.exports.view = async (req, res, next) => {
 	const { payeeID } = req.params;
 	const payee = await Payee.findById(payeeID)
-	// .populate("cheques")
 	const cheques = await Cheque.find({
 		payee: payeeID
 	})
 	const _id = cheques.map(({ _id }) => _id)
+	//	find the total sum of cheques'a values for that payee
 	let sum = await Cheque.aggregate([
 		{
 			$match:
@@ -37,6 +37,10 @@ module.exports.view = async (req, res, next) => {
 			}
 		}
 	])
+	//	find the sum of cheques' values for that payee ina given period of time
+	//	.
+	//	.
+	//	.
 	if (!payee) {
 		return res.status(404).json({
 			message: "Cannot find that payee!"

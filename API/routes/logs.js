@@ -7,7 +7,7 @@ const logs = require("../controllers/logs");
 
 
 router.route('/')
-    .get(catchAsync(logs.all))
+    .get(isAdmin, catchAsync(logs.all))
     .post(validateLog, isAdmin, catchAsync(logs.create))
 
 router.get("/myLogs", catchAsync(logs.mine))

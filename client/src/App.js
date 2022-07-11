@@ -5,6 +5,7 @@ import NavBar from "./components/NavBar";
 
 import Login from "./components/Users/login";
 import Register from "./components/Users/register";
+import ChangePassword from "./components/Users/changePassword";
 
 import Bills from "./components/Bills/index";
 import Bill from "./components/Bills/show";
@@ -58,7 +59,7 @@ function App() {
 
 				{/* General Routes */}
 				<Route path="/login" exact element={<Login />} />
-				<Route path="/changePassword" exact element={<Test />} />
+				<Route path="/changePassword" exact element={user && <ChangePassword />} />
 				{/* Bills Routes */}
 				<Route path="/bills" exact element={permission ? <Bills /> : <Login />} />
 				<Route path="/bills/new" exact element={<NewBill />} />

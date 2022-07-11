@@ -1,4 +1,5 @@
 const User = require("../../models/user");
+const Log = require("../../models/log");
 
 module.exports.all = async (req, res, next) => {
 	const workers = await User.find({})
@@ -10,14 +11,35 @@ module.exports.all = async (req, res, next) => {
 
 module.exports.view = async (req, res, next) => {
 	const { id } = req.params;
-	const worker = await User.findById(id).populate("logs")
+	const worker = await User.findById(id)
 	if (!worker) {
 		return res.status(404).json({
-			message: "Cannot find that bill!"
+			message: "Cannot find that worker!"
 		});
 	}
+	const logs = await Log.find({
+		worker: id
+	})
+	const _id = logs.map(({ _id }) => _id)
+	//	Count the number of non-absence days in a given period of time
+	// let counter = await Cheque.aggregate([
+	// 	{
+	// 		$match:
+	// 		{
+	// 			_id: { "$in": _id }
+	// 		}
+	// 	},
+	// 	{
+	// 		$group:
+	// 		{
+	// 			_id: null,
+	// 			total: { $sum: "$value" }
+	// 		}
+	// 	}
+	// ])
 	return res.status(200).json({
-		worker: worker
+		worker: worker,
+		logs: logs
 	});
 }
 
