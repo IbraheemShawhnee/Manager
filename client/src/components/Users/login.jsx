@@ -22,11 +22,11 @@ const Login = () => {
                 const url = "/api/login";
                 const { data: res } = await axios.post(url, data);
                 if (res.success) {
-                    setMessage(res.message);
                     window.open("/", "_self");
                 }
+                setMessage(res.message);
             } catch (error) {
-                setMessage(error.res.message);
+                setMessage(error.message);
             }
         }
     };
