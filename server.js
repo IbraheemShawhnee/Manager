@@ -15,8 +15,6 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 
-const flash = require("connect-flash")
-
 const passport = require("passport");
 const LocalStrategy = require("passport-local")
 const mongoSanitize = require("express-mongo-sanitize");
@@ -26,18 +24,7 @@ const cors = require("cors");
 const User = require("./models/user");
 
 // Routes and Authorizations
-// const { isLoggedIn, isAdmin } = require("./middlewares/middleware");
 const APIRoutes = require("./API/api")
-// const billsRoutes = require("./routes/bills")
-// const workersRoutes = require("./routes/workers")
-// const logsRoutes = require("./routes/logs")
-// const payeesRoutes = require("./routes/payees")
-// const chequesRoutes = require("./routes/cheques")
-// const usersRoutes = require("./routes/users")
-
-// Error handling
-const ExpressError = require("./utils/ExpressError");
-const catchAsync = require("./utils/catchAsync");
 
 //	DB CONNECTION
 
@@ -90,7 +77,7 @@ const sessionConfig = {
 	resave: false,
 	saveUninitialized: true,
 	cookie: {
-		httpOnly: true,
+		httpOnly: !secure,
 		secure: secure,
 		expires: Date.now() + (1000 * 60 * 60 * 24 * 7),
 		maxAge: (1000 * 60 * 60 * 24 * 7),
@@ -106,14 +93,10 @@ app.set("views", path.join(__dirname, "/views"));
 
 //	Parsing JSON
 app.use(express.urlencoded({ extended: true }));
-//	Serving files
-app.use(express.static(path.join(__dirname, "/public")));
 //	Method Overriding
 app.use(methodOverride("_method"));
 //	Configuring Session
 app.use(session(sessionConfig));
-//	Flash
-app.use(flash());
 //	Helmet
 app.use(helmet());
 //	Mongo Sanitize
@@ -179,33 +162,13 @@ app.use(
 //	Main Middleware
 app.use((req, res, next) => {
 	res.locals.currentUser = req.user;
-	//	Flasing
-	res.locals.success = req.flash("success");
-	res.locals.error = req.flash("error");
 	next();
 });
 
-//	Routes and Authorizations
+//	API
 app.use("/api", APIRoutes)
 
-//	LEGACY CODE
-// app.use("/bills", isLoggedIn, isAdmin, billsRoutes);
-// app.use("/payees", isLoggedIn, isAdmin, payeesRoutes);
-// app.use("/workers", isLoggedIn, isAdmin, workersRoutes);
-// app.use("/logs", isLoggedIn, logsRoutes)
-// app.use("/cheques", isLoggedIn, isAdmin, chequesRoutes);
-// app.use("/", usersRoutes)
-
-//		Home page;
-// app.get("/", (req, res) => {
-// 	res.render("home")
-// })
-
-// app.all('*', (req, res, next) => {
-// 	console.log(`(404)Request at: ${req.originalUrl}`);
-// 	next(new ExpressError("Page  Not Found", 404));
-// })
-
+//	Serving the Front-End
 app.use(express.static("client/build"));
 app.get("*", (req, res) => {
 	res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
@@ -214,7 +177,7 @@ app.get("*", (req, res) => {
 app.use((err, req, res, next) => {
 	const { statusCode = 500 } = err;
 	if (!err.message) err.message = "Oh No, Something Went Wrong!"
-	return res.status(statusCode).render("error", { pageTitle: "Error", err: err })
+	return res.status(statusCode).json({ err: err });
 })
 
 // Start server
