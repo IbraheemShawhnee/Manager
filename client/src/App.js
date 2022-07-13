@@ -1,7 +1,8 @@
 import { Route, Routes, useParams, Navigate } from "react-router-dom";
 import axios from "axios";
 
-import NavBar from "./components/NavBar";
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
 
 import Login from "./components/Users/login";
 import Register from "./components/Users/register";
@@ -30,6 +31,7 @@ import NotFound from "./components/notFound";
 import { useEffect, useState } from "react";
 
 function App() {
+	const [isOpen, setIsOpen] = useState(false);
 	const [user, setUser] = useState(null);
 	const [permission, setPermission] = useState(false);
 	useEffect(() => {
@@ -51,14 +53,19 @@ function App() {
 		getUser();
 	}, []);
 
+	const toggle = ()=>{
+		setIsOpen(!isOpen);
+	}
+
 	return (
 		<>
-			<NavBar user={user} />
+			<Sidebar isOpen={isOpen} toggle={toggle} user={user}/>
+			<Navbar toggle={toggle} user={user}/>
 			<Routes>
 				<Route path="/" exact element={<Home user={user} />} />
 
 				{/* General Routes */}
-				<Route path="/login" exact element={!user ? <Login /> : <Navigate to="/" /> } />
+				<Route path="/login" exact element={!user ? <Login /> : <Navigate to="/" />} />
 				<Route path="/changePassword" exact element={user && <ChangePassword />} />
 				{/* Bills Routes */}
 				<Route path="/bills" exact element={permission ? <Bills /> : <Login />} />

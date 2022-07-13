@@ -16,6 +16,7 @@ Manager App Quick walk-through:
 
 * Custom qureis when retreiving anything from the API
 * Paginign for the responses
+* SECURE_COOKIES options is Disabled for now
 
 # Important notes:
 
@@ -27,7 +28,7 @@ Manager App Quick walk-through:
 * DB_PORT: Mongod port (default: 27017)
 * DB_URL : Your Mongo Database URL (default: mongodb://localhost: + DB_PORT / managerDB)
 * SECRET: Secret for cookies/sessions (default: ""whatawonderfullsecret!")
-* SECURE_COOKIES: Secure property for cookies (default: false) to make it true set SECURE_COOKIES === "true"
+* SECURE_COOKIES: Secure property for cookies (default: false) to make it true set SECURE_COOKIES === "true" [DISABLED]
 * PORT: The Port for Front-End Server Will Be Listening At (auto default: 80)
 * BACKEND_PORT: The Port for Back-End Server Will Be Listening At (auto default: 5000, if changed then proxy must be changed in "/client/package.json")
 
