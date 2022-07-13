@@ -24,7 +24,8 @@ const Login = () => {
                 setMessage(res.message);
                 window.open("/", "_self");
             } catch (error) {
-                setMessage(error.response.data.message);
+                console.log(error.res);
+                // setMessage(error.res);
             }
         }
     };

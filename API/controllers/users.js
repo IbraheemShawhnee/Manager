@@ -3,6 +3,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 const User = require("../../models/user");
 
+
 module.exports.create = async (req, res, next) => {
     try {
         let { name, email, phoneNumber, username, password } = req.body;
@@ -23,6 +24,14 @@ module.exports.checkUsername = async (req, res, next) => {
     return res.status(200).json({ available: false });
 }
 
+module.exports.checkAuthentication = (req, res) => {
+    if (req.isAuthenticated()) {
+        return this.successLogin(req, res);
+    } else {
+        return this.failedLogin(req, res);
+    }
+}
+
 module.exports.successLogin = (req, res) => {
     return res.status(200).json({
         success: true,
@@ -34,9 +43,11 @@ module.exports.successLogin = (req, res) => {
 
 
 module.exports.failedLogin = (req, res) => {
-    return res.status(401).json({
+    return res.status(200).json({
         success: false,
-        message: "Invalid login credentials"
+        message: "Invalid login credentials",
+        cookies: req.cookies,
+        user: null
     });
 }
 

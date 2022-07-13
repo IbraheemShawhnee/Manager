@@ -34,12 +34,11 @@ function App() {
 	const [permission, setPermission] = useState(false);
 	useEffect(() => {
 		const getUser = async () => {
-			await axios.get("/api/login/success")
+			await axios.get("/api/login")
 				.then((res) => {
 					if (res.status === 200) {
 						return res.data;
 					}
-					console.log("no");
 					throw new Error("Not logged in");
 				}).then(res => {
 					console.log(res.user);
@@ -59,7 +58,7 @@ function App() {
 				<Route path="/" exact element={<Home user={user} />} />
 
 				{/* General Routes */}
-				<Route path="/login" exact element={<Login />} />
+				<Route path="/login" exact element={!user ? <Login /> : <Navigate to="/" /> } />
 				<Route path="/changePassword" exact element={user && <ChangePassword />} />
 				{/* Bills Routes */}
 				<Route path="/bills" exact element={permission ? <Bills /> : <Login />} />

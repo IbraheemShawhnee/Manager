@@ -12,20 +12,17 @@ router.route("/register")
     .post(isLoggedIn, isAdmin, catchAsync(users.create))
 
 router.route("/login")
+    .get(users.checkAuthentication)
     .post(passport.authenticate('local', {
-        successRedirect: "/api/login/success",
-        failureRedirect: "/api/login/failed"
-    }));
-
-router.route("/login/success")
-    .get(users.successLogin);
+        failureRedirect: "/login",
+    }), users.successLogin);
 
 router.route("/login/failed")
     .get(users.failedLogin);
 
 router.route("/logout")
     .get(isLoggedIn, users.logout)
-    
+
 router.route("/changePassword")
     .patch(isLoggedIn, catchAsync(users.passwordChange))
 

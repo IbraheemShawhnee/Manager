@@ -2,7 +2,7 @@ if (process.env.NODE_ENV !== "production") {
 	require('dotenv').config();
 }
 const PORT = process.env.PORT || 5000;
-const CLIENT = `http://localhost:3000`;
+const CLIENT = `http://localhost:${PORT}`;
 const MONGOD_PORT = process.env.DB_PORT || 27017;
 
 //	PACKAGES
@@ -26,14 +26,14 @@ const cors = require("cors");
 const User = require("./models/user");
 
 // Routes and Authorizations
-const { isLoggedIn, isAdmin } = require("./middlewares/middleware");
+// const { isLoggedIn, isAdmin } = require("./middlewares/middleware");
 const APIRoutes = require("./API/api")
-const billsRoutes = require("./routes/bills")
-const workersRoutes = require("./routes/workers")
-const logsRoutes = require("./routes/logs")
-const payeesRoutes = require("./routes/payees")
-const chequesRoutes = require("./routes/cheques")
-const usersRoutes = require("./routes/users")
+// const billsRoutes = require("./routes/bills")
+// const workersRoutes = require("./routes/workers")
+// const logsRoutes = require("./routes/logs")
+// const payeesRoutes = require("./routes/payees")
+// const chequesRoutes = require("./routes/cheques")
+// const usersRoutes = require("./routes/users")
 
 // Error handling
 const ExpressError = require("./utils/ExpressError");
@@ -187,6 +187,8 @@ app.use((req, res, next) => {
 
 //	Routes and Authorizations
 app.use("/api", APIRoutes)
+
+//	LEGACY CODE
 // app.use("/bills", isLoggedIn, isAdmin, billsRoutes);
 // app.use("/payees", isLoggedIn, isAdmin, payeesRoutes);
 // app.use("/workers", isLoggedIn, isAdmin, workersRoutes);
@@ -204,19 +206,16 @@ app.use("/api", APIRoutes)
 // 	next(new ExpressError("Page  Not Found", 404));
 // })
 
+app.use(express.static("client/build"));
+app.get("*", (req, res) => {
+	res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+});
 
 app.use((err, req, res, next) => {
 	const { statusCode = 500 } = err;
 	if (!err.message) err.message = "Oh No, Something Went Wrong!"
 	return res.status(statusCode).render("error", { pageTitle: "Error", err: err })
 })
-
-if (process.env.NODE_ENV === "production") {
-	app.use(express.static("client/build"));
-	app.get("*", (req, res) => {
-		res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-	});
-}
 
 // Start server
 app.listen(PORT, () => {
