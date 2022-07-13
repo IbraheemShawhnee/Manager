@@ -60,7 +60,7 @@ mongoose.connection.once("open", async () => {
 })
 
 const secret = process.env.SECRET || "whatawonderfullsecret!"
-const secure = process.env.SECURE_COOKIES === "true" || false;
+// const secure = process.env.SECURE_COOKIES === "true" || false;
 
 const store = MongoStore.create({
 	mongoUrl: dbUrl,
@@ -77,8 +77,7 @@ const sessionConfig = {
 	resave: false,
 	saveUninitialized: true,
 	cookie: {
-		httpOnly: !secure,
-		secure: secure,
+		httpOnly: false,
 		expires: Date.now() + (1000 * 60 * 60 * 24 * 7),
 		maxAge: (1000 * 60 * 60 * 24 * 7),
 	}
