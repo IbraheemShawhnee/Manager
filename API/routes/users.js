@@ -14,7 +14,7 @@ router.route("/register")
 router.route("/login")
     .get(users.checkAuthentication)
     .post(passport.authenticate('local', {
-        failureRedirect: "/login",
+        failureRedirect: "/api/login/failed",
     }), users.successLogin);
 
 router.route("/login/failed")
