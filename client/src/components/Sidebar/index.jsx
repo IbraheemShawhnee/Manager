@@ -1,6 +1,5 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import axios from "axios";
-import { IconContext } from "react-icons/lib";
 import {
     SidebarContainer,
     Icon,
@@ -11,23 +10,23 @@ import {
     SideBtnWrapper,
     SideBtn,
 } from './SidebarElements';
-
+import { UserContext } from '../../App';
 const Sidebar = (props) => {
+    const {user} = useContext(UserContext);
     const logout = async () => {
         await axios.get("/api/logout");
         window.open("/", "_self");
     };
     return (
         <>
-            <IconContext.Provider value={{ color: "#fff" }}>
                 <SidebarContainer isOpen={props.isOpen} onClick={props.toggle}>
                     <Icon onClick={props.toggle}>
                         <CloseIcon />
                     </Icon>
                     <SidebarWrapper>
                         <SidebarMenu>
-                            {props.user ? <>
-                                {(props.user.isAdmin || props.user.isSuper) ?
+                            {user ? <>
+                                {(user.isAdmin || user.isSuper) ?
                                     <>
                                         <SidebarLink to="/">
                                             Home
@@ -69,7 +68,6 @@ const Sidebar = (props) => {
                         </SidebarMenu>
                     </SidebarWrapper>
                 </SidebarContainer>
-            </IconContext.Provider>
         </>
     )
 }

@@ -1,5 +1,8 @@
+import React, { useEffect, useState } from "react";
 import { Route, Routes, useParams, Navigate } from "react-router-dom";
 import axios from "axios";
+
+import { AuthRoutes, AdminRoutes } from "./components/ProtectedRoutes";
 
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
@@ -30,14 +33,14 @@ import Cheque from "./pages/Cheques/show";
 
 import Error from "./components/error";
 import NotFound from "./components/notFound";
-import { useEffect, useState } from "react";
 
 import "./App.css"
 
+export const UserContext = React.createContext();
+
 function App() {
 	const [isOpen, setIsOpen] = useState(false);
-	const [user, setUser] = useState(null);
-	const [permission, setPermission] = useState(false);
+	const [user, setUser] = useState();
 	useEffect(() => {
 		const getUser = async () => {
 			await axios.get("/api/login")
@@ -50,7 +53,6 @@ function App() {
 					if (res.user) {
 						console.log(res.user);
 						setUser(res.user);
-						setPermission(res.user.isAdmin || res.user.isSuper);
 					}
 				}).catch(err => {
 					console.log(err);
@@ -65,44 +67,48 @@ function App() {
 
 	return (
 		<>
-			<Sidebar isOpen={isOpen} toggle={toggle} user={user} />
-			<Navbar toggle={toggle} user={user} />
-			<Routes>
-				<Route path="/" exact element={<Home user={user} />} />
-
-				{/* General Routes */}
-				<Route path="/login" exact element={!user ? <Login /> : <Navigate to="/" />} />
-				<Route path="/changePassword" exact element={user && <ChangePassword />} />
-				{/* Bills Routes */}
-				<Route path="/bills" exact element={permission ? <Bills /> : <Login />} />
-				<Route path="/bills/new" exact element={<NewBill />} />
-				<Route path="/bills/:id" exact element={<Bill />} />
-				<Route path="/bills/:id/edit" exact element={<Test />} />
-				{/* Workers Routes */}
-				<Route path="/workers" exact element={<Workers />} />
-				<Route path="/workers/new" exact element={permission ? <Register /> : <Home />} />
-				<Route path="/workers/:id" exact element={<Worker />} />
-				<Route path="/workers/:id/edit" exact element={<Test />} />
-				{/* Logs Routes */}
-				<Route path="/logs" exact element={<Logs />} />
-				<Route path="/logs/new" exact element={<Test />} />
-				<Route path="/logs/:id" exact element={<Log />} />
-				<Route path="/logs/:id/edit" exact element={<Test />} />
-				<Route path="/myLogs" exact element={<Test />} />
-				{/* Payees Routes */}
-				<Route path="/payees" exact element={<Payees />} />
-				<Route path="/payees/new" exact element={<NewPayee />} />
-				<Route path="/payees/:id" exact element={<Payee />} />
-				<Route path="/payees/:id/edit" exact element={<Test />} />
-				{/* Cheques Routes */}
-				<Route path="/cheques" exact element={<Cheques />} />
-				<Route path="/cheques/new" exact element={<Test />} />
-				<Route path="/cheques/:id" exact element={<Cheque />} />
-				<Route path="/cheques/:id/edit" exact element={<Test />} />
-				{/* Errors */}
-				<Route path="/500" exact element={<Error />} />
-				<Route path="*" exact element={<NotFound />} />
-			</Routes >
+			<UserContext.Provider value={{ user, setUser }}>
+				<Sidebar isOpen={isOpen} toggle={toggle} />
+				<Navbar toggle={toggle} />
+				<Routes>
+					<Route path="/" exact element={<Home />} />
+					<Route path="/login" exact element={!user ? <Login /> : <Navigate to="/" />} />
+					<Route element={<AuthRoutes />}>
+						<Route path="/changePassword" exact element={<ChangePassword />} />
+						<Route path="/myLogs" exact element={<Test />} />
+					</Route>
+					<Route element={<AdminRoutes />}>
+						{/* Bills Routes */}
+						<Route path="/bills" exact element={<Bills />} />
+						<Route path="/bills/new" exact element={<NewBill />} />
+						<Route path="/bills/:id" exact element={<Bill />} />
+						<Route path="/bills/:id/edit" exact element={<Test />} />
+						{/* Workers Routes */}
+						<Route path="/workers" exact element={<Workers />} />
+						<Route path="/workers/new" exact element={<Register />} />
+						<Route path="/workers/:id" exact element={<Worker />} />
+						<Route path="/workers/:id/edit" exact element={<Test />} />
+						{/* Logs Routes */}
+						<Route path="/logs" exact element={<Logs />} />
+						<Route path="/logs/new" exact element={<Test />} />
+						<Route path="/logs/:id" exact element={<Log />} />
+						<Route path="/logs/:id/edit" exact element={<Test />} />
+						{/* Payees Routes */}
+						<Route path="/payees" exact element={<Payees />} />
+						<Route path="/payees/new" exact element={<NewPayee />} />
+						<Route path="/payees/:id" exact element={<Payee />} />
+						<Route path="/payees/:id/edit" exact element={<Test />} />
+						{/* Cheques Routes */}
+						<Route path="/cheques" exact element={<Cheques />} />
+						<Route path="/cheques/new" exact element={<Test />} />
+						<Route path="/cheques/:id" exact element={<Cheque />} />
+						<Route path="/cheques/:id/edit" exact element={<Test />} />
+					</Route>
+					{/* Errors */}
+					<Route path="/500" exact element={<Error />} />
+					<Route path="*" exact element={<NotFound />} />
+				</Routes >
+			</UserContext.Provider>
 		</>
 	);
 }

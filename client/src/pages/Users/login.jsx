@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
     Container,
@@ -12,8 +13,12 @@ import {
     FormButton,
     Text
 } from "./Elements";
+import { UserContext } from "../../App";
 
 const Login = () => {
+    const { user, setUser } = useContext(UserContext);
+    const navigate = useNavigate();
+    const location = useLocation();
     const [data, setData] = useState({
         username: "",
         password: "",
@@ -33,9 +38,15 @@ const Login = () => {
                 const url = "/api/login";
                 const { data: res } = await axios.post(url, data);
                 if (res.success) {
-                    window.open("/", "_self");
+                    setMessage(res.message);
+                    setUser(res.user);
+                    if (location.state?.from) {
+                        navigate(location.state.from.pathname);
+                    }
+                    else {
+                        navigate("/");
+                    }
                 }
-                setMessage(res.message);
             } catch (error) {
                 setMessage(error.message);
             }

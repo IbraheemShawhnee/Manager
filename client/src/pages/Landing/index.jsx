@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import Video from "../../videos/video.mp4"
 import {
     HomeContainer,
@@ -13,8 +13,9 @@ import {
     ArrowRight,
     FooterP
 } from "./LandingPageElements";
-
+import { UserContext } from '../../App';
 function Home(props) {
+    const { user } = useContext(UserContext);
     const year = new Date().getFullYear();
     const [hover, setHover] = useState(false);
     const onHover = () => {
@@ -34,7 +35,7 @@ function Home(props) {
                     Let's get Working!
                 </HomeP>
                 <HomeBtnWrapper>
-                    <HomeBtn to={props.user ? "/myLogs" : "/login"}
+                    <HomeBtn to="/myLogs"
                         onMouseEnter={onHover}
                         onMouseLeave={onHover}
                         // primary="true"
@@ -43,7 +44,11 @@ function Home(props) {
                         View Your Work Logs {hover ? <ArrowForward /> : <ArrowRight />}
                     </HomeBtn>
                 </HomeBtnWrapper>
-                <FooterP>&copy; Assad Anabosi {year}</FooterP>
+                <FooterP>&copy; Assad Anabosi {year}
+                    {user &&
+                        <span> - Currently logged in as {user.username}</span>
+                    }
+                </FooterP>
             </HomeContent>
         </HomeContainer>
     )
