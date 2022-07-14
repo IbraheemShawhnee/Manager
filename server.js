@@ -121,18 +121,21 @@ passport.deserializeUser(User.deserializeUser());
 // Configuring Helemt's Content Security Policy
 
 const scriptSrcUrls = [
-	"https://stackpath.bootstrapcdn.com",
-	"https://cdn.jsdelivr.net",
+
 ];
 const styleSrcUrls = [
-	"https://stackpath.bootstrapcdn.com",
-	"https://cdn.jsdelivr.net/",
+	"https://fonts.googleapis.com",
 ];
 const connectSrcUrls = [
 
 ];
 const fontSrcUrls = [
-	"https://cdn.jsdelivr.net",
+	"https://fonts.googleapis.com",
+	"https://fonts.gstatic.com",
+];
+
+const mediaSrcUrls = [
+
 ];
 app.use(
 	helmet.contentSecurityPolicy({
@@ -144,13 +147,12 @@ app.use(
 			workerSrc: ["'self'", "blob:"],
 			childSrc: ["blob:"],
 			objectSrc: [],
+			mediaSrc: [
+				"'self'", ...mediaSrcUrls],
 			imgSrc: [
 				"'self'",
 				"blob:",
 				"data:",
-				"https://www.transparenttextures.com",
-				"https://www.transparenttextures.com/patterns/carbon-fibre-big.png",
-				"https://images.unsplash.com",
 			],
 			fontSrc: ["'self'", ...fontSrcUrls],
 		},

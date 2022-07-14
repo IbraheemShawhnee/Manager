@@ -1,12 +1,12 @@
 :root {
-    --background: #1a1a2e;
-    --color: #ffffff;
-    --primary-color: #0f3460;
+    --background: #black;
+    --color: white;
+    --primary-color: #fff;
 }
 
-* {
+/* * {
     box-sizing: border-box;
-}
+} */
 
 html {
     scroll-behavior: smooth;
@@ -15,18 +15,9 @@ html {
 body {
     margin: 0;
     box-sizing: border-box;
-    font-family: "poppins";
-     background: #49BCF6;
-  background: -webkit-linear-gradient(to right, #49BCF6, #49DEB2);
-  background: linear-gradient(to right, #49BCF6, #49DEB2);
-/*     background: var(--background); */
     color: var(--color);
     letter-spacing: 1px;
     transition: background 0.2s ease;
-    -webkit-transition: background 0.2s ease;
-    -moz-transition: background 0.2s ease;
-    -ms-transition: background 0.2s ease;
-    -o-transition: background 0.2s ease;
 }
 
 a {
@@ -82,6 +73,10 @@ h1 {
     -o-border-radius: 5px;
 }
 
+input::placeholder{
+    color: white;
+}
+
 .login-container form input:focus {
     box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.2);
     animation: wobble 0.3s ease-in;
@@ -90,7 +85,7 @@ h1 {
 
 .login-container form button {
     background-color: var(--primary-color);
-    color: var(--color);
+    color: black;
     display: block;
     padding: 13px;
     border-radius: 5px;
@@ -180,6 +175,10 @@ h1 {
 
 .theme-btn:hover {
     width: 40px !important;
+}
+
+#msg{
+    color: white;
 }
 
 @keyframes wobble {

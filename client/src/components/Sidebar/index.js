@@ -1,7 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import axios from "axios";
-// import './styles.css';
+import { IconContext } from "react-icons/lib";
 import {
     SidebarContainer,
     Icon,
@@ -20,52 +19,57 @@ const Sidebar = (props) => {
     };
     return (
         <>
-            <SidebarContainer isOpen={props.isOpen} onClick={props.toggle}>
-                <Icon onClick={props.toggle}>
-                    <CloseIcon />
-                </Icon>
-                <SidebarWrapper>
-                    <SidebarMenu>
-                        {props.user ? <>
-                            {(props.user.isAdmin || props.user.isSuper) ?
-                                <>
-                                    <SidebarLink to="/">
-                                        Home
-                                    </SidebarLink>
-                                    <SidebarLink to="/bills">
-                                        Bills
-                                    </SidebarLink>
-                                    <SidebarLink to="/workers">
-                                        Workers
-                                    </SidebarLink>
-                                    <SidebarLink to="/logs">
-                                        Logs
-                                    </SidebarLink>
-                                    <SidebarLink to="/payees">
-                                        Payees
-                                    </SidebarLink>
-                                    <SidebarLink to="/cheques">
-                                        Cheques
-                                    </SidebarLink>
-                                </>
-                                :
-                                <>
-                                    <SidebarLink to="/myLogs">
-                                        My Logs
-                                    </SidebarLink>
-                                </>
+            <IconContext.Provider value={{ color: "#fff" }}>
+                <SidebarContainer isOpen={props.isOpen} onClick={props.toggle}>
+                    <Icon onClick={props.toggle}>
+                        <CloseIcon />
+                    </Icon>
+                    <SidebarWrapper>
+                        <SidebarMenu>
+                            {props.user ? <>
+                                {(props.user.isAdmin || props.user.isSuper) ?
+                                    <>
+                                        <SidebarLink to="/">
+                                            Home
+                                        </SidebarLink>
+                                        <SidebarLink to="/bills">
+                                            Bills
+                                        </SidebarLink>
+                                        <SidebarLink to="/workers">
+                                            Workers
+                                        </SidebarLink>
+                                        <SidebarLink to="/logs">
+                                            Logs
+                                        </SidebarLink>
+                                        <SidebarLink to="/payees">
+                                            Payees
+                                        </SidebarLink>
+                                        <SidebarLink to="/cheques">
+                                            Cheques
+                                        </SidebarLink>
+                                    </>
+                                    :
+                                    <>
+                                        <SidebarLink to="/myLogs">
+                                            My Logs
+                                        </SidebarLink>
+                                    </>
+                                }
+                                <SidebarLink to="/changePassword">
+                                    Change Password
+                                </SidebarLink>
+                                <SideBtnWrapper>
+                                    <SideBtn onClick={logout} to="/">Logout</SideBtn>
+                                </SideBtnWrapper>
+                            </> :
+                                <SideBtnWrapper>
+                                    <SideBtn to="/login">Login</SideBtn>
+                                </SideBtnWrapper>
                             }
-                            <SideBtnWrapper>
-                                <SideBtn onClick={logout} to="/">Logout</SideBtn>
-                            </SideBtnWrapper>
-                        </> :
-                            <SideBtnWrapper>
-                                <SideBtn to="/login">Login</SideBtn>
-                            </SideBtnWrapper>
-                        }
-                    </SidebarMenu>
-                </SidebarWrapper>
-            </SidebarContainer>
+                        </SidebarMenu>
+                    </SidebarWrapper>
+                </SidebarContainer>
+            </IconContext.Provider>
         </>
     )
 }

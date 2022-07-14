@@ -4,31 +4,35 @@ import axios from "axios";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 
-import Login from "./components/Users/login";
-import Register from "./components/Users/register";
-import ChangePassword from "./components/Users/changePassword";
+import Home from "./pages/Landing";
 
-import Bills from "./components/Bills/index";
-import Bill from "./components/Bills/show";
-import NewBill from "./components/Bills/new"
+import Login from "./pages/Users/login";
+import Register from "./pages/Users/register";
+import ChangePassword from "./pages/Users/changePassword";
 
-import Workers from "./components/Workers/index";
-import Worker from "./components/Workers/show";
+import Bills from "./pages/Bills/index";
+import Bill from "./pages/Bills/show";
+import NewBill from "./pages/Bills/new"
 
-import Logs from "./components/Logs/index";
-import Log from "./components/Logs/show";
+import Workers from "./pages/Workers/index";
+import Worker from "./pages/Workers/show";
 
-import Payees from "./components/Payees/index";
-import Payee from "./components/Payees/show";
-import NewPayee from "./components/Payees/new"
+import Logs from "./pages/Logs/index";
+import Log from "./pages/Logs/show";
 
-import Cheques from "./components/Cheques/index";
-import Cheque from "./components/Cheques/show";
+import Payees from "./pages/Payees/index";
+import Payee from "./pages/Payees/show";
+import NewPayee from "./pages/Payees/new"
+
+import Cheques from "./pages/Cheques/index";
+import Cheque from "./pages/Cheques/show";
 
 
 import Error from "./components/error";
 import NotFound from "./components/notFound";
 import { useEffect, useState } from "react";
+
+import "./App.css"
 
 function App() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -43,9 +47,11 @@ function App() {
 					}
 					throw new Error("Not logged in");
 				}).then(res => {
-					console.log(res.user);
-					setUser(res.user);
-					res.user && setPermission(res.user.isAdmin || res.user.isSuper);
+					if (res.user) {
+						console.log(res.user);
+						setUser(res.user);
+						setPermission(res.user.isAdmin || res.user.isSuper);
+					}
 				}).catch(err => {
 					console.log(err);
 				});
@@ -53,14 +59,14 @@ function App() {
 		getUser();
 	}, []);
 
-	const toggle = ()=>{
+	const toggle = () => {
 		setIsOpen(!isOpen);
 	}
 
 	return (
 		<>
-			<Sidebar isOpen={isOpen} toggle={toggle} user={user}/>
-			<Navbar toggle={toggle} user={user}/>
+			<Sidebar isOpen={isOpen} toggle={toggle} user={user} />
+			<Navbar toggle={toggle} user={user} />
 			<Routes>
 				<Route path="/" exact element={<Home user={user} />} />
 
@@ -74,7 +80,7 @@ function App() {
 				<Route path="/bills/:id/edit" exact element={<Test />} />
 				{/* Workers Routes */}
 				<Route path="/workers" exact element={<Workers />} />
-				<Route path="/workers/new" exact element={permission ? <Register /> : <Navigate to="/" />} />
+				<Route path="/workers/new" exact element={permission ? <Register /> : <Home />} />
 				<Route path="/workers/:id" exact element={<Worker />} />
 				<Route path="/workers/:id/edit" exact element={<Test />} />
 				{/* Logs Routes */}
@@ -102,22 +108,6 @@ function App() {
 }
 
 export default App;
-
-function Home(props) {
-	return (
-		<>
-			<h1>
-				A L - A N A B O S I
-			</h1>
-			<h4>
-				Welcome to Manager App!
-				<p>
-					Let's get Working!
-				</p>
-			</h4>
-		</>
-	);
-}
 
 function Test() {
 	let params = useParams();

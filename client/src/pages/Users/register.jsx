@@ -1,7 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
-import 'bootstrap/dist/css/bootstrap.min.css';
+
+import "./index.css";
 
 const Register = () => {
     const [data, setData] = useState({
@@ -81,7 +82,6 @@ const Register = () => {
                 <div className="form-container">
                     <h1 className="opacity">New Worker</h1>
                     <form onSubmit={handleSubmit}>
-                        {message && <div>{message}</div>}
                         <input onChange={handleChange} name="name" type="text" placeholder="FULL NAME" />
                         <input onChange={handleChange} name="username" type="text" placeholder="USERNAME" onBlur={checkUsername}/>
                         <input onChange={handleChange} name="password" type="password" placeholder="PASSWORD" />
@@ -89,6 +89,7 @@ const Register = () => {
                         <input onChange={handleChange} name="email" type="text" placeholder="E-MAIL" />
                         <input onChange={handleChange} name="phoneNumber" type="text" placeholder="PHONE NUMBER" />
                         <button type="submit" className="opacity">Register</button>
+                        {message && <div id="msg">{message}</div>}
                     </form>
                 </div>
                 <div className="circle circle-two"></div>

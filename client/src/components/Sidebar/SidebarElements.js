@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
 
 export const SidebarContainer = styled.aside`
@@ -27,6 +27,9 @@ export const Icon = styled.div`
 `
 export const CloseIcon = styled(FaTimes)`
     color: #fff;
+    &:hover{
+        color: #01bf71;
+    }
 `
 
 export const SidebarWrapper = styled.div`
