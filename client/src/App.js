@@ -40,7 +40,7 @@ export const UserContext = React.createContext();
 
 function App() {
 	const [isOpen, setIsOpen] = useState(false);
-	const [user, setUser] = useState();
+	const [user, setUser] = useState(null);
 	useEffect(() => {
 		const getUser = async () => {
 			await axios.get("/api/login")

@@ -13,14 +13,18 @@ import {
     ArrowRight,
     FooterP
 } from "./LandingPageElements";
-import { UserContext } from '../../App';
-function Home(props) {
+
+import { UserContext } from "../../App";
+
+function Home() {
+    const u = useContext(UserContext);
     const { user } = useContext(UserContext);
     const year = new Date().getFullYear();
     const [hover, setHover] = useState(false);
     const onHover = () => {
         setHover(!hover);
     };
+    document.title = "Manager";
     return (
         <HomeContainer>
             <HomeBg>

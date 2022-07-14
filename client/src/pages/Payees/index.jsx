@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Row from "./row";
-function Payees() {
 
+function Payees() {
+    document.title = "Manager - Payees";
     const [payees, setPayees] = useState(null);
     
     useEffect(() => {

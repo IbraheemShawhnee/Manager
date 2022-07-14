@@ -1,10 +1,9 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 import "./index.css";
-
 const Register = () => {
+    document.title = "Manager - New Worker";
     const [data, setData] = useState({
         name: "",
         username: "",
@@ -36,12 +35,12 @@ const Register = () => {
             }
         }
     };
-    const checkPassword = ()=>{
-        if (data.password === data.confirmPassword){
+    const checkPassword = () => {
+        if (data.password === data.confirmPassword) {
             setMessage("");
             return true;
         }
-        else{
+        else {
             setMessage("Password feilds are not the same!");
             return false;
         }
@@ -83,9 +82,9 @@ const Register = () => {
                     <h1 className="opacity">New Worker</h1>
                     <form onSubmit={handleSubmit}>
                         <input onChange={handleChange} name="name" type="text" placeholder="FULL NAME" />
-                        <input onChange={handleChange} name="username" type="text" placeholder="USERNAME" onBlur={checkUsername}/>
+                        <input onChange={handleChange} name="username" type="text" placeholder="USERNAME" onBlur={checkUsername} />
                         <input onChange={handleChange} name="password" type="password" placeholder="PASSWORD" />
-                        <input onChange={handleChange} name="confirmPassword" type="password" placeholder="CONFIRM PASSWORD" onBlur={checkPassword}/>
+                        <input onChange={handleChange} name="confirmPassword" type="password" placeholder="CONFIRM PASSWORD" onBlur={checkPassword} />
                         <input onChange={handleChange} name="email" type="text" placeholder="E-MAIL" />
                         <input onChange={handleChange} name="phoneNumber" type="text" placeholder="PHONE NUMBER" />
                         <button type="submit" className="opacity">Register</button>

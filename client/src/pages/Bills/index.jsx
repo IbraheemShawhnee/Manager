@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Row from "./row";
 function Bills() {
-
+    document.title = "Manager - Bills";
     const [bills, setBills] = useState(null);
     const [total, setTotal] = useState(0);
-    
+
     useEffect(() => {
         const getBills = async () => {
             try {

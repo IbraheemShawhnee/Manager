@@ -35,7 +35,11 @@ function Payee() {
         />
         );
     }
-
+    if (payee) {
+        document.title = `Payee - ${payee.name}`;
+    } else {
+        document.title = "Manager - 404";
+    }
     return (
         <>
             <table>
@@ -76,30 +80,30 @@ function Payee() {
                 </tbody>
             </table>
             {cheques && cheques.length &&
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>
-                                    Date
-                                </th>
-                                <th>
-                                    Serial Number
-                                </th>
-                                <th></th>
-                                <th>
-                                    Value
-                                </th>
-                                <th>
-                                    {total && <span>Total: ₪{total}</span>} 
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                cheques.map(createRow)
-                            }
-                        </tbody>
-                    </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                Date
+                            </th>
+                            <th>
+                                Serial Number
+                            </th>
+                            <th></th>
+                            <th>
+                                Value
+                            </th>
+                            <th>
+                                {total && <span>Total: ₪{total}</span>}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            cheques.map(createRow)
+                        }
+                    </tbody>
+                </table>
             }
         </>
     );

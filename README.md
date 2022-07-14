@@ -17,6 +17,7 @@ Manager App Quick walk-through:
 * Custom qureis when retreiving anything from the API
 * Paginign for the responses
 * SECURE_COOKIES options is Disabled for now
+* If not redirecting via "Link" then entering from an "href" or typing the url yourself won't get you to the destination (Problem with the behaviour of the protected route)
 
 # Important notes:
 

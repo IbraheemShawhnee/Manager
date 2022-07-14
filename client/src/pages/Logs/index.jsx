@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Row from "./row";
 function Logs() {
-
+    document.title = "Manager - Logs";
     const [logs, setLogs] = useState(null);
-    
+
     useEffect(() => {
         const getLogs = async () => {
             try {
@@ -25,8 +25,8 @@ function Logs() {
             id={log._id}
             date={log.date.substring(0, 10)}
             name={log.worker.name}
-            // description={log.description}
-            // extraNotes={log.extraNotes}
+        // description={log.description}
+        // extraNotes={log.extraNotes}
         />
         );
     }

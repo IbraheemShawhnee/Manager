@@ -18,6 +18,11 @@ function Log() {
         }
         getLog();
     }, []);
+    if (log) {
+        document.title = `Log - ${log.worker.name}`;
+    } else {
+        document.title = "Manager - 404";
+    }
     return (
         <table>
             <thead>

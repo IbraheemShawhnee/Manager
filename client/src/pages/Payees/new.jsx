@@ -1,9 +1,8 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const NewPayee = () => {
+    document.title = "Manager - New Payee";
     const date = new Date();
     const [data, setData] = useState({
         name: "",
@@ -44,10 +43,10 @@ const NewPayee = () => {
                     <h1 className="opacity">New Payee</h1>
                     <form onSubmit={handleSubmit}>
                         {message && <div>{message}</div>}
-                        <input onChange={handleChange} name="name" type="text" placeholder="NAME" value={data.name}/>
-                        <input onChange={handleChange} name="email" type="text" placeholder="EMAIL" value={data.email}/>
-                        <input onChange={handleChange} name="phoneNumber" type="text" placeholder="PHONE NUMBER" value={data.phoneNumber}/>
-                        <input onChange={handleChange} name="extraNotes" type="string" placeholder="EXTRA NOTES" value={data.extraNotes}/>
+                        <input onChange={handleChange} name="name" type="text" placeholder="NAME" value={data.name} />
+                        <input onChange={handleChange} name="email" type="text" placeholder="EMAIL" value={data.email} />
+                        <input onChange={handleChange} name="phoneNumber" type="text" placeholder="PHONE NUMBER" value={data.phoneNumber} />
+                        <input onChange={handleChange} name="extraNotes" type="string" placeholder="EXTRA NOTES" value={data.extraNotes} />
                         <button type="submit" className="opacity">ADD</button>
                     </form>
                 </div>

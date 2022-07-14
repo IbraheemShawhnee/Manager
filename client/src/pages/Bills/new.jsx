@@ -1,9 +1,7 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 const NewBill = () => {
+    document.title = "Manager - New Bill";
     const date = new Date();
     const [data, setData] = useState({
         date: String(date.getFullYear()) + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0'),
@@ -45,9 +43,9 @@ const NewBill = () => {
                     <form onSubmit={handleSubmit}>
                         {message && <div>{message}</div>}
                         <input onChange={handleChange} name="date" type="date" placeholder="DATE" value={data.date} />
-                        <input onChange={handleChange} name="value" type="text" placeholder="VALUE" value={data.value}/>
-                        <input onChange={handleChange} name="description" type="text" placeholder="DESCRIPTION" value={data.description}/>
-                        <input onChange={handleChange} name="extraNotes" type="string" placeholder="EXTRA NOTES" value={data.extraNotes}/>
+                        <input onChange={handleChange} name="value" type="text" placeholder="VALUE" value={data.value} />
+                        <input onChange={handleChange} name="description" type="text" placeholder="DESCRIPTION" value={data.description} />
+                        <input onChange={handleChange} name="extraNotes" type="string" placeholder="EXTRA NOTES" value={data.extraNotes} />
                         <button type="submit" className="opacity">ADD</button>
                     </form>
                 </div>

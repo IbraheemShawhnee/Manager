@@ -12,8 +12,14 @@ import {
     FormButton,
     Text
 } from "./Elements";
+import { FooterP } from "../Landing/LandingPageElements";
+import { UserContext } from "../../App";
+import { useContext } from "react";
 
 const ChangePassword = () => {
+    const year = new Date().getFullYear();
+    const {user} = useContext(UserContext)
+    document.title = "Manager - Change Password";
     const [data, setData] = useState({
         oldPassword: "",
         password: "",
@@ -89,6 +95,11 @@ const ChangePassword = () => {
                     </FormContent>
                 </FormWrap>
             </Container>
+            <FooterP>&copy; Assad Anabosi {year}
+                {user &&
+                    <span> - Currently logged in as {user.username}</span>
+                }
+            </FooterP>
         </>
     )
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Row from "./row";
 function Cheques() {
-
+    document.title = "Manager - Cheques";
     const [cheques, setCheques] = useState(null);
     const [total, setTotal] = useState(0);
     useEffect(() => {

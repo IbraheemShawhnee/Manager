@@ -17,7 +17,7 @@ function Row(props) {
                 {props.value}
             </td>
             <td>
-            <a href={link}> View</a>
+                <a href={link}> View</a>
             </td>
         </tr>
     );

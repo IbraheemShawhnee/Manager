@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-
 function Cheque() {
     let params = useParams();
     const [cheque, setCheque] = useState(null);
@@ -19,6 +18,12 @@ function Cheque() {
         getCheque();
     }, []);
     console.log(cheque);
+    if (cheque) {
+        document.title = `Cheque - #${cheque.serial}`;
+    }
+    else{
+        document.title = "Manager - 404";
+    }
     return (
         <table>
             <thead>

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-
 function Bill() {
+    document.title = "Manager - Bill";
     let params = useParams();
     const [bill, setBill] = useState(null);
     useEffect(() => {

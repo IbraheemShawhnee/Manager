@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Row from "./row";
-function Workers() {
 
+function Workers() {
+    document.title = "Manager - Workers";
     const [workers, setWorkers] = useState(null);
-    
+
     useEffect(() => {
         const getWorkers = async () => {
             try {

@@ -16,6 +16,7 @@ import {
 import { UserContext } from "../../App";
 
 const Login = () => {
+    document.title = "Manager - Login";
     const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
     const location = useLocation();
