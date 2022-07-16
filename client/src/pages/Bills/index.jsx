@@ -1,26 +1,16 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import Row from "./row";
+
+import { fetchBills } from "../../features/Bills/billsSlice";
 function Bills() {
     document.title = "Manager - Bills";
-    const [bills, setBills] = useState(null);
-    const [total, setTotal] = useState(0);
-
+    const dispatch = useDispatch();
     useEffect(() => {
-        const getBills = async () => {
-            try {
-                const res = await axios.get("api/bills");
-                setBills(res.data.bills);
-                setTotal(res.data.sum);
-            }
-            catch (err) {
-                console.log(err)
-            }
-        }
-        getBills();
-    }, []);
-
-
+        dispatch(fetchBills());
+    }, [])
+    const response = useSelector((state) => state.bills);
+    console.log(response);
     function createRow(bill) {
         return (<Row
             key={bill._id}
@@ -32,36 +22,39 @@ function Bills() {
         />
         );
     }
-
     return (
         <>
             <h1>Bills Page</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            Date
-                        </th>
-                        <th>
-                            Value
-                        </th>
-                        <th>
-                            Description
-                        </th>
-                        <th>
-                            Extra Notes
-                        </th>
-                        <th>
-                            Total: {total}
-                        </th>
-                        <th>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {bills && bills.map(createRow)}
-                </tbody>
-            </table>
+            {response.loading && <div>Loading...</div>}
+            {!response.loading && response.error ? <div>Error: {response.error}</div> : null}
+            {!response.loading && response.bills.bills && response.bills.bills.length ? (
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                Date
+                            </th>
+                            <th>
+                                Value
+                            </th>
+                            <th>
+                                Description
+                            </th>
+                            <th>
+                                Extra Notes
+                            </th>
+                            <th>
+                                Total: ₪{response.bills.sum}
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {response.bills.bills.map(createRow)}
+                    </tbody>
+                </table>
+            ) : null}
         </>
     );
 }

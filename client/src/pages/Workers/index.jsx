@@ -1,22 +1,15 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Row from "./row";
+
+import { fetchWorkers } from "../../features/Workers/workersSlice";
 
 function Workers() {
     document.title = "Manager - Workers";
-    const [workers, setWorkers] = useState(null);
-
+    const dispatch = useDispatch();
+    const response = useSelector((state) => state.workers);
     useEffect(() => {
-        const getWorkers = async () => {
-            try {
-                const res = await axios.get("api/workers");
-                setWorkers(res.data.workers);
-            }
-            catch (err) {
-                console.log(err)
-            }
-        }
-        getWorkers();
+        dispatch(fetchWorkers());
     }, []);
 
     function createRow(worker) {
@@ -34,29 +27,33 @@ function Workers() {
     return (
         <>
             <h1>Workers Page</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            Username
-                        </th>
-                        <th>
-                            Name
-                        </th>
-                        <th>
-                            Email
-                        </th>
-                        <th>
-                            Phone Number
-                        </th>
-                        <th>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {workers && workers.map(createRow)}
-                </tbody>
-            </table>
+            {response.loading && <div>Loading...</div>}
+            {!response.loading && response.error ? <div>Error: {response.error}</div> : null}
+            {!response.loading && response.workers.length ? (
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                Username
+                            </th>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Email
+                            </th>
+                            <th>
+                                Phone Number
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {response.workers.map(createRow)}
+                    </tbody>
+                </table>
+            ) : null}
         </>
     );
 }

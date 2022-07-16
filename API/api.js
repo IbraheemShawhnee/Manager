@@ -1,14 +1,14 @@
-const express = require("express");
-const { isLoggedIn, isAdmin } = require('./middlewares/middleware');
+import express from "express"
+import { isLoggedIn, isAdmin } from "./middlewares/middleware.js";
 const router = express.Router();
 
 // Routes and Authorizations
-const billsRoutes = require("./routes/bills")
-const workersRoutes = require("./routes/workers")
-const logsRoutes = require("./routes/logs")
-const payeesRoutes = require("./routes/payees")
-const chequesRoutes = require("./routes/cheques")
-const usersRoutes = require("./routes/users")
+import billsRoutes from "./routes/bills.js";
+import workersRoutes from "./routes/workers.js";
+import logsRoutes from "./routes/logs.js";
+import payeesRoutes from "./routes/payees.js";
+import chequesRoutes from "./routes/cheques.js";
+import usersRoutes from "./routes/users.js";
 
 
 router.get('/express_backend', (req, res) => {
@@ -24,6 +24,12 @@ router.use("/workers",isLoggedIn, isAdmin, workersRoutes);
 router.use("/logs",isLoggedIn, logsRoutes)
 router.use("/cheques",isLoggedIn, isAdmin, chequesRoutes);
 router.use("/", usersRoutes);
+router.route("*")
+    .all((req, res)=>{
+        return res.status(404).json({
+            message: "This page doesn't exisit!"
+        });
+    })
 
 
-module.exports = router;
+export default router;

@@ -25,7 +25,7 @@ const Navbar = (props) => {
     const [scrollNav, setScrollNav] = useState(false);
 
     const changeNav = () => {
-        if (window.screenY >= 20) {
+        if (window.screenY) {
             setScrollNav(true);
         } else {
             setScrollNav(false);
@@ -67,7 +67,7 @@ const Navbar = (props) => {
                                     :
                                     <>
                                         <NavItem>
-                                            <NavLinks to="/myLogs">My Logs</NavLinks>
+                                            <NavLinks to="/logs">My Logs</NavLinks>
                                         </NavItem>
                                     </>
                                 }

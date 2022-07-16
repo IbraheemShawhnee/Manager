@@ -1,23 +1,16 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Row from "./row";
 
+// import store from "../../app/store";
+import { fetchPayees } from "../../features/Payees/payeesSlice";
 function Payees() {
     document.title = "Manager - Payees";
-    const [payees, setPayees] = useState(null);
-    
+    const dispatch = useDispatch();
     useEffect(() => {
-        const getPayees = async () => {
-            try {
-                const res = await axios.get("api/payees");
-                setPayees(res.data.payees);
-            }
-            catch (err) {
-                console.log(err)
-            }
-        }
-        getPayees();
-    }, []);
+        dispatch(fetchPayees());
+    }, [])
+    const response = useSelector((state) => state.payees);
 
     function createRow(payee) {
         return (<Row
@@ -34,28 +27,32 @@ function Payees() {
     return (
         <>
             <h1>Payees Page</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            Name
-                        </th>
-                        <th>
-                            Email
-                        </th>
-                        <th>
-                            Phone Number
-                        </th>
-                        <th>
-                            Etxra Notes
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {payees && payees.map(createRow)}
-                </tbody>
-            </table>
+            {response.loading && <div>Loading...</div>}
+            {!response.loading && response.error ? <div>Error: {response.error}</div> : null}
+            {!response.loading && response.payees.length ? (
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Email
+                            </th>
+                            <th>
+                                Phone Number
+                            </th>
+                            <th>
+                                Etxra Notes
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {response.payees && response.payees.map(createRow)}
+                    </tbody>
+                </table>
+            ) : null}
         </>
     );
 }

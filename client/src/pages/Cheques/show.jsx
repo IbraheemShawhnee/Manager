@@ -1,27 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import { findCheque } from "../../features/Cheques/chequesSlice";
 function Cheque() {
-    let params = useParams();
-    const [cheque, setCheque] = useState(null);
+    let { id } = useParams();
+    const dispatch = useDispatch();
     useEffect(() => {
-        const getCheque = async () => {
-            try {
-                const url = `api/cheques/${params.id}`;
-                const res = await axios.get(url, { baseURL: "/" });
-                setCheque(res.data.cheque);
-            }
-            catch (err) {
-                console.cheque(err)
-            }
-        }
-        getCheque();
+        dispatch(findCheque(id));
     }, []);
-    console.log(cheque);
+    
+    const cheque = useSelector((state) => state.cheques.cheques);
+    console.log(useSelector((state) => state.cheques));
     if (cheque) {
         document.title = `Cheque - #${cheque.serial}`;
     }
-    else{
+    else {
         document.title = "Manager - 404";
     }
     return (
@@ -49,10 +42,10 @@ function Cheque() {
                     cheque &&
                     <tr>
                         <td>
-                            {cheque.payee.name}
+                            {cheque.payee && cheque.payee.name}
                         </td>
                         <td>
-                            {cheque.dueDate.substring(0, 10)}
+                            {cheque.dueDate && cheque.dueDate.substring(0, 10)}
                         </td>
                         <td>
                             {cheque.value}

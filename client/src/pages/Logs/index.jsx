@@ -1,24 +1,23 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect, useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchLogs, fetchMyLogs } from "../../features/Logs/logsSlice";
+
+import { UserContext } from "../../App";
 import Row from "./row";
+
 function Logs() {
-    document.title = "Manager - Logs";
-    const [logs, setLogs] = useState(null);
-
+    document.title = "Manager - Logs"
+    const dispatch = useDispatch();
+    const { user } = useContext(UserContext);
     useEffect(() => {
-        const getLogs = async () => {
-            try {
-                const res = await axios.get("api/logs");
-                setLogs(res.data.logs);
-            }
-            catch (err) {
-                console.log(err)
-            }
+        if (user && (user.isAdmin || user.isSuper)) {
+            dispatch(fetchLogs());
         }
-        getLogs();
-    }, []);
-
-
+        else {
+            dispatch(fetchMyLogs());
+        }
+    }, [])
+    const response = useSelector((state) => state.logs);
     function createRow(log) {
         return (<Row
             key={log._id}
@@ -34,6 +33,9 @@ function Logs() {
     return (
         <>
             <h1>Logs Page</h1>
+            {response.loading && <div>Loading...</div>}
+            {!response.loading && response.error ? <div>Error: {response.error}</div> : null}
+            {!response.loading && response.logs.length ? (
             <table>
                 <thead>
                     <tr>
@@ -56,9 +58,10 @@ function Logs() {
                     </tr>
                 </thead>
                 <tbody>
-                    {logs && logs.map(createRow)}
+                    {response.logs.map(createRow)}
                 </tbody>
             </table>
+            ) : null}
         </>
     );
 }

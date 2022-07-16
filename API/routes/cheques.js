@@ -1,22 +1,22 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const catchAsync = require("../../utils/catchAsync");
-const { validateCheque } = require("../middlewares/validations");
-const cheques = require("../controllers/cheques");
+import catchAsync from "express-async-handler";
+import { validateCheque } from "../middlewares/validations.js";
+import * as cheques from "../controllers/cheques.js";
 
 
 router.route("/")
-    .get(catchAsync(cheques.all))
-    .post(validateCheque, catchAsync(cheques.create))
+    .get(catchAsync(cheques.All))
+    .post(validateCheque, catchAsync(cheques.Create))
+
+router.get("/cancelled", catchAsync(cheques.Cancelled))
+
+router.get("/deleted", catchAsync(cheques.Deleted))
 
 router.route("/:chequeID")
-    .get(catchAsync(cheques.view))
-    .put(validateCheque, catchAsync(cheques.update))
-    .delete(catchAsync(cheques.delete))
-
-router.get("/cancelled", catchAsync(cheques.cancelled))
-
-router.get("/deleted", catchAsync(cheques.deleted))
+    .get(catchAsync(cheques.View))
+    .put(validateCheque, catchAsync(cheques.Update))
+    .delete(catchAsync(cheques.Delete))
 
 
-module.exports = router;
+export default router;

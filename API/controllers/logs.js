@@ -1,9 +1,9 @@
-const { isAdminV, logsPaginatedResult } = require('../middlewares/middleware');
-const User = require("../../models/user");
-const Log = require("../../models/log");
+import { isAdminV } from "../middlewares/middleware.js";
+import User from "../../models/user.js";
+import Log from "../../models/log.js";
 
 
-module.exports.all = async (req, res, next) => {
+export const All = async (req, res, next) => {
 	// let page = parseInt(req.query.page)
 	// if (!page) {
 	// 	page = 1
@@ -33,7 +33,7 @@ module.exports.all = async (req, res, next) => {
 
 }
 
-module.exports.mine = async (req, res, next) => {
+export const Mine = async (req, res, next) => {
 	// let page = parseInt(req.query.page)
 	// if (!page) {
 	// 	page = 1
@@ -53,7 +53,7 @@ module.exports.mine = async (req, res, next) => {
 	});
 }
 
-module.exports.create = async (req, res, next) => {
+export const Create = async (req, res, next) => {
 	const { log } = req.body;
 	if (log.payment.length == 0) {
 		log.payment = 0;
@@ -64,11 +64,17 @@ module.exports.create = async (req, res, next) => {
 	const newLog = new Log(log)
 	await newLog.save();
 	worker.logs.push(newLog._id)
-	worker.save();
-	return res.status(201).json({ message: "Log Added Successfully" });
+	try {
+		worker.save();
+		return res.status(201).json({ message: "Log Added Successfully" });
+	} catch (error) {
+		return res.status(409).json({
+			message: error.message
+		})
+	}
 }
 
-module.exports.view = async (req, res, next) => {
+export const View = async (req, res, next) => {
 	const { logID } = req.params;
 	const log = await Log.findById(logID).populate("worker")
 	if (!log) {
@@ -88,7 +94,7 @@ module.exports.view = async (req, res, next) => {
 }
 
 
-module.exports.update = async (req, res, next) => {
+export const Update = async (req, res, next) => {
 	const { logID } = req.params;
 	if (req.body.log.payment.length == 0) {
 		req.body.log.payment = 0;
@@ -105,7 +111,7 @@ module.exports.update = async (req, res, next) => {
 	});
 }
 
-module.exports.delete = async (req, res, next) => {
+export const Delete = async (req, res, next) => {
 	const { logID } = req.params;
 	const log = await Log.findByIdAndDelete(logID)
 	if (!log) {
@@ -113,7 +119,7 @@ module.exports.delete = async (req, res, next) => {
 			message: "Cannot find that log!"
 		});
 	}
-	return res.status(201).json({
+	return res.status(200).json({
 		message: "Log Deleted Successfully",
 	});
 }

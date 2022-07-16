@@ -6,6 +6,7 @@ import { NavLink as Link } from 'react-router-dom';
 export const Nav = styled.nav`
     background: ${({ scrollNav }) => (scrollNav ? "#000" : "transparent")};
     height: 80px;
+    /* margin-top: -80px; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -96,6 +97,9 @@ export const NavLinks = styled(Link)`
 export const NavbarBtnWrapper = styled.div`
     display: flex;
     align-items: center;
+    @media screen and (max-width: 768px){
+        display: none;
+    }
 `
 
 export const NavbarBtn = styled(Link)`
@@ -103,20 +107,17 @@ export const NavbarBtn = styled(Link)`
     background: #01bf71;
     white-space: nowrap;
     padding: 10px 22px;
-    color: #010606;
+    color: #fff;
     font-size: 16px;
     outline: none;
     border: none;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     text-decoration: none;
-    &:hover{
+    &:hover {
         transition: all 0.2s ease-in-out;
         background: #fff;
         color: #010606;
     }
 
-    @media screen and (max-width: 768px) {
-        display: none;
-    }
 `

@@ -1,8 +1,9 @@
-const Payee = require("../../models/payee");
-const Cheque = require("../../models/cheque");
+import Payee from "../../models/payee.js";
+import Cheque from "../../models/cheque.js";
 // const { chequesPaginatedResult } = require("../middlewares/middleware");
 
-module.exports.all = async (req, res, next) => {
+
+export const All = async (req, res, next) => {
 	// const dates = {
 	// 	null: false,
 	// 	since: req.query.since,
@@ -15,10 +16,10 @@ module.exports.all = async (req, res, next) => {
 	// }else if (!dates.till) {
 	// 	dates.till = dates.since;
 	// }
-	let page = parseInt(req.query.page);
-	if (!page) {
-		page = 1
-	}
+	// let page = parseInt(req.query.page);
+	// if (!page) {
+	// 	page = 1
+	// }
 	// const limit = 10;
 	// const startIndex = (page - 1) * limit;
 	// const endInex = page * limit;
@@ -60,21 +61,21 @@ module.exports.all = async (req, res, next) => {
 	});
 }
 
-module.exports.cancelled = async (req, res, next) => {
+export const Cancelled = async (req, res, next) => {
 	const cheques = await Cheque.find({ isCancelled: true }).sort({ serial: -1 })
 	res.status(200).json({
 		cheques: cheques
 	});
 }
 
-module.exports.deleted = async (req, res, next) => {
+export const Deleted = async (req, res, next) => {
 	const cheques = await Cheque.find({ isDeleted: true }).sort({ serial: -1 })
 	res.status(200).json({
 		cheques: cheques,
 	});
 }
 
-module.exports.create = async (req, res, next) => {
+export const Create = async (req, res, next) => {
 	const { cheque } = req.body;
 	const payeeID = cheque.payee;
 	cheque.isCancelled = !!cheque.isCancelled;
@@ -83,35 +84,45 @@ module.exports.create = async (req, res, next) => {
 		delete cheque.payee;
 	}
 	const newCheque = new Cheque(cheque)
-	await newCheque.save();
-	if (!cheque.isCancelled) {
-		const payee = await Payee.findById(payeeID);
-		payee.cheques.push(newCheque._id)
-		payee.save();
+	try {
+		await newCheque.save();
+		if (!cheque.isCancelled) {
+			const payee = await Payee.findById(payeeID);
+			payee.cheques.push(newCheque._id)
+			payee.save();
+		}
+		res.status(201).json({
+			message: "Cheque Added Successfully"
+		});
 	}
-	req.flash("success", "Cheque Added Successfully");
-	res.redirect("/cheques/" + newCheque._id)
+	catch (error) {
+		return res.status(409).json({
+			message: error.message
+		})
+	}
 }
 
-module.exports.view = async (req, res, next) => {
+export const View = async (req, res, next) => {
 	const { chequeID } = req.params;
 	const cheque = await Cheque.findById(chequeID).populate("payee")
 	if (!cheque) {
-		req.flash("error", "Cannot find that cheque!");
-		return res.redirect("/cheques");
+		return res.status(404).json({
+			message: "Cannot find that cheque!"
+		});
 	}
 	return res.status(200).json({
 		cheque: cheque
 	});
 }
 
-module.exports.update = async (req, res, next) => {
+export const Update = async (req, res, next) => {
 	const { chequeID } = req.params;
 	req.body.cheque.isCancelled = !!req.body.cheque.isCancelled;
 	const cheque = await Cheque.findById(chequeID);
 	if (!cheque) {
-		req.flash("error", "Cannot find that cheque!");
-		return res.redirect("/cheques");
+		return res.status(404).json({
+			message: "Cannot find that cheque!"
+		});
 	}
 	if (cheque.isCancelled && req.body.cheque.payee.length != 0) {
 		req.body.cheque.isCancelled = false;
@@ -125,18 +136,27 @@ module.exports.update = async (req, res, next) => {
 		delete req.body.cheque.payee;
 		req.body.cheque.isDeleted = false;
 	}
-	await Cheque.findByIdAndUpdate(chequeID, { ...req.body.cheque }, { new: true, runValidators: true })
-	req.flash("success", "Cheque Updated Successfully");
-	res.redirect("/cheques/" + chequeID)
+	try {
+		await Cheque.findByIdAndUpdate(chequeID, { ...req.body.cheque }, { new: true, runValidators: true })
+		return res.status(201).json({
+			message: "Cheque updated successfully!",
+		});
+	} catch (error) {
+		return res.status(409).json({
+			message: error.message
+		})
+	}
 }
 
-module.exports.delete = async (req, res, next) => {
+export const Delete = async (req, res, next) => {
 	const { chequeID } = req.params;
 	const cheque = await Cheque.findByIdAndDelete(chequeID)
 	if (!cheque) {
-		req.flash("error", "Cannot find that cheque!");
-		return res.redirect("/cheques");
+		return res.status(404).json({
+			message: "Cannot find that cheque!"
+		});
 	}
-	req.flash("success", "Cheque Deleted Successfully");
-	res.redirect("/cheques")
+	return res.status(200).josn({
+		message: "Cheque Deleted Successfully"
+	})
 }

@@ -1,44 +1,53 @@
+import dotenv from "dotenv";
 if (process.env.NODE_ENV !== "production") {
-	require('dotenv').config();
+	dotenv.config();
 }
 const PORT = process.env.PORT || 5000;
 const CLIENT = `http://localhost:${PORT}`;
 const MONGOD_PORT = process.env.DB_PORT || 27017;
 
 //	PACKAGES
-const express = require("express");
-const path = require("path");
-const ejsMate = require("ejs-mate");
-const methodOverride = require("method-override");
-const mongoose = require("mongoose");
+import express from "express";
+import mongoose from "mongoose";
+
+//	Path
+import path from "path";
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 //	Session
-const session = require("express-session");
-const MongoStore = require("connect-mongo");
+import session from "express-session";
+import MongoStore from "connect-mongo";
 
-const passport = require("passport");
-const LocalStrategy = require("passport-local")
-const mongoSanitize = require("express-mongo-sanitize");
+import passport from "passport";
+import LocalStrategy from "passport-local"
+import mongoSanitize from "express-mongo-sanitize"
 
-const helmet = require("helmet");
-const cors = require("cors");
-const User = require("./models/user");
+import helmet from "helmet";
+import cors from "cors";
+import User from "./models/user.js";
+
 
 // Routes and Authorizations
-const APIRoutes = require("./API/api")
+import APIRoutes from "./API/api.js"
 
 //	DB CONNECTION
 
-dbUrl = process.env.DB_URL || "mongodb://localhost:" + MONGOD_PORT + "/managerDB"
+const dbUrl = process.env.DB_URL || "mongodb://localhost:" + MONGOD_PORT + "/managerDB"
 mongoose.connect(dbUrl, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true
 })
 	.then(() => {
-		console.log("Connection to the Database was established successfully!")
+		console.log("Connection to the Database was established successfully!");
+		app.listen(PORT, () => {
+			console.log(`Server has started on PORT: ${PORT}`);
+		})
 	})
 	.catch(error => {
-		console.log("An ERROR occurred while attempting to connect to the Database")
-		console.log(error)
+		console.log("An ERROR occurred while attempting to connect to the Database");
+		console.log(error);
 	})
 mongoose.connection.once("open", async () => {
 	if (await User.countDocuments().exec() < 1) {
@@ -84,16 +93,9 @@ const sessionConfig = {
 }
 
 const app = express();
-app.engine("ejs", ejsMate);
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "/views"));
-
-//	Middlewares
 
 //	Parsing JSON
 app.use(express.urlencoded({ extended: true }));
-//	Method Overriding
-app.use(methodOverride("_method"));
 //	Configuring Session
 app.use(session(sessionConfig));
 //	Helmet
@@ -176,12 +178,10 @@ app.get("*", (req, res) => {
 });
 
 app.use((err, req, res, next) => {
+	console.log("! ! ! E R R O R ! ! !");
 	const { statusCode = 500 } = err;
 	if (!err.message) err.message = "Oh No, Something Went Wrong!"
-	return res.status(statusCode).json({ err: err });
-})
-
-// Start server
-app.listen(PORT, () => {
-	console.log(`Server has started on PORT: ${PORT}`);
-})
+	console.log(err);
+	console.log(err.message);
+	return res.status(statusCode).json({ error: err.message });
+});

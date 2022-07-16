@@ -1,6 +1,7 @@
-const Bill = require("../../models/bill");
+import Bill from "../../models/bill.js";
 // const { billsPaginatedResult } = require("../middlewares/middleware");
-module.exports.all = async (req, res) => {
+
+export const All = async (req, res) => {
 	// let page = parseInt(req.query.page);
 	// if (!page) {
 	// 	page = 1
@@ -30,17 +31,24 @@ module.exports.all = async (req, res) => {
 	// })
 }
 
-module.exports.create = async (req, res, next) => {
+export const Create = async (req, res, next) => {
 	if (req.body.value < 0)
 		req.body.isExpenses = false;
 	const bill = new Bill(req.body)
-	await bill.save()
-	return res.status(201).json({
-		message: "Bill Added Successfully",
-	});
+	try {
+		await bill.save();
+		return res.status(201).json({
+			message: "Bill Added Successfully",
+			bill: bill
+		});
+	} catch (error) {
+		return res.status(409).json({
+			message: error.message
+		})
+	}
 }
 
-module.exports.view = async (req, res, next) => {
+export const View = async (req, res, next) => {
 	const { id } = req.params
 	const bill = await Bill.findById(id)
 	if (!bill) {
@@ -54,7 +62,7 @@ module.exports.view = async (req, res, next) => {
 }
 
 
-module.exports.update = async (req, res, next) => {
+export const Update = async (req, res, next) => {
 	const { id } = req.params;
 	if (req.body.value < 0)
 		req.body.isExpenses = false;
@@ -66,11 +74,10 @@ module.exports.update = async (req, res, next) => {
 	}
 	return res.status(201).json({
 		message: "Bill updated successfully!",
-		bill: bill
 	});
 }
 
-module.exports.delete = async (req, res, next) => {
+export const Delete = async (req, res, next) => {
 	const { id } = req.params;
 	const bill = await Bill.findByIdAndDelete(id)
 	if (!bill) {
@@ -78,7 +85,7 @@ module.exports.delete = async (req, res, next) => {
 			message: "Cannot find that bill!"
 		});
 	}
-	return res.status(201).json({
+	return res.status(200).json({
 		message: "Bill Deleted Successfully",
 	});
 }

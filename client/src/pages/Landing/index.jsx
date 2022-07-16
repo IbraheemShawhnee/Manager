@@ -39,7 +39,7 @@ function Home() {
                     Let's get Working!
                 </HomeP>
                 <HomeBtnWrapper>
-                    <HomeBtn to="/myLogs"
+                    <HomeBtn to="/logs"
                         onMouseEnter={onHover}
                         onMouseLeave={onHover}
                         // primary="true"

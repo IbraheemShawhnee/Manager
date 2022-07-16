@@ -1,20 +1,30 @@
-const Cheque = require("../../models/cheque");
-const Payee = require("../../models/payee");
+import Cheque from "../../models/cheque.js";
+import Payee from "../../models/payee.js";
 
-module.exports.all = async (req, res, next) => {
+
+export const All = async (req, res, next) => {
 	const payees = await Payee.find({})
 	return res.status(200).json({
 		payees: payees
 	});
 }
 
-module.exports.create = async (req, res, next) => {
+export const Create = async (req, res, next) => {
 	const payee = new Payee(req.body)
-	await payee.save();
-	return res.status(201).json({ message: "Payee Added Successfully" });
+	try {
+		await payee.save();
+		return res.status(201).json({
+			payee,
+			message: "Payee Added Successfully"
+		});
+	} catch (error) {
+		return res.status(409).json({
+			message: error.message
+		})
+	}
 }
 
-module.exports.view = async (req, res, next) => {
+export const View = async (req, res, next) => {
 	const { payeeID } = req.params;
 	const payee = await Payee.findById(payeeID)
 	const cheques = await Cheque.find({
@@ -46,10 +56,8 @@ module.exports.view = async (req, res, next) => {
 			message: "Cannot find that payee!"
 		});
 	}
-	if (!sum[0]) {
-		total = 0;
-	}
-	else {
+	let total = 0;
+	if (sum[0]) {
 		total = sum[0].total;
 	}
 	return res.status(200).json({
@@ -59,9 +67,9 @@ module.exports.view = async (req, res, next) => {
 	});
 }
 
-module.exports.update = async (req, res, next) => {
+export const Update = async (req, res, next) => {
 	const { payeeID } = req.params;
-	const payee = await Payee.findByIdAndUpdate(payeeID, { ...req.body.payee }, { new: true, runValidators: true })
+	const payee = await Payee.findByIdAndUpdate(payeeID, { ...req.body }, { new: true, runValidators: true })
 	if (!payee) {
 		return res.status(404).json({
 			message: "Cannot find that payee!"
@@ -73,7 +81,7 @@ module.exports.update = async (req, res, next) => {
 	});
 }
 
-module.exports.delete = async (req, res, next) => {
+export const Delete = async (req, res, next) => {
 	const { payeeID } = req.params;
 	const payee = await Payee.findByIdAndDelete(payeeID)
 	if (!payee) {
@@ -81,7 +89,7 @@ module.exports.delete = async (req, res, next) => {
 			message: "Cannot find that payee!"
 		});
 	}
-	return res.status(201).json({
+	return res.status(200).json({
 		message: "Payee Deleted Successfully",
 	});
 }

@@ -1,5 +1,5 @@
-const BaseJoi = require('joi');
-const sanitizeHtml = require('sanitize-html');
+import BaseJoi from "joi";
+import sanitizeHtml from "sanitize-html";
 
 const extension = (joi) => ({
 	type: 'string',
@@ -24,20 +24,20 @@ const extension = (joi) => ({
 const Joi = BaseJoi.extend(extension)
 
 
-module.exports.billSchema = new Joi.object({
+export const billSchema = new Joi.object({
 	date: Joi.date().required(),
 	value: Joi.number().required(),
 	description: Joi.string().required().escapeHTML(),
 	extraNotes: Joi.string().allow('').escapeHTML()
 });
 
-module.exports.userSchema = new Joi.object({
+export const userSchema = new Joi.object({
 	name: Joi.string().required().escapeHTML(),
 	email: Joi.string().email().allow('').escapeHTML(),
 	phoneNumber: Joi.string().allow('').escapeHTML()
 });
 
-module.exports.logSchema = new Joi.object({
+export const logSchema = new Joi.object({
 		date: Joi.date().required(),
 		worker: Joi.required(),
 		isAbsence: Joi.allow(),
@@ -48,14 +48,14 @@ module.exports.logSchema = new Joi.object({
 		extraNotes: Joi.string().allow('').escapeHTML()
 });
 
-module.exports.payeeSchema = new Joi.object({
+export const payeeSchema = new Joi.object({
 		name: Joi.string().required().escapeHTML(),
 		email: Joi.string().email().allow('').escapeHTML(),
 		phoneNumber: Joi.string().allow('').escapeHTML(),
 		extraNotes: Joi.string().allow('').escapeHTML(),
 });
 
-module.exports.chequeSchema = new Joi.object({
+export const chequeSchema = new Joi.object({
 		serial: Joi.number().min(0),
 		dueDate: Joi.date().required(),
 		value: Joi.number().min(0),

@@ -1,24 +1,15 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Row from "./row";
+
+import { fetchCheques } from "../../features/Cheques/chequesSlice";
 function Cheques() {
     document.title = "Manager - Cheques";
-    const [cheques, setCheques] = useState(null);
-    const [total, setTotal] = useState(0);
+    const dispatch = useDispatch();
     useEffect(() => {
-        const getCheques = async () => {
-            try {
-                const res = await axios.get("api/cheques");
-                setCheques(res.data.cheques);
-                setTotal(res.data.sum);
-            }
-            catch (err) {
-                console.cheque(err)
-            }
-        }
-        getCheques();
-    }, []);
-
+        dispatch(fetchCheques());
+    }, [])
+    const response = useSelector((state) => state.cheques);
 
     function createRow(cheque) {
         return (<Row
@@ -31,34 +22,37 @@ function Cheques() {
         />
         );
     }
-
     return (
         <>
             <h1>Cheques Page</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            Date
-                        </th>
-                        <th>
-                            Serial Number
-                        </th>
-                        <th>
-                            Payee Name
-                        </th>
-                        <th>
-                            Value
-                        </th>
-                        <th>
-                            Total: ₪{total}
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {cheques && cheques.map(createRow)}
-                </tbody>
-            </table>
+            {response.loading && <div>Loading...</div>}
+            {!response.loading && response.error ? <div>Error: {response.error}</div> : null}
+            {!response.loading && response.cheques.cheques && response.cheques.cheques.length ? (
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                Date
+                            </th>
+                            <th>
+                                Serial Number
+                            </th>
+                            <th>
+                                Payee Name
+                            </th>
+                            <th>
+                                Value
+                            </th>
+                            <th>
+                            Total: ₪{response.cheques.sum}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {response.cheques.cheques.map(createRow)}
+                    </tbody>
+                </table>
+            ) : null}
         </>
     );
 }

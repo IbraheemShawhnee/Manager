@@ -1,17 +1,17 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const catchAsync = require("../../utils/catchAsync");
-const { validateUser } = require("../middlewares/validations");
-const { isSuper } = require("../middlewares/middleware");
-const workers = require("../controllers/workers");
+import catchAsync from "express-async-handler";
+import { validateUser } from "../middlewares/validations.js";
+import { isSuper } from "../middlewares/middleware.js";
+import * as workers from "../controllers/workers.js";
 
 //  Index - GET
-router.get('/', catchAsync(workers.all))
+router.get('/', catchAsync(workers.All))
 
 router.route("/:id")
-    .get(catchAsync(workers.view))
-    .put(validateUser, catchAsync(workers.update))
-    .delete(isSuper, catchAsync(workers.delete))
+    .get(catchAsync(workers.View))
+    .put(validateUser, catchAsync(workers.Update))
+    .delete(isSuper, catchAsync(workers.Delete))
 
 
-module.exports = router;
+export default router;

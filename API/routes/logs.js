@@ -1,21 +1,21 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const catchAsync = require("../../utils/catchAsync");
-const { validateLog } = require("../middlewares/validations");
-const { isAdmin } = require("../middlewares/middleware");
-const logs = require("../controllers/logs");
+import catchAsync from "express-async-handler";
+import { validateLog } from "../middlewares/validations.js"
+import { isAdmin } from "../middlewares/middleware.js"
+import * as logs from "../controllers/logs.js";
 
 
 router.route('/')
-    .get(isAdmin, catchAsync(logs.all))
-    .post(validateLog, isAdmin, catchAsync(logs.create))
+    .get(isAdmin, catchAsync(logs.All))
+    .post(validateLog, isAdmin, catchAsync(logs.Create))
 
-router.get("/myLogs", catchAsync(logs.mine))
+router.get("/myLogs", (logs.Mine))
 
 router.route("/:logID")
-    .get(catchAsync(logs.view))
-    .put(isAdmin, validateLog, catchAsync(logs.update))
-    .delete(isAdmin, catchAsync(logs.delete))
+    .get(catchAsync(logs.View))
+    .put(isAdmin, validateLog, catchAsync(logs.Update))
+    .delete(isAdmin, catchAsync(logs.Delete))
 
 
-module.exports = router;
+export default router;

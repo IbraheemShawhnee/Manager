@@ -1,33 +1,37 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const catchAsync = require('../../utils/catchAsync');
-const passport = require("passport");
-const users = require("../controllers/users");
-const { isLoggedIn, isAdmin, isSuper } = require("../middlewares/middleware");
+import catchAsync from "express-async-handler";
+import passport from "passport";
+import * as users from "../controllers/users.js";
+import { isLoggedIn, isAdmin, isSuper } from "../middlewares/middleware.js";
 
 router.route("/checkUsername")
-    .post(isLoggedIn, isAdmin, catchAsync(users.checkUsername))
+    .post(isLoggedIn, isAdmin, catchAsync(users.CheckUsername))
 
 router.route("/register")
-    .post(isLoggedIn, isAdmin, catchAsync(users.create))
+    .post(isLoggedIn, isAdmin, catchAsync(users.Create))
 
 router.route("/login")
-    .get(users.checkAuthentication)
+    .get(users.CheckAuthentication)
     .post(passport.authenticate('local', {
         failureRedirect: "/api/login/failed",
-    }), users.successLogin);
+    }), users.SuccessLogin);
+
+router.route("/me")
+    .get(users.getMe)
+
 
 router.route("/login/failed")
-    .get(users.failedLogin);
+    .get(users.FailedLogin);
 
 router.route("/logout")
-    .get(isLoggedIn, users.logout)
+    .get(isLoggedIn, users.Logout)
 
 router.route("/changePassword")
-    .patch(isLoggedIn, catchAsync(users.passwordChange))
+    .patch(isLoggedIn, catchAsync(users.PasswordChange))
 
-router.patch("/changePassword/:id", isLoggedIn, isSuper, catchAsync(users.passwordSet))
+// router.patch("/changePassword/:id", isLoggedIn, isSuper, catchAsync(users.PasswordSet))
 
-router.patch("/updatePermissions/:id", isLoggedIn, isSuper, catchAsync(users.updatePermissions))
+// router.patch("/updatePermissions/:id", isLoggedIn, isSuper, catchAsync(users.UpdatePermissions))
 
-module.exports = router;
+export default router;

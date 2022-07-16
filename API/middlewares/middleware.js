@@ -1,9 +1,9 @@
-const User = require("../../models/user");
-// const Bill = require("../../models/bill");
-// const Cheque = require("../../models/cheque");
-// const Log = require("../../models/log");
+import User from "../../models/user.js";
+// import Bill from "../../models/bill.js";
+// import Cheque from "../../models/cheque.js";
+// import Log from "../../models/log.js";
 
-module.exports.isLoggedIn = (req, res, next) => {
+export const isLoggedIn = (req, res, next) => {
 	if (!req.isAuthenticated()) {
 		return res.status(401).json({
 			message: "You must be signed in first!"
@@ -12,7 +12,7 @@ module.exports.isLoggedIn = (req, res, next) => {
 	next();
 }
 
-module.exports.isAdmin = async (req, res, next) => {
+export const isAdmin = async (req, res, next) => {
 	const user = await User.findById(req.user._id);
 	if (!user.isAdmin && !user.isSuper) {
 		return res.status(401).json({
@@ -22,12 +22,12 @@ module.exports.isAdmin = async (req, res, next) => {
 	next();
 }
 
-module.exports.isAdminV = async (req) => {
+export const isAdminV = async (req) => {
 	const user = await User.findById(req.user._id);
 	return user.isAdmin || user.isSuper;
 }
 
-module.exports.isSuper = async (req, res, next) => {
+export const isSuper = async (req, res, next) => {
 	const user = await User.findById(req.user._id);
 	if (!user.isSuper) {
 		return res.status(401).json({
@@ -37,12 +37,12 @@ module.exports.isSuper = async (req, res, next) => {
 	next();
 }
 
-// module.exports.isSuperV = async (req) => {
+// export const isSuperV = async (req) => {
 // 	const user = await User.findById(req.user._id);
 // 	return user.isSuper;
 // }
 
-// module.exports.chequesPaginatedResult = async (page, startIndex, endInex) => {
+// export const chequesPaginatedResult = async (page, startIndex, endInex) => {
 // 	let pages = {}
 // 	if (endInex < await Cheque.countDocuments().exec()) {
 // 		pages.next = page + 1;
@@ -53,7 +53,7 @@ module.exports.isSuper = async (req, res, next) => {
 // 	return pages;
 // }
 
-// module.exports.logsPaginatedResult = async (page, startIndex, endInex) => {
+// export const logsPaginatedResult = async (page, startIndex, endInex) => {
 // 	let pages = {}
 // 	if (endInex < await Log.countDocuments().exec()) {
 // 		pages.next = page + 1;
@@ -64,7 +64,7 @@ module.exports.isSuper = async (req, res, next) => {
 // 	return pages;
 // }
 
-// module.exports.billsPaginatedResult = async (page, startIndex, endInex) => {
+// export const billsPaginatedResult = async (page, startIndex, endInex) => {
 // 	let pages = {}
 // 	if (endInex < await Bill.countDocuments().exec()) {
 // 		pages.next = page + 1;

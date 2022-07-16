@@ -1,24 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 
+import { findBill } from "../../features/Bills/billsSlice";
 function Bill() {
     document.title = "Manager - Bill";
-    let params = useParams();
-    const [bill, setBill] = useState(null);
+    let { id } = useParams();
+    const dispatch = useDispatch();
     useEffect(() => {
-        const getBill = async () => {
-            try {
-                const url = `api/bills/${params.id}`;
-                const res = await axios.get(url, { baseURL: "/" });
-                setBill(res.data.bill);
-            }
-            catch (err) {
-                console.log(err)
-            }
-        }
-        getBill();
+        dispatch(findBill(id));
     }, []);
+    const bill = useSelector((state) => state.bills.bills);
     return (
         <table>
             <thead>
@@ -44,7 +36,7 @@ function Bill() {
                     bill &&
                     <tr>
                         <td>
-                            {bill.date.substring(0, 10)}
+                            {bill.date && bill.date.substring(0, 10)}
                         </td>
                         <td>
                             {bill.value}

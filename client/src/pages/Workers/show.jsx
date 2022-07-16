@@ -1,26 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 
+import { findWorker } from "../../features/Workers/workersSlice";
 function Worker() {
-    let params = useParams();
-    const [worker, setWorker] = useState(null);
+    let { id } = useParams();
+    const dispatch = useDispatch();
     useEffect(() => {
-        const getWorker = async () => {
-            try {
-                const url = `api/workers/${params.id}`;
-                const res = await axios.get(url, { baseURL: "/" });
-                setWorker(res.data.worker);
-            }
-            catch (err) {
-                console.log(err)
-            }
-        }
-        getWorker();
-    }, []);
-    if (worker){
+        dispatch(findWorker(id));
+    }, [])
+    const worker = useSelector((state) => state.workers.workers);
+    if (worker) {
         document.title = `Worker - ${worker.name}`;
-    }else{
+    } else {
         document.title = "Manager - 404";
     }
     return (

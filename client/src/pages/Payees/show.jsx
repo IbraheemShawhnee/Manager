@@ -79,7 +79,7 @@ function Payee() {
                     }
                 </tbody>
             </table>
-            {cheques && cheques.length &&
+            {cheques && cheques.length != 0 &&
                 <table>
                     <thead>
                         <tr>

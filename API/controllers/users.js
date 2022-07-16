@@ -1,49 +1,66 @@
-if (process.env.NODE_ENV !== "production") {
-    require('dotenv').config();
-}
-const User = require("../../models/user");
+import User from "../../models/user.js";
 
-
-module.exports.create = async (req, res, next) => {
+export const Create = async (req, res, next) => {
     try {
         let { name, email, phoneNumber, username, password } = req.body;
         const user = new User({ name, email, phoneNumber, username });
         await User.register(user, password);
-        res.status(201).json({ message: "Worker created successfully" });
-    } catch (err) {
-        res.status(400).json({ message: err.message });
+        res.status(201).json({
+            message: "Worker created successfully"
+        });
+    } catch (error) {
+        res.status(409).json({
+            message: error.message
+        });
     }
 }
 
-module.exports.checkUsername = async (req, res, next) => {
+export const CheckUsername = async (req, res, next) => {
     const { username } = req.body;
     const user = await User.findByUsername(username);
     if (!user) {
-        return res.status(200).json({ available: true });
+        return res.status(200).json({
+            available: true,
+            message: ""
+        });
     }
-    return res.status(200).json({ available: false });
+    return res.status(400).json({
+        available: false,
+        message: "Uername already taken"
+    });
 }
 
-module.exports.checkAuthentication = (req, res) => {
-    if (req.isAuthenticated()) {
-        return this.successLogin(req, res);
-    } else {
-        return this.failedLogin(req, res);
-    }
+export const CheckAuthentication = (req, res) => {
+    return req.isAuthenticated() ?
+        SuccessLogin(req, res) : FailedLogin(req, res);
 }
 
-module.exports.successLogin = (req, res) => {
+export const getMe = (req, res) => {
+    return req.isAuthenticated() ?
+        res.status(200).json({
+            cookies: req.cookies,
+            user: req.user
+        })
+        :
+        res.status(401).json({
+            cookies: req.cookies,
+            user: null
+        })
+}
+
+export const SuccessLogin = (req, res) => {
+    const user = req.user;
     return res.status(200).json({
         success: true,
         message: "Logged in Successfully",
         cookies: req.cookies,
-        user: req.user
+        user: user
     });
 }
 
 
-module.exports.failedLogin = (req, res) => {
-    return res.status(200).json({
+export const FailedLogin = (req, res) => {
+    return res.status(400).json({
         success: false,
         message: "Invalid login credentials",
         cookies: req.cookies,
@@ -51,7 +68,7 @@ module.exports.failedLogin = (req, res) => {
     });
 }
 
-module.exports.logout = async (req, res, next) => {
+export const Logout = async (req, res, next) => {
     req.logout((err) => {
         if (err) {
             console.log(err);
@@ -65,7 +82,7 @@ module.exports.logout = async (req, res, next) => {
 }
 
 
-module.exports.passwordChange = async (req, res, next) => {
+export const PasswordChange = async (req, res, next) => {
     User.findOne({ _id: req.user._id }, (err, user) => {
         if (err) {
             return res.status(500).json({
@@ -95,28 +112,28 @@ module.exports.passwordChange = async (req, res, next) => {
     });
 }
 
-module.exports.passwordSet = async (req, res, next) => {
-    const { id } = req.params;
-    const user = await User.findOne({ _id: id });
-    if (!user) {
-        return res.status(404).json({
-            message: "User Not Found"
-        });
-    }
-    try {
-        await user.setPassword(req.body.password);
-        await user.save();
-        return res.status(201).json({
-            message: "Password Changed Successfully"
-        })
-    } catch (err) {
-        return res.status(500).json({
-            message: err.message
-        })
-    }
-}
+// export const PasswordSet = async (req, res, next) => {
+//     const { id } = req.params;
+//     const user = await User.findOne({ _id: id });
+//     if (!user) {
+//         return res.status(404).json({
+//             message: "User Not Found"
+//         });
+//     }
+//     try {
+//         await user.setPassword(req.body.password);
+//         await user.save();
+//         return res.status(201).json({
+//             message: "Password Changed Successfully"
+//         })
+//     } catch (err) {
+//         return res.status(500).json({
+//             message: err.message
+//         })
+//     }
+// }
 
-// module.exports.updatePermissions = async (req, res, next) => {
+// export const UpdatePermissions = async (req, res, next) => {
 //     const { id } = req.params;
 //     let { permissions } = req.body;
 //     if (!permissions) {
@@ -136,5 +153,3 @@ module.exports.passwordSet = async (req, res, next) => {
 //     req.flash("success", "Permissions Updated Successfully");
 //     res.redirect("/workers/" + id)
 // }
-
-
