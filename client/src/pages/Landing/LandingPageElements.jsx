@@ -126,7 +126,8 @@ export const ArrowRight = styled(MdKeyboardArrowRight)`
 `
 
 export const FooterP = styled.p`
-    color: #fff;
+    font-size: 0.8rem;
+    color: #6c757d;
     margin: 10px auto;
     position: fixed;
     padding: 10px 10px 0px 10px;

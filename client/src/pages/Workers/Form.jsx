@@ -5,6 +5,7 @@ import { createWorker, findWorker, updateWorker } from "../../features/Workers/w
 
 import axios from "axios";
 import "./index.css";
+import Loading from "../../components/Loading";
 
 const WorkerForm = () => {
     let { id } = useParams();
@@ -79,46 +80,49 @@ const WorkerForm = () => {
             })
         }
     }, [])
-    const { message, error } = useSelector((state) => state.workers);
+    const { message, error, loading } = useSelector((state) => state.workers);
     const handleSubmit = async (event) => {
         event.preventDefault();
-            console.log(data);
-            if (id) {                
-                delete data.username;
-                dispatch(updateWorker(id, data));
-            } else {
-                if (validate()) {
-                    dispatch(createWorker(data))
-                }
-                else {
-                    setMessage("Double Check your inputs!");
-                }
+        console.log(data);
+        if (id) {
+            delete data.username;
+            dispatch(updateWorker(id, data));
+        } else {
+            if (validate()) {
+                dispatch(createWorker(data))
             }
+            else {
+                setMessage("Double Check your inputs!");
+            }
+        }
     };
     return (
-        <section className="container">
-            <div className="login-container">
-                <div className="circle circle-one"></div>
-                <div className="form-container">
-                    <h1 className="opacity">{id && data ? `Edit - ${data.name}` : "New Worker"}</h1>
-                    <form onSubmit={handleSubmit} autoComplete="off">
-                        <input onChange={handleChange} name="name" type="text" placeholder="Full Name" value={data.name} />
-                        {!id && <>
-                            <input onChange={handleChange} name="username" type="text" placeholder="Username" onBlur={checkUsername} />
-                            <input onChange={handleChange} name="password" type="password" placeholder="Password" />
-                            <input onChange={handleChange} name="confirmPassword" type="password" placeholder="Confirm Password" onBlur={checkPassword} />
-                        </>}
-                        <input onChange={handleChange} name="email" type="text" placeholder="E-Mail" value={data.email} />
-                        <input onChange={handleChange} name="phoneNumber" type="text" placeholder="Phone Number" value={data.phoneNumber} />
-                        <button type="submit" className="opacity">{id ? "Edit" : "Add"}</button>
-                        {message && <div id="msg">{message}</div>}
-                        {error && <div id="msg">{error}</div>}
-                    </form>
+        <>
+            {loading && <Loading />}
+            <section className="container">
+                <div className="login-container">
+                    <div className="circle circle-one"></div>
+                    <div className="form-container">
+                        <h1 className="opacity">{id && data ? `Edit - ${data.name}` : "New Worker"}</h1>
+                        <form onSubmit={handleSubmit} autoComplete="off">
+                            <input onChange={handleChange} name="name" type="text" placeholder="Full Name" value={data.name} />
+                            {!id && <>
+                                <input onChange={handleChange} name="username" type="text" placeholder="Username" onBlur={checkUsername} />
+                                <input onChange={handleChange} name="password" type="password" placeholder="Password" />
+                                <input onChange={handleChange} name="confirmPassword" type="password" placeholder="Confirm Password" onBlur={checkPassword} />
+                            </>}
+                            <input onChange={handleChange} name="email" type="text" placeholder="E-Mail" value={data.email} />
+                            <input onChange={handleChange} name="phoneNumber" type="text" placeholder="Phone Number" value={data.phoneNumber} />
+                            <button type="submit" className="opacity">{id ? "Edit" : "Add"}</button>
+                            {message && <div id="msg">{message}</div>}
+                            {/* {error && <div id="msg">{error}</div>} */}
+                        </form>
+                    </div>
+                    <div className="circle circle-two"></div>
                 </div>
-                <div className="circle circle-two"></div>
-            </div>
-            <div className="theme-btn-container"></div>
-        </section>
+                <div className="theme-btn-container"></div>
+            </section>
+        </>
     )
 }
 

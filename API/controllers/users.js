@@ -35,26 +35,41 @@ export const CheckAuthentication = (req, res) => {
         SuccessLogin(req, res) : FailedLogin(req, res);
 }
 
+
 export const getMe = (req, res) => {
-    return req.isAuthenticated() ?
-        res.status(200).json({
+    if (req.isAuthenticated()) {
+        const user = {};
+        user.name = req.user.name;
+        user.username = req.user.username;
+        user.phoneNumber = req.user.phoneNumber;
+        user.email = req.user.email;
+        user.isSuper = req.user.isSuper;
+        user.isAdmin = req.user.isAdmin;
+        return res.status(200).json({
             cookies: req.cookies,
-            user: req.user
+            user
         })
-        :
-        res.status(401).json({
+    } else {
+        return res.status(200).json({
             cookies: req.cookies,
             user: null
         })
+    }
 }
 
 export const SuccessLogin = (req, res) => {
-    const user = req.user;
+    const user = {};
+    user.name = req.user.name;
+    user.username = req.user.username;
+    user.phoneNumber = req.user.phoneNumber;
+    user.email = req.user.email;
+    user.isSuper = req.user.isSuper;
+    user.isAdmin = req.user.isAdmin;
     return res.status(200).json({
         success: true,
         message: "Logged in Successfully",
         cookies: req.cookies,
-        user: user
+        user,
     });
 }
 

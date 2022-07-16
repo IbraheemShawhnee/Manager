@@ -27,10 +27,20 @@ export const fetchMyLogs = createAsyncThunk("logs/fetchMyLogs", () => {
         });
 })
 
+export const findLog = createAsyncThunk("logs/findLog", (id) => {
+    return axios
+        .get(`/api/logs/${id}`)
+        .then(response => {
+            const { log } = response.data;
+            return log;
+        });
+})
+
 const logsSlice = createSlice({
     name: "logs",
     initialState,
     extraReducers: builder => {
+        //  Fetch All Logs
         builder.addCase(fetchLogs.pending, state => {
             state.loading = true;
         });
@@ -44,6 +54,7 @@ const logsSlice = createSlice({
             state.logs = [];
             state.error = action.error.message;
         })
+        //  Fetch My Logs
         builder.addCase(fetchMyLogs.pending, state => {
             state.loading = true;
         });
@@ -53,6 +64,20 @@ const logsSlice = createSlice({
             state.error = "";
         });
         builder.addCase(fetchMyLogs.rejected, (state, action) => {
+            state.loading = false;
+            state.logs = [];
+            state.error = action.error.message;
+        })
+        //  Find Log
+        builder.addCase(findLog.pending, state => {
+            state.loading = true;
+        });
+        builder.addCase(findLog.fulfilled, (state, action) => {
+            state.loading = false;
+            state.logs = action.payload;
+            state.error = "";
+        });
+        builder.addCase(findLog.rejected, (state, action) => {
             state.loading = false;
             state.logs = [];
             state.error = action.error.message;

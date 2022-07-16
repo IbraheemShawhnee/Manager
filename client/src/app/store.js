@@ -7,6 +7,7 @@ import workersReducer from "../features/Workers/workersSlice";
 import logsReducer from "../features/Logs/logsSlice";
 import payeesReducer from "../features/Payees/payeesSlice";
 import chequesReducer from "../features/Cheques/chequesSlice";
+import userSlice from '../features/Users/userSlice';
 
 const store = configureStore({
     reducer: {
@@ -15,6 +16,7 @@ const store = configureStore({
         logs: logsReducer,
         payees: payeesReducer,
         cheques: chequesReducer,
+        user: userSlice,
     }
 }, applyMiddleware(thunk))
 

@@ -32,7 +32,7 @@ function Home() {
             </HomeBg>
             <HomeContent>
                 <HomeH1>
-                    AL-ANABOSI
+                    A L - A N A B O S I
                 </HomeH1>
                 <HomeP>
                     Welcome to the Manager App <br />

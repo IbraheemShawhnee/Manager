@@ -12,13 +12,11 @@ router.route("/register")
     .post(isLoggedIn, isAdmin, catchAsync(users.Create))
 
 router.route("/login")
-    .get(users.CheckAuthentication)
+    .get(users.getMe)
     .post(passport.authenticate('local', {
         failureRedirect: "/api/login/failed",
     }), users.SuccessLogin);
 
-router.route("/me")
-    .get(users.getMe)
 
 
 router.route("/login/failed")

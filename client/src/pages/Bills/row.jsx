@@ -1,7 +1,7 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
 function Row(props) {
-    const link = `bills/${props.id}`
+    const link = `../bills/${props.id}`
     return (
         <tr>
             <td>
@@ -17,7 +17,7 @@ function Row(props) {
                 {props.extraNotes}
             </td>
             <td>
-                <a href={link}> View</a>
+                <Link to={link}> View</Link>
             </td>
         </tr>
     );

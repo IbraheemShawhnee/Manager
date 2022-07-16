@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Row from "./row";
 
 import { fetchWorkers } from "../../features/Workers/workersSlice";
+import Loading from "../../components/Loading";
 
 function Workers() {
     document.title = "Manager - Workers";
@@ -27,7 +28,7 @@ function Workers() {
     return (
         <>
             <h1>Workers Page</h1>
-            {response.loading && <div>Loading...</div>}
+            {response.loading && <Loading />}
             {!response.loading && response.error ? <div>Error: {response.error}</div> : null}
             {!response.loading && response.workers.length ? (
                 <table>

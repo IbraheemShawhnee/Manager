@@ -31,8 +31,8 @@ export const findPayee = createAsyncThunk("payees/findPayee", (id) => {
     return axios
         .get(`/api/payees/${id}`)
         .then(response => {
-            const { payee } = response.data;
-            return payee;
+            console.log(response.data);
+            return response.data;
         });
 })
 
@@ -47,7 +47,7 @@ export const updatePayee = createAsyncThunk("payees/updatePayee", (id, data) => 
         });
 })
 
-export const deletPayee = createAsyncThunk("payees/deletPayee", (id) => {
+export const deletePayee = createAsyncThunk("payees/deletPayee", (id) => {
     return axios
         .delete(`/api/payees/${id}`)
         .then(response => {
@@ -89,7 +89,7 @@ const payeesSlice = createSlice({
             state.payees = [];
             state.error = action.error.message;
         })
-        //  FETCH USER
+        //  FIND PAYEE
         builder.addCase(findPayee.pending, state => {
             state.loading = true;
         });
@@ -118,15 +118,15 @@ const payeesSlice = createSlice({
             state.error = action.error.message;
         })
         //  DELETE
-        builder.addCase(deletPayee.pending, state => {
+        builder.addCase(deletePayee.pending, state => {
             state.loading = true;
         });
-        builder.addCase(deletPayee.fulfilled, (state, action) => {
+        builder.addCase(deletePayee.fulfilled, (state, action) => {
             state.loading = false;
             state.message = action.payload;
             state.error = "";
         });
-        builder.addCase(deletPayee.rejected, (state, action) => {
+        builder.addCase(deletePayee.rejected, (state, action) => {
             state.loading = false;
             state.message = "";
             state.error = action.error.message;

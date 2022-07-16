@@ -4,6 +4,7 @@ import Row from "./row";
 
 // import store from "../../app/store";
 import { fetchPayees } from "../../features/Payees/payeesSlice";
+import Loading from "../../components/Loading";
 function Payees() {
     document.title = "Manager - Payees";
     const dispatch = useDispatch();
@@ -27,7 +28,7 @@ function Payees() {
     return (
         <>
             <h1>Payees Page</h1>
-            {response.loading && <div>Loading...</div>}
+            {response.loading && <Loading />}
             {!response.loading && response.error ? <div>Error: {response.error}</div> : null}
             {!response.loading && response.payees.length ? (
                 <table>

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Row from "./row";
 
 import { fetchCheques } from "../../features/Cheques/chequesSlice";
+import Loading from "../../components/Loading";
 function Cheques() {
     document.title = "Manager - Cheques";
     const dispatch = useDispatch();
@@ -19,13 +20,14 @@ function Cheques() {
             serial={cheque.serial}
             name={cheque.payee.name}
             value={cheque.value}
+            description={cheque.description}
         />
         );
     }
     return (
         <>
             <h1>Cheques Page</h1>
-            {response.loading && <div>Loading...</div>}
+            {response.loading && <Loading />}
             {!response.loading && response.error ? <div>Error: {response.error}</div> : null}
             {!response.loading && response.cheques.cheques && response.cheques.cheques.length ? (
                 <table>
@@ -42,6 +44,9 @@ function Cheques() {
                             </th>
                             <th>
                                 Value
+                            </th>
+                            <th>
+                                Description
                             </th>
                             <th>
                             Total: ₪{response.cheques.sum}

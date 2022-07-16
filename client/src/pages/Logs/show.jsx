@@ -1,68 +1,88 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import { findLog } from "../../features/Logs/logsSlice";
+import { useDispatch, useSelector } from "react-redux";
 
+import Loading from "../../components/Loading";
 function Log() {
-    let params = useParams();
-    const [log, setLog] = useState(null);
+    let { id } = useParams();
+    const dispatch = useDispatch();
     useEffect(() => {
-        const getLog = async () => {
-            try {
-                const url = `api/logs/${params.id}`;
-                const res = await axios.get(url, { baseURL: "/" });
-                setLog(res.data.log);
-            }
-            catch (err) {
-                console.log(err)
-            }
-        }
-        getLog();
+        dispatch(findLog(id));
     }, []);
+
+    const { logs: log, loading } = useSelector((state) => state.logs);
     if (log) {
-        document.title = `Log - ${log.worker.name}`;
+        console.log(log);
+        document.title = `Log - ${log.worker?.name}`;
     } else {
         document.title = "Manager - 404";
     }
     return (
-        <table>
-            <thead>
-                <tr>
-                    <th>
-                        Date
-                    </th>
-                    <th>
-                        Worker Name
-                    </th>
-                    <th>
-                        Payment
-                    </th>
-                    <th>
-                        Time
-                    </th>
-                    <th>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    log &&
+        <>
+            {loading && <Loading />}
+            <table>
+                <thead>
                     <tr>
-                        <td>
-                            {log.date.substring(0, 10)}
-                        </td>
-                        <td>
-                            {log.worker.name}
-                        </td>
-                        <td>
-                            {log.time}
-                        </td>
-                        {/* <td>
-                            {log.extraNotes}
-                        </td> */}
+                        <th>
+                            Date
+                        </th>
+                        <th>
+                            Worker Name
+                        </th>
+                        <th>
+                            Absence
+                        </th>
+                        <th>
+                            Overtime
+                        </th>
+                        <th>
+                            Overtime Value
+                        </th>
+                        <th>
+                            Time
+                        </th>
+                        <th>
+                            Payment
+                        </th>
+                        <th>
+                            Extra Notes
+                        </th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {
+                        log && log.length != 0 &&
+                        <tr>
+                            <td>
+                                {log.date?.substring(0, 10)}
+                            </td>
+                            <td>
+                                {log.worker?.name}
+                            </td>
+                            <td>
+                                {log.isAbsence ? "true" : "false"}
+                            </td>
+                            <td>
+                                {log.overtime}
+                            </td>
+                            <td>
+                                {log.overtimeValue}
+                            </td>
+                            <td>
+                                {log.time}
+                            </td>
+                            <td>
+                                {log.payment}
+                            </td>
+                            <td>
+                                {log.extraNotes}
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </>
     );
 
 }

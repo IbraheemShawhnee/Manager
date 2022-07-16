@@ -41,9 +41,6 @@ mongoose.connect(dbUrl, {
 })
 	.then(() => {
 		console.log("Connection to the Database was established successfully!");
-		app.listen(PORT, () => {
-			console.log(`Server has started on PORT: ${PORT}`);
-		})
 	})
 	.catch(error => {
 		console.log("An ERROR occurred while attempting to connect to the Database");
@@ -87,8 +84,8 @@ const sessionConfig = {
 	saveUninitialized: true,
 	cookie: {
 		httpOnly: false,
-		expires: Date.now() + (1000 * 60 * 60 * 24 * 7),
-		maxAge: (1000 * 60 * 60 * 24 * 7),
+		expires: Date.now() + (1000 * 60 * 60 * 24),
+		maxAge: (1000 * 60 * 60 * 24),
 	}
 }
 
@@ -104,7 +101,7 @@ app.use(helmet());
 app.use(mongoSanitize({
 	replaceWith: '_'
 }));
-//	--
+
 app.use(express.json());
 app.use(cors({
 	origin: CLIENT,
@@ -115,6 +112,7 @@ app.use(cors({
 //	Passport session manager
 app.use(passport.initialize());
 app.use(passport.session());
+
 //	Passport Configuration
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
@@ -185,3 +183,7 @@ app.use((err, req, res, next) => {
 	console.log(err.message);
 	return res.status(statusCode).json({ error: err.message });
 });
+
+app.listen(PORT, () => {
+	console.log(`Server has started on PORT: ${PORT}`);
+})

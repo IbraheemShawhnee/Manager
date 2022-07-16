@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Row from "./row";
 
 import { fetchBills } from "../../features/Bills/billsSlice";
+import Loading from "../../components/Loading";
 function Bills() {
     document.title = "Manager - Bills";
     const dispatch = useDispatch();
@@ -10,7 +11,6 @@ function Bills() {
         dispatch(fetchBills());
     }, [])
     const response = useSelector((state) => state.bills);
-    console.log(response);
     function createRow(bill) {
         return (<Row
             key={bill._id}
@@ -25,7 +25,7 @@ function Bills() {
     return (
         <>
             <h1>Bills Page</h1>
-            {response.loading && <div>Loading...</div>}
+            {response.loading && <Loading />}
             {!response.loading && response.error ? <div>Error: {response.error}</div> : null}
             {!response.loading && response.bills.bills && response.bills.bills.length ? (
                 <table>
