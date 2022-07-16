@@ -1,7 +1,7 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
 function Row(props) {
-    const link = `workers/${props.id}`
+    const link = `../workers/${props.id}`
     return (
         <tr>
             <td>
@@ -17,7 +17,7 @@ function Row(props) {
                 {props.phoneNumber}
             </td>
             <td>
-            <a href={link}> View</a>
+                <Link to={link}> View</Link>
             </td>
         </tr>
     );
