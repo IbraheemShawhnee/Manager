@@ -35,25 +35,24 @@ export const findWorker = createAsyncThunk("workers/findWorker", (id) => {
         });
 })
 
-export const updateWorker = createAsyncThunk("workers/updateWorker", (id, data) => {
-    console.log(data);
+export const updateWorker = createAsyncThunk("workers/updateWorker", (requestObj) => {
+    const { id, data } = requestObj;
     return axios
         .put(`/api/workers/${id}`, data)
         .then(response => {
-            console.log(response);
             const { message } = response.data;
             return message;
         });
 })
 
-export const deleteWorker = createAsyncThunk("workers/deletWorker", (id) => {
-    return axios
-        .delete(`/api/workers/${id}`)
-        .then(response => {
-            const { worker } = response.data;
-            return worker;
-        });
-})
+// export const deleteWorker = createAsyncThunk("workers/deletWorker", (id) => {
+//     return axios
+//         .delete(`/api/workers/${id}`)
+//         .then(response => {
+//             const { worker } = response.data;
+//             return worker;
+//         });
+// })
 
 
 const workersSlice = createSlice({
@@ -117,19 +116,19 @@ const workersSlice = createSlice({
             state.error = action.error.message;
         })
         //  DELETE
-        builder.addCase(deleteWorker.pending, state => {
-            state.loading = true;
-        });
-        builder.addCase(deleteWorker.fulfilled, (state, action) => {
-            state.loading = false;
-            state.message = action.payload;
-            state.error = "";
-        });
-        builder.addCase(deleteWorker.rejected, (state, action) => {
-            state.loading = false;
-            state.message = "";
-            state.error = action.error.message;
-        })
+        // builder.addCase(deleteWorker.pending, state => {
+        //     state.loading = true;
+        // });
+        // builder.addCase(deleteWorker.fulfilled, (state, action) => {
+        //     state.loading = false;
+        //     state.message = action.payload;
+        //     state.error = "";
+        // });
+        // builder.addCase(deleteWorker.rejected, (state, action) => {
+        //     state.loading = false;
+        //     state.message = "";
+        //     state.error = action.error.message;
+        // })
     }
 })
 

@@ -39,7 +39,6 @@ export const HomeBg = styled.div`
     width: 100%;
     height: 100%;
     overflow: hidden;
-
 `
 export const VideoBg = styled.video`
     width: 100%;
@@ -47,7 +46,6 @@ export const VideoBg = styled.video`
     -o-object-fit: cover;
     object-fit: cover;
     background: #232a34;
-
 `
 
 export const HomeContent = styled.div`
@@ -58,7 +56,6 @@ export const HomeContent = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-
 `
 
 export const HomeH1 = styled.h1`
@@ -108,7 +105,6 @@ export const HomeBtn = styled(Link)`
     justify-content: center;
     align-items: center;
     transition: all 0.2s ease-in-out;
-
     &:hover{
         transition: all 0.2s ease-in-out;
         background: ${({ primary }) => (primary ? "#fff" : "#01BF71")};

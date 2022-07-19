@@ -4,9 +4,10 @@ import { NavLink as Link } from 'react-router-dom';
 
 
 export const Nav = styled.nav`
-    background: ${({ scrollNav }) => (scrollNav ? "#000" : "transparent")};
+    box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(20px);
+    background: transparent;
     height: 80px;
-    /* margin-top: -80px; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -28,6 +29,7 @@ export const NavbarContainer = styled.div`
     width: 100%;
     padding: 0 24px;
     max-width: 1100px;
+
 `
 
 export const NavLogo = styled(Link)`
@@ -41,14 +43,15 @@ export const NavLogo = styled(Link)`
     font-weight: bold;
     text-decoration: none;
     &:hover{
-        color: #01bf71;
+        color: #010606;
+        /* color: #01bf71; */
     }
 `
 
 export const MobileIcon = styled.div`
     height: 25px;
     display: none;
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 900px) {
             display: block;
             color: #fff;
             position: absolute;
@@ -59,7 +62,8 @@ export const MobileIcon = styled.div`
             cursor: pointer;
     }
     &:hover{
-        color: #01bf71;
+        color: #010606;
+        /* color: #01bf71; */
     }
 `
 
@@ -69,7 +73,7 @@ export const NavMenu = styled.ul`
     list-style: none;
     text-align: center;
     margin-right: -22px;
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 900px) {
         display: none;
     }
 `
@@ -87,24 +91,27 @@ export const NavLinks = styled(Link)`
     height: 100%;
     cursor: pointer;
     &:hover{
-        color: #01bf71;
+        color: #010606;
+        /* color: #01bf71; */
     }
     &[class*="active"] {
-    border-bottom:  3px solid #01bf71;
+        border-bottom: 3px solid #010606;
+    /* border-bottom:  3px solid #01bf71; */
   }
 `;
 
 export const NavbarBtnWrapper = styled.div`
     display: flex;
     align-items: center;
-    @media screen and (max-width: 768px){
+    @media screen and (max-width: 900px){
         display: none;
     }
 `
 
 export const NavbarBtn = styled(Link)`
     border-radius: 50px;
-    background: #01bf71;
+    background: #010606;
+    /* background: #01bf71; */
     white-space: nowrap;
     padding: 10px 22px;
     color: #fff;

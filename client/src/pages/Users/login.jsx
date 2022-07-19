@@ -15,9 +15,13 @@ import {
 } from "./Elements";
 import { UserContext } from "../../App";
 
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../features/Users/userSlice";
+
 const Login = () => {
     document.title = "Manager - Login";
-    const { user, setUser } = useContext(UserContext);
+    const dispatch = useDispatch();
+    // const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
     const location = useLocation();
     const [data, setData] = useState({
@@ -36,19 +40,23 @@ const Login = () => {
         if (data.username.length && data.password.length) {
             setMessage("");
             try {
-                const url = "/api/login";
-                const { data: res } = await axios.post(url, data);
-                if (res.success) {
-                    setMessage(res.message);
-                    setUser(res.user);
-                    if (location.state?.from) {
-                        navigate(location.state.from.pathname);
+                dispatch(loginUser(data)).then(({ payload }) => {
+                    setMessage(payload?.message)
+                    if (payload?.success) {
+                        if (location.state?.from) {
+                            navigate(location.state.from.pathname);
+                        }
+                        else {
+                            navigate("/");
+                        }
                     }
-                    else {
-                        navigate("/");
-                    }
-                }
-            } catch (error) {
+                }).catch((error) => {
+                    setMessage("Something went wrong!");
+                    // setError(true);
+                    return console.log(error);
+                })
+            }
+            catch (error) {
                 setMessage(error.message);
             }
         }

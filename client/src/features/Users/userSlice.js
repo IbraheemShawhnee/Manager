@@ -20,7 +20,6 @@ export const getUser = createAsyncThunk("users/fetchUserData", () => {
 })
 
 export const loginUser = createAsyncThunk("users/loginUser", (data) => {
-    console.log(data);
     return axios
         .post("/api/login", data)
         .then(response => {

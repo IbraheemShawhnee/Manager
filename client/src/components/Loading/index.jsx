@@ -10,11 +10,9 @@ const Loading = () => {
     return (
         <>
             <LoadingContainer>
-                <LoadingMenu>
-                    <LoadingCenter>
-                        <ClipLoader size={300} color={"#01bf71"}cssOverride={false}/>
-                    </LoadingCenter>
-                </LoadingMenu>
+                <LoadingCenter>
+                    <ClipLoader size={300} color={"#000"} cssOverride={false} />
+                </LoadingCenter>
             </LoadingContainer>
         </>
     )

@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react'
+import { useDispatch } from 'react-redux';
+// import axios from "axios";
 import { FaBars } from 'react-icons/fa'
-import axios from "axios";
 import { UserContext } from "../../App"
+import { logoutUser } from '../../features/Users/userSlice';
 import {
     Nav,
     NavbarContainer,
@@ -16,28 +18,18 @@ import {
 } from "./NavbarElements";
 
 const Navbar = (props) => {
-    const logout = async () => {
-        await axios.get("/api/logout");
+    const dispatch = useDispatch()
+    const logout = () => {
+        dispatch(logoutUser())
+        // await axios.get("/api/logout");
         window.open("/", "_self");
     };
 
-    const {user} = useContext(UserContext);
-    const [scrollNav, setScrollNav] = useState(false);
-
-    const changeNav = () => {
-        if (window.screenY) {
-            setScrollNav(true);
-        } else {
-            setScrollNav(false);
-        }
-    }
-    useEffect(() => {
-        window.addEventListener('scroll', changeNav)
-    }, []);
+    const { user } = useContext(UserContext);
 
     return (
         <>
-            <Nav scrollNav={scrollNav}>
+            <Nav>
                 <NavbarContainer>
                     <NavLogo to="/">Manager</NavLogo>
                     <MobileIcon onClick={props.toggle}>

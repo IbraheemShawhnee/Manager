@@ -45,6 +45,7 @@ export const View = async (req, res, next) => {
 }
 
 export const Update = async (req, res, next) => {
+	console.log(req.params);
 	const { id } = req.params;
 	const worker = await User.findByIdAndUpdate(id, { name: req.body.name, email: req.body.email, phoneNumber: req.body.phoneNumber }, { new: true, runValidators: true })
 	if (!worker) {

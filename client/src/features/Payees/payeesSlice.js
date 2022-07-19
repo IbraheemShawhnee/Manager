@@ -31,17 +31,15 @@ export const findPayee = createAsyncThunk("payees/findPayee", (id) => {
     return axios
         .get(`/api/payees/${id}`)
         .then(response => {
-            console.log(response.data);
             return response.data;
         });
 })
 
-export const updatePayee = createAsyncThunk("payees/updatePayee", (id, data) => {
-    console.log(data);
+export const updatePayee = createAsyncThunk("payees/updatePayee", (requestObj) => {
+    const { id, data } = requestObj;
     return axios
         .put(`/api/payees/${id}`, data)
         .then(response => {
-            console.log(response);
             const { message } = response.data;
             return message;
         });

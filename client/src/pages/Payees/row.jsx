@@ -17,7 +17,7 @@ function Row(props) {
                 {props.extraNotes}
             </td>
             <td>
-            <Link to={link} baseUrl="/"> View</Link>
+            <Link to={link}> View</Link>
             </td>
         </tr>
     );

@@ -67,7 +67,7 @@ const WorkerForm = () => {
 
     useEffect(() => {
         if (id) {
-            dispatch(findWorker(id)).then(({ payload: worker }) => {
+            dispatch(findWorker(id)).then(({ payload: { worker: worker } }) => {
                 setData({
                     name: worker.name,
                     email: worker.email,
@@ -83,10 +83,16 @@ const WorkerForm = () => {
     const { message, error, loading } = useSelector((state) => state.workers);
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(data);
         if (id) {
-            delete data.username;
-            dispatch(updateWorker(id, data));
+            dispatch(updateWorker({
+                id,
+                data: {
+                    name: data.name,
+                    email: data.email,
+                    phoneNumber: data.phoneNumber
+                }
+            }
+            ));
         } else {
             if (validate()) {
                 dispatch(createWorker(data))
@@ -104,6 +110,8 @@ const WorkerForm = () => {
                     <div className="circle circle-one"></div>
                     <div className="form-container">
                         <h1 className="opacity">{id && data ? `Edit - ${data.name}` : "New Worker"}</h1>
+                        {message && <div id="msg">{message}</div>}
+                        {/* {error && <div id="msg">{error}</div>} */}
                         <form onSubmit={handleSubmit} autoComplete="off">
                             <input onChange={handleChange} name="name" type="text" placeholder="Full Name" value={data.name} />
                             {!id && <>
@@ -114,8 +122,6 @@ const WorkerForm = () => {
                             <input onChange={handleChange} name="email" type="text" placeholder="E-Mail" value={data.email} />
                             <input onChange={handleChange} name="phoneNumber" type="text" placeholder="Phone Number" value={data.phoneNumber} />
                             <button type="submit" className="opacity">{id ? "Edit" : "Add"}</button>
-                            {message && <div id="msg">{message}</div>}
-                            {/* {error && <div id="msg">{error}</div>} */}
                         </form>
                     </div>
                     <div className="circle circle-two"></div>

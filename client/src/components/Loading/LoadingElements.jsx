@@ -6,7 +6,9 @@ export const LoadingContainer = styled.aside`
     z-index: 999;
     width: 100%;
     height: 100%;
-    background: #0d0d0d;
+    background: transparent;
+    backdrop-filter: blur(20px);
+    /* background: #0d0d0d; */
     display: grid;
     align-items: center;
     top: 0;
@@ -16,23 +18,8 @@ export const LoadingContainer = styled.aside`
     top: '0';
 `
 
-export const LoadingMenu = styled.ul`
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(6, 80px);
-    text-align: center;
-    @media screen and (max-width: 480px){
-        grid-template-rows: repeat(6, 60px);
-    }
-
-`
-
 export const LoadingCenter = styled.div`
+    display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
-    text-decoration: none;
-    list-style: none;
-    transition: 0.2s ease-in-out;
-    text-decoration: none;
 `
