@@ -1,8 +1,8 @@
 import React from 'react';
 const NotFound = () => {
     return (
-        <main style={{ padding: "1rem" }}>
-            <p>Oops something went wrong!</p>
+        <main style={{ padding: "2rem", textAlign: 'center' }}>
+            <h1>Oops something went wrong!</h1>
         </main>
     )
 }

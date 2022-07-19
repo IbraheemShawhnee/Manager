@@ -1,5 +1,5 @@
 import React, {useContext} from 'react'
-import axios from "axios";
+import { useDispatch } from 'react-redux';
 import {
     SidebarContainer,
     Icon,
@@ -10,12 +10,13 @@ import {
     SideBtnWrapper,
     SideBtn,
 } from './SidebarElements';
+import { logoutUser } from '../../features/Users/userSlice';
 import { UserContext } from '../../App';
 const Sidebar = (props) => {
     const {user} = useContext(UserContext);
-    const logout = async () => {
-        await axios.get("/api/logout");
-        window.open("/", "_self");
+    const dispatch = useDispatch()
+    const logout = () => {
+        dispatch(logoutUser());
     };
     return (
         <>

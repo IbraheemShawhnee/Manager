@@ -18,15 +18,11 @@ import {
 } from "./NavbarElements";
 
 const Navbar = (props) => {
+    const { user } = useContext(UserContext);
     const dispatch = useDispatch()
     const logout = () => {
-        dispatch(logoutUser())
-        // await axios.get("/api/logout");
-        window.open("/", "_self");
+        dispatch(logoutUser());
     };
-
-    const { user } = useContext(UserContext);
-
     return (
         <>
             <Nav>

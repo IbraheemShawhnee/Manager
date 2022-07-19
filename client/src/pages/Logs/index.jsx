@@ -5,7 +5,7 @@ import { fetchLogs, fetchMyLogs } from "../../features/Logs/logsSlice";
 import { UserContext } from "../../App";
 import Row from "./row";
 import Loading from "../../components/Loading";
-
+import { Link } from "react-router-dom";
 function Logs() {
     document.title = "Manager - Logs"
     const dispatch = useDispatch();
@@ -36,7 +36,7 @@ function Logs() {
 
     return (
         <>
-            <h1>Logs Page</h1>
+        <Link to="../logs/new"><h1>Logs Page</h1></Link>
             {response.loading && <Loading />}
             {!response.loading && response.error ? <div>Error: {response.error}</div> : null}
             {!response.loading && response.logs.length ? (

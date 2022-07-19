@@ -4,7 +4,7 @@ import Row from "./row";
 
 import { fetchWorkers } from "../../features/Workers/workersSlice";
 import Loading from "../../components/Loading";
-
+import { Link } from "react-router-dom";
 function Workers() {
     document.title = "Manager - Workers";
     const dispatch = useDispatch();
@@ -27,7 +27,7 @@ function Workers() {
 
     return (
         <>
-            <h1>Workers Page</h1>
+            <Link to="../workers/new"><h1>Workers Page</h1></Link>
             {response.loading && <Loading />}
             {!response.loading && response.error ? <div>Error: {response.error}</div> : null}
             {!response.loading && response.workers.length ? (

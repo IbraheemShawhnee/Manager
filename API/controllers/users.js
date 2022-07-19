@@ -67,7 +67,7 @@ export const SuccessLogin = (req, res) => {
     user.isAdmin = req.user.isAdmin;
     return res.status(200).json({
         success: true,
-        message: "Logged in Successfully",
+        message: "Welcome Back!",
         cookies: req.cookies,
         user,
     });

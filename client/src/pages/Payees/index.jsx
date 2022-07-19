@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Row from "./row";
 
-// import store from "../../app/store";
+import { Link } from "react-router-dom";
 import { fetchPayees } from "../../features/Payees/payeesSlice";
 import Loading from "../../components/Loading";
 function Payees() {
@@ -27,7 +27,7 @@ function Payees() {
 
     return (
         <>
-            <h1>Payees Page</h1>
+            <Link to="../payees/new"><h1>Payees Page</h1></Link>
             {response.loading && <Loading />}
             {!response.loading && response.error ? <div>Error: {response.error}</div> : null}
             {!response.loading && response.payees.length ? (

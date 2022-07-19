@@ -4,6 +4,8 @@ import Row from "./row";
 
 import { fetchBills } from "../../features/Bills/billsSlice";
 import Loading from "../../components/Loading";
+import { Link } from "react-router-dom";
+
 function Bills() {
     document.title = "Manager - Bills";
     const dispatch = useDispatch();
@@ -24,7 +26,7 @@ function Bills() {
     }
     return (
         <>
-            <h1>Bills Page</h1>
+            <Link to="../bills/new"><h1>Bills Page</h1></Link>
             {response.loading && <Loading />}
             {!response.loading && response.error ? <div>Error: {response.error}</div> : null}
             {!response.loading && response.bills.bills && response.bills.bills.length ? (

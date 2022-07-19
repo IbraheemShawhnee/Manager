@@ -19,7 +19,7 @@ export const AuthRoutes = () => {
 export const AdminRoutes = () => {
     const useAuth = () => {
         const { user } = useContext(UserContext);
-        return user && (user.isAdmin || user.isSuper);
+        return (user?.isAdmin || user?.isSuper);
     };
     const location = useLocation();
     const isAuth = useAuth();

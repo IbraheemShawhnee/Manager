@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Row from "./row";
-
+import { Link } from "react-router-dom";
 import { fetchCheques } from "../../features/Cheques/chequesSlice";
 import Loading from "../../components/Loading";
 function Cheques() {
@@ -26,7 +26,7 @@ function Cheques() {
     }
     return (
         <>
-            <h1>Cheques Page</h1>
+        <Link to="../cheques/new"><h1>Cheques Page</h1></Link>
             {response.loading && <Loading />}
             {!response.loading && response.error ? <div>Error: {response.error}</div> : null}
             {!response.loading && response.cheques.cheques && response.cheques.cheques.length ? (
