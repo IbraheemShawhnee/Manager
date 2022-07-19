@@ -1,6 +1,5 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
 import {
     Container,
     FormWrap,
@@ -13,7 +12,6 @@ import {
     FormButton,
     Text
 } from "./Elements";
-import { UserContext } from "../../App";
 
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../features/Users/userSlice";
@@ -21,7 +19,6 @@ import { loginUser } from "../../features/Users/userSlice";
 const Login = () => {
     document.title = "Manager - Login";
     const dispatch = useDispatch();
-    // const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
     const location = useLocation();
     const [data, setData] = useState({
@@ -41,8 +38,10 @@ const Login = () => {
             setMessage("");
             try {
                 dispatch(loginUser(data)).then(({ payload }) => {
-                    setMessage(payload?.message)
-                    if (payload?.success) {
+                    if (!payload.success) {
+                        setMessage(payload.message)
+                    }
+                    else {
                         if (location.state?.from) {
                             navigate(location.state.from.pathname);
                         }
@@ -52,7 +51,6 @@ const Login = () => {
                     }
                 }).catch((error) => {
                     setMessage("Something went wrong!");
-                    // setError(true);
                     return console.log(error);
                 })
             }

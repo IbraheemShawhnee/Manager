@@ -75,7 +75,7 @@ export const SuccessLogin = (req, res) => {
 
 
 export const FailedLogin = (req, res) => {
-    return res.status(400).json({
+    return res.status(200).json({
         success: false,
         message: "Invalid login credentials",
         cookies: req.cookies,

@@ -5,7 +5,7 @@ import axios from "axios";
 const initialState = {
     loading: false,
     user: null,
-    error: "",
+    success: true,
     message: "",
 };
 
@@ -46,7 +46,6 @@ const userSlice = createSlice({
         builder.addCase(getUser.fulfilled, (state, action) => {
             state.loading = false;
             state.user = action.payload;
-            state.error = "";
         });
         builder.addCase(getUser.rejected, (state, action) => {
             state.loading = false;
@@ -57,15 +56,18 @@ const userSlice = createSlice({
         //  loginUser
         builder.addCase(loginUser.pending, state => {
             state.loading = true;
+            state.success = false;
         });
         builder.addCase(loginUser.fulfilled, (state, action) => {
             state.loading = false;
-            state.user = action.payload;
-            state.error = "";
+            state.user = action.payload.user;
+            state.success = action.payload.success;
+            state.message = action.payload.message
         });
         builder.addCase(loginUser.rejected, (state, action) => {
             state.loading = false;
             state.user = null;
+            state.success = false;
             state.message = "";
             state.error = action.error.message;
         })
@@ -77,12 +79,10 @@ const userSlice = createSlice({
             state.loading = false;
             state.user = null;
             state.message = action.payload.message;
-            state.error = "";
         });
         builder.addCase(logoutUser.rejected, (state, action) => {
             state.loading = false;
-            state.message = "";
-            state.error = action.error.message;
+            state.message = action.error.message;
         })
     }
 })
