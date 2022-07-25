@@ -12,15 +12,15 @@ router.route("/register")
     .post(isLoggedIn, isAdmin, catchAsync(users.Create))
 
 router.route("/login")
-    .get(users.getMe)
     .post(passport.authenticate('local', {
         failureRedirect: "/api/login/failed",
     }), users.SuccessLogin);
 
-
-
 router.route("/login/failed")
     .get(users.FailedLogin);
+
+router.route("/user")
+    .get(users.getMe)
 
 router.route("/logout")
     .get(isLoggedIn, users.Logout)
@@ -28,8 +28,8 @@ router.route("/logout")
 router.route("/changePassword")
     .patch(isLoggedIn, catchAsync(users.PasswordChange))
 
-// router.patch("/changePassword/:id", isLoggedIn, isSuper, catchAsync(users.PasswordSet))
+router.patch("/changePassword/:id", isLoggedIn, isSuper, catchAsync(users.PasswordSet))
 
-// router.patch("/updatePermissions/:id", isLoggedIn, isSuper, catchAsync(users.UpdatePermissions))
+router.patch("/updatePermissions/:id", isLoggedIn, isSuper, catchAsync(users.UpdatePermissions))
 
 export default router;

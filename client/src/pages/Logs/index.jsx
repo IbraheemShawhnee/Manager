@@ -36,7 +36,7 @@ function Logs() {
 
     return (
         <>
-        <Link to="../logs/new"><h1>Logs Page</h1></Link>
+            <Link to="../logs/new"><h1>Logs Page</h1></Link>
             {response.loading && <Loading />}
             {!response.loading && response.error ? <div>Error: {response.error}</div> : null}
             {!response.loading && response.logs.length ? (

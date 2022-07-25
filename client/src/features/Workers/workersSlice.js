@@ -45,14 +45,14 @@ export const updateWorker = createAsyncThunk("workers/updateWorker", (requestObj
         });
 })
 
-// export const deleteWorker = createAsyncThunk("workers/deletWorker", (id) => {
-//     return axios
-//         .delete(`/api/workers/${id}`)
-//         .then(response => {
-//             const { worker } = response.data;
-//             return worker;
-//         });
-// })
+export const deleteWorker = createAsyncThunk("workers/deletWorker", (id) => {
+    return axios
+        .delete(`/api/workers/${id}`)
+        .then(response => {
+            const { worker } = response.data;
+            return worker;
+        });
+})
 
 
 const workersSlice = createSlice({
@@ -116,19 +116,19 @@ const workersSlice = createSlice({
             state.error = action.error.message;
         })
         //  DELETE
-        // builder.addCase(deleteWorker.pending, state => {
-        //     state.loading = true;
-        // });
-        // builder.addCase(deleteWorker.fulfilled, (state, action) => {
-        //     state.loading = false;
-        //     state.message = action.payload;
-        //     state.error = "";
-        // });
-        // builder.addCase(deleteWorker.rejected, (state, action) => {
-        //     state.loading = false;
-        //     state.message = "";
-        //     state.error = action.error.message;
-        // })
+        builder.addCase(deleteWorker.pending, state => {
+            state.loading = true;
+        });
+        builder.addCase(deleteWorker.fulfilled, (state, action) => {
+            state.loading = false;
+            state.message = action.payload;
+            state.error = "";
+        });
+        builder.addCase(deleteWorker.rejected, (state, action) => {
+            state.loading = false;
+            state.message = "";
+            state.error = action.error.message;
+        })
     }
 })
 

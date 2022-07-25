@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 const payeeSchema = new Schema({
 	name: {
 		type: String,
-		required: true,
+		required: [true, "Name can't be blank..."],
 		unique: true,
 	},
 	email: {

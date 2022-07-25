@@ -1,3 +1,5 @@
+// Setting up Env Vars
+
 import dotenv from "dotenv";
 if (process.env.NODE_ENV !== "production") {
 	dotenv.config();
@@ -6,7 +8,10 @@ const PORT = process.env.PORT || 5000;
 const CLIENT = `http://localhost:${PORT}`;
 const MONGOD_PORT = process.env.DB_PORT || 27017;
 
-//	PACKAGES
+const secret = process.env.SECRET || "whatawonderfullsecret!"
+// const secure = process.env.SECURE_COOKIES === "true" || false;
+
+
 import express from "express";
 import mongoose from "mongoose";
 
@@ -19,17 +24,18 @@ const __dirname = path.dirname(__filename);
 //	Session
 import session from "express-session";
 import MongoStore from "connect-mongo";
-
+//	Passport.js
 import passport from "passport";
 import LocalStrategy from "passport-local"
 import mongoSanitize from "express-mongo-sanitize"
 
 import helmet from "helmet";
-import cors from "cors";
+
 import User from "./models/user.js";
 
 
-// Routes and Authorizations
+// API
+import cors from "cors";
 import APIRoutes from "./API/api.js"
 
 //	DB CONNECTION
@@ -65,9 +71,7 @@ mongoose.connection.once("open", async () => {
 	}
 })
 
-const secret = process.env.SECRET || "whatawonderfullsecret!"
-// const secure = process.env.SECURE_COOKIES === "true" || false;
-
+//	Session Configuration
 const store = MongoStore.create({
 	mongoUrl: dbUrl,
 	touchAfter: 24 * 60 * 60,
@@ -88,7 +92,7 @@ const sessionConfig = {
 		maxAge: (1000 * 60 * 60 * 24),
 	}
 }
-
+//	
 const app = express();
 
 //	Parsing JSON
@@ -109,7 +113,7 @@ app.use(cors({
 	credentials: true,
 }));
 
-//	Passport session manager
+//	Passport Session Manager
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -162,6 +166,7 @@ app.use(
 
 //	Main Middleware
 app.use((req, res, next) => {
+	//	Storing current user data
 	res.locals.currentUser = req.user;
 	next();
 });

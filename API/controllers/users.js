@@ -127,44 +127,44 @@ export const PasswordChange = async (req, res, next) => {
     });
 }
 
-// export const PasswordSet = async (req, res, next) => {
-//     const { id } = req.params;
-//     const user = await User.findOne({ _id: id });
-//     if (!user) {
-//         return res.status(404).json({
-//             message: "User Not Found"
-//         });
-//     }
-//     try {
-//         await user.setPassword(req.body.password);
-//         await user.save();
-//         return res.status(201).json({
-//             message: "Password Changed Successfully"
-//         })
-//     } catch (err) {
-//         return res.status(500).json({
-//             message: err.message
-//         })
-//     }
-// }
+export const PasswordSet = async (req, res, next) => {
+    const { id } = req.params;
+    const user = await User.findOne({ _id: id });
+    if (!user) {
+        return res.status(404).json({
+            message: "User Not Found"
+        });
+    }
+    try {
+        await user.setPassword(req.body.password);
+        await user.save();
+        return res.status(201).json({
+            message: "Password Changed Successfully"
+        })
+    } catch (err) {
+        return res.status(500).json({
+            message: err.message
+        })
+    }
+}
 
-// export const UpdatePermissions = async (req, res, next) => {
-//     const { id } = req.params;
-//     let { permissions } = req.body;
-//     if (!permissions) {
-//         permissions = {
-//             isAdmin: false,
-//             isSuper: false
-//         }
-//     } else {
-//         permissions.isAdmin = !!permissions.isAdmin;
-//         permissions.isSuper = !!permissions.isSuper;
-//     }
-//     const worker = await User.findByIdAndUpdate(id, { isAdmin: permissions.isAdmin, isSuper: permissions.isSuper }, { new: true, runValidators: true })
-//     if (!worker) {
-//         req.flash("error", "Cannot find that worker!");
-//         return res.redirect("/workers");
-//     }
-//     req.flash("success", "Permissions Updated Successfully");
-//     res.redirect("/workers/" + id)
-// }
+export const UpdatePermissions = async (req, res, next) => {
+    const { id } = req.params;
+    const { permission } = req.body;
+    const isAdmin = (permission === 'Admin' || permission === "Super");
+    const isSuper = (permission === "Super");
+    const worker = await User.findByIdAndUpdate(id, {
+        isAdmin,
+        isSuper,
+    },
+        { new: true, runValidators: true }
+    )
+    if (!worker) {
+        return res.status(404).json({
+            message: "Cannot find that worker!",
+        })
+    }
+    return res.status(201).json({
+        message: "Permissions Updated Successfully"
+    });
+}

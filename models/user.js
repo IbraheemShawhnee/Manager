@@ -6,7 +6,7 @@ const { Schema } = mongoose;
 const userSchema = new Schema({
     name: {
         type: String,
-        required: [true, "Worker must have a name"],
+        required: [true, "Name can't be blank..."],
         unique: true,
     },
     email: {
