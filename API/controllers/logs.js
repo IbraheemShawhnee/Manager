@@ -55,12 +55,7 @@ export const Mine = async (req, res, next) => {
 
 export const Create = async (req, res, next) => {
 	const { log } = req.body;
-	if (log.payment.length == 0) {
-		log.payment = 0;
-	}
-	log.isAbsence = !!log.isAbsence;
-	const workerID = log.worker;
-	const worker = await User.findById(workerID);
+	const worker = await User.findById(log.worker);
 	const newLog = new Log(log)
 	await newLog.save();
 	worker.logs.push(newLog._id)
@@ -96,10 +91,6 @@ export const View = async (req, res, next) => {
 
 export const Update = async (req, res, next) => {
 	const { logID } = req.params;
-	if (req.body.log.payment.length == 0) {
-		req.body.log.payment = 0;
-	}
-	req.body.log.isAbsence = !!req.body.log.isAbsence;
 	const log = await Log.findByIdAndUpdate(logID, { ...req.body.log }, { new: true, runValidators: true })
 	if (!log) {
 		return res.status(404).json({

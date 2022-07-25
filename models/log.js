@@ -10,15 +10,15 @@ const logSchema = new Schema({
 		type: Boolean,
 		default: false
 	},
-	time: {
+	startingTime: {
 		type: String,
 		required: false,
 	},
-	overtime: {
+	finishingTime:{
 		type: String,
-		required: false
+		required: false,
 	},
-	overtimeValue: {
+	OTV: {
 		type: String,
 		required: false
 	},

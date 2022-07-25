@@ -39,7 +39,7 @@ const PayeeForm = () => {
         }
     }, [])
     const { message, error, loading } = useSelector((state) => state.payees);
-    const handleSubmit = async (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
         if (id) {
             dispatch(updatePayee({ id, data }));

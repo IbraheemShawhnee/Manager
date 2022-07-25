@@ -36,10 +36,49 @@ export const findLog = createAsyncThunk("logs/findLog", (id) => {
         });
 })
 
+export const createLog = createAsyncThunk("logs/createLog", (data) => {
+    data.date = new Date(data.date);
+    return axios
+        .post(`/api/logs`, {
+            log: data
+        })
+        .then(response => {
+            const { message } = response.data;
+            return message;
+        });
+})
+
+export const updateLog = createAsyncThunk("logs/updateLog", (requestObj) => {
+    const { id, data } = requestObj;
+    console.log(`/api/logs/${id}`);
+    return axios
+        .put(`/api/logs/${id}`, {
+            log: data
+        })
+        .then(response => {
+            const { message } = response.data;
+            return message;
+        });
+})
+
 const logsSlice = createSlice({
     name: "logs",
     initialState,
     extraReducers: builder => {
+        //  CREATE
+        builder.addCase(createLog.pending, state => {
+            state.loading = true;
+        });
+        builder.addCase(createLog.fulfilled, (state, action) => {
+            state.loading = false;
+            state.message = action.payload;
+            state.error = "";
+        });
+        builder.addCase(createLog.rejected, (state, action) => {
+            state.loading = false;
+            state.message = "";
+            state.error = action.error.message;
+        })
         //  Fetch All Logs
         builder.addCase(fetchLogs.pending, state => {
             state.loading = true;
@@ -80,6 +119,20 @@ const logsSlice = createSlice({
         builder.addCase(findLog.rejected, (state, action) => {
             state.loading = false;
             state.logs = [];
+            state.error = action.error.message;
+        })
+        //  UPDATE
+        builder.addCase(updateLog.pending, state => {
+            state.loading = true;
+        });
+        builder.addCase(updateLog.fulfilled, (state, action) => {
+            state.loading = false;
+            state.message = action.payload;
+            state.error = "";
+        });
+        builder.addCase(updateLog.rejected, (state, action) => {
+            state.loading = false;
+            state.message = "";
             state.error = action.error.message;
         })
     }

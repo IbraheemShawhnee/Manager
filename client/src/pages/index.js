@@ -13,6 +13,7 @@ export { default as Worker } from "./Workers/show";
 
 export { default as Logs } from "./Logs/index";
 export { default as Log } from "./Logs/show";
+export { default as LogForm } from "./Logs/Form";
 
 export { default as Payees } from "./Payees/index";
 export { default as Payee } from "./Payees/show";
