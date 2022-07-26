@@ -100,7 +100,7 @@ const LogForm = () => {
 
                             <input type="time" name="startingTime" onChange={handleInfoChange} value={data.startingTime} />
                             <input type="time" name="finishingTime" onChange={handleInfoChange} value={data.finishingTime} />
-                            <input type="text" name="extraNotes" />
+                            <input type="text" name="extraNotes" value={data.extraNotes} onChange={handleInfoChange} />
                             <button type="submit" className="opacity">{id ? "Edit" : "Add"}</button>
                         </form>
                     </div>

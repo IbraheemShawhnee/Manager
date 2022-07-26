@@ -78,11 +78,6 @@ export const Deleted = async (req, res, next) => {
 export const Create = async (req, res, next) => {
 	const { cheque } = req.body;
 	const payeeID = cheque.payee;
-	cheque.isCancelled = !!cheque.isCancelled;
-	if (cheque.isCancelled || cheque.payee.length == 0) {
-		cheque.isCancelled = true;
-		delete cheque.payee;
-	}
 	const newCheque = new Cheque(cheque)
 	try {
 		await newCheque.save();

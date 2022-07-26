@@ -32,6 +32,7 @@ export const validateUser = (req, res, next) => {
 	const { error } = userSchema.validate(req.body)
 	if (error) {
 		const msg = error.details.map(el => el.message).join(',');
+		console.log(msg);
 		return res.status(400).json({
 			message: msg
 		})
@@ -45,6 +46,7 @@ export const validatePayee = (req, res, next) => {
 	const { error } = payeeSchema.validate(req.body)
 	if (error) {
 		const msg = error.details.map(el => el.message).join(',');
+		console.log(msg);
 		return res.status(400).json({
 			message: msg
 		})
@@ -58,6 +60,7 @@ export const validateCheque = (req, res, next) => {
 	const { error } = chequeSchema.validate(req.body)
 	if (error) {
 		const msg = error.details.map(el => el.message).join(',');
+		console.log(msg);
 		return res.status(400).json({
 			message: msg
 		})

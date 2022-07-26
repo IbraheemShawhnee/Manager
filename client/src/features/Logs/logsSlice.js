@@ -50,7 +50,6 @@ export const createLog = createAsyncThunk("logs/createLog", (data) => {
 
 export const updateLog = createAsyncThunk("logs/updateLog", (requestObj) => {
     const { id, data } = requestObj;
-    console.log(`/api/logs/${id}`);
     return axios
         .put(`/api/logs/${id}`, {
             log: data
@@ -58,6 +57,15 @@ export const updateLog = createAsyncThunk("logs/updateLog", (requestObj) => {
         .then(response => {
             const { message } = response.data;
             return message;
+        });
+})
+
+export const deleteLog = createAsyncThunk("logs/deleteLog", (id) => {
+    return axios
+        .delete(`/api/logs/${id}`)
+        .then(response => {
+            const { worker } = response.data;
+            return worker;
         });
 })
 
@@ -131,6 +139,20 @@ const logsSlice = createSlice({
             state.error = "";
         });
         builder.addCase(updateLog.rejected, (state, action) => {
+            state.loading = false;
+            state.message = "";
+            state.error = action.error.message;
+        })
+        //  DELETE
+        builder.addCase(deleteLog.pending, state => {
+            state.loading = true;
+        });
+        builder.addCase(deleteLog.fulfilled, (state, action) => {
+            state.loading = false;
+            state.message = action.payload;
+            state.error = "";
+        });
+        builder.addCase(deleteLog.rejected, (state, action) => {
             state.loading = false;
             state.message = "";
             state.error = action.error.message;

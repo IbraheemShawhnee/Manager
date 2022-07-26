@@ -58,10 +58,12 @@ export const payeeSchema = new Joi.object({
 });
 
 export const chequeSchema = new Joi.object({
-	serial: Joi.number().min(0),
-	dueDate: Joi.date().required(),
-	value: Joi.number().min(0),
-	description: Joi.string().allow('').escapeHTML(),
-	payee: Joi.required(),
-	isCancelled: Joi.allow(),
+	cheque: Joi.object({
+		serial: Joi.number().min(0),
+		dueDate: Joi.date().required(),
+		value: Joi.number().min(0),
+		description: Joi.string().allow('').escapeHTML(),
+		payee: Joi.required(),
+		isCancelled: Joi.allow(),
+	}).required()
 });

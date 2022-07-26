@@ -9,6 +9,16 @@ const initialState = {
     message: "",
 };
 
+export const createCheque = createAsyncThunk("cheques/createCheque", (data) => {
+    data.dueDate = new Date(data.dueDate);
+    return axios
+        .post(`/api/cheques`, { cheque: data })
+        .then(response => {
+            const { message } = response.data;
+            return message;
+        });
+})
+
 export const fetchCheques = createAsyncThunk("cheques/fetchCheques", () => {
     return axios
         .get("/api/cheques")
@@ -27,20 +37,45 @@ export const findCheque = createAsyncThunk("cheques/findCheque", (id) => {
         });
 })
 
-export const addCheque = createAsyncThunk("cheques/addCheque", (data) => {
+export const updateCheque = createAsyncThunk("cheques/updateCheque", (requestObj) => {
+    const { id, data } = requestObj;
     return axios
-        .post(`/api/cheques`, data)
+        .put(`/api/cheques/${id}`, {
+            cheque: data
+        })
         .then(response => {
             const { message } = response.data;
-            console.log(message);
             return message;
         });
 })
+
+export const deleteCheque = createAsyncThunk("cheques/deleteCheque", (id) => {
+    return axios
+        .delete(`/api/cheques/${id}`)
+        .then(response => {
+            const { worker } = response.data;
+            return worker;
+        });
+})
+
 
 const chequesSlice = createSlice({
     name: "cheques",
     initialState,
     extraReducers: builder => {
+        //  createCheque
+        builder.addCase(createCheque.pending, state => {
+            state.loading = true;
+        });
+        builder.addCase(createCheque.fulfilled, (state, action) => {
+            state.loading = false;
+            state.message = action.payload;
+            state.error = "";
+        });
+        builder.addCase(createCheque.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+        })
         //  fetchCheques
         builder.addCase(fetchCheques.pending, state => {
             state.loading = true;
@@ -69,17 +104,32 @@ const chequesSlice = createSlice({
             state.cheques = [];
             state.error = action.error.message;
         })
-        //  addCheque
-        builder.addCase(addCheque.pending, state => {
+        //  UPDATE
+        builder.addCase(updateCheque.pending, state => {
             state.loading = true;
         });
-        builder.addCase(addCheque.fulfilled, (state, action) => {
+        builder.addCase(updateCheque.fulfilled, (state, action) => {
             state.loading = false;
             state.message = action.payload;
             state.error = "";
         });
-        builder.addCase(addCheque.rejected, (state, action) => {
+        builder.addCase(updateCheque.rejected, (state, action) => {
             state.loading = false;
+            state.message = "";
+            state.error = action.error.message;
+        })
+        //  DELETE
+        builder.addCase(deleteCheque.pending, state => {
+            state.loading = true;
+        });
+        builder.addCase(deleteCheque.fulfilled, (state, action) => {
+            state.loading = false;
+            state.message = action.payload;
+            state.error = "";
+        });
+        builder.addCase(deleteCheque.rejected, (state, action) => {
+            state.loading = false;
+            state.message = "";
             state.error = action.error.message;
         })
 
