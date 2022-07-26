@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -77,7 +77,7 @@ function Worker() {
                             }
                         </tbody>
                     </table>
-                    {logs && logs.length != 0 &&
+                    {logs && logs.length !== 0 &&
                         <table>
                             <thead>
                                 <tr>

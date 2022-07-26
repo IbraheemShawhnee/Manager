@@ -1,7 +1,5 @@
-import React, { useContext } from 'react'
 import {
     LoadingContainer,
-    LoadingMenu,
     LoadingCenter
 } from './LoadingElements';
 import ClipLoader from "react-spinners/ClipLoader";

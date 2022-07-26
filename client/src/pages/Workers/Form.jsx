@@ -79,7 +79,7 @@ const WorkerForm = () => {
 
     useEffect(() => {
         if (id) {
-            dispatch(findWorker(id)).then(({ payload: { worker: worker } }) => {
+            dispatch(findWorker(id)).then(({ payload: { worker } }) => {
                 setData({
                     name: worker.name,
                     email: worker.email,
@@ -97,7 +97,7 @@ const WorkerForm = () => {
             })
         }
     }, [])
-    const { message, error, loading } = useSelector((state) => state.workers);
+    const { message, loading } = useSelector((state) => state.workers);
     const updateUserInfo = event => {
         event.preventDefault();
         if (id) {

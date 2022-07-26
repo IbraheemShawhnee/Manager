@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {
     Container,
     FormWrap,
-    Icon,
     FormContent,
     Form,
     FormH1,
