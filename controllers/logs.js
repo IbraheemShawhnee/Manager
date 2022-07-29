@@ -1,9 +1,9 @@
-const { isAdminV, logsPaginatedResult } = require('../middlewares/middleware');
-const User = require("../models/user");
-const Log = require("../models/log");
+import { isAdminV, logsPaginatedResult } from "../middlewares/middleware.js";
+import User from "../models/user.js";
+import Log from "../models/log.js";
 
 
-module.exports.all = async (req, res, next) => {
+export const All = async (req, res, next) => {
 	let page = parseInt(req.query.page)
 	if (!page) {
 		page = 1
@@ -30,7 +30,7 @@ module.exports.all = async (req, res, next) => {
 
 }
 
-module.exports.mine = async (req, res, next) => {
+export const Mine = async (req, res, next) => {
 	// let page = parseInt(req.query.page)
 	// if (!page) {
 	// 	page = 1
@@ -52,7 +52,7 @@ module.exports.mine = async (req, res, next) => {
 	})
 }
 
-module.exports.renderNewForn = async (req, res, next) => {
+export const RenderNewForn = async (req, res, next) => {
 	const date = new Date();
 	const workers = await User.find({})
 	const defaultDate = String(date.getFullYear()) + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
@@ -63,7 +63,7 @@ module.exports.renderNewForn = async (req, res, next) => {
 	})
 }
 
-module.exports.create = async (req, res, next) => {
+export const Create = async (req, res, next) => {
 	const { log } = req.body;
 	if (log.payment.length == 0) {
 		log.payment = 0;
@@ -79,7 +79,7 @@ module.exports.create = async (req, res, next) => {
 	res.redirect("/logs")
 }
 
-module.exports.view = async (req, res, next) => {
+export const View = async (req, res, next) => {
 	const { logID } = req.params;
 	const log = await Log.findById(logID).populate("worker")
 	if (!log) {
@@ -97,7 +97,7 @@ module.exports.view = async (req, res, next) => {
 
 }
 
-module.exports.renderEditForm = async (req, res, next) => {
+export const RenderEditForm = async (req, res, next) => {
 	const { logID } = req.params;
 	const log = await Log.findById(logID).populate("worker")
 	const workers = await User.find({})
@@ -112,7 +112,7 @@ module.exports.renderEditForm = async (req, res, next) => {
 	});
 }
 
-module.exports.update = async (req, res, next) => {
+export const Update = async (req, res, next) => {
 	const { logID } = req.params;
 	if (req.body.log.payment.length == 0) {
 		req.body.log.payment = 0;
@@ -127,7 +127,7 @@ module.exports.update = async (req, res, next) => {
 	res.redirect("/logs/" + logID)
 }
 
-module.exports.delete = async (req, res, next) => {
+export const Delete = async (req, res, next) => {
 	const { logID } = req.params;
 	const log = await Log.findByIdAndDelete(logID)
 	if (!log) {

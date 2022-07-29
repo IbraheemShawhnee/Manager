@@ -1,27 +1,27 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const catchAsync = require('../utils/catchAsync');
-const { isLoggedIn, isAdmin, isSuper } = require('../middlewares/middleware');
-const passport = require("passport");
-const users = require("../controllers/users");
+import catchAsync from "../utils/catchAsync.js";
+import { isLoggedIn, isAdmin, isSuper } from "../middlewares/middleware.js";
+import passport from "passport";
+import * as users from "../controllers/users.js";
 
 router.route("/register")
-    .get(isLoggedIn, isAdmin, users.renderRegisterForm)
-    .post(isLoggedIn, isAdmin, catchAsync(users.create))
+    .get(isLoggedIn, isAdmin, users.RenderRegisterForm)
+    .post(isLoggedIn, isAdmin, catchAsync(users.Create))
 
 router.route("/login")
-    .get(users.renderLoginPage)
-    .post(passport.authenticate('local', { failureFlash: true, failureRedirect: "/login", keepSessionInfo: true }), users.login)
+    .get(users.RenderLoginPage)
+    .post(passport.authenticate('local', { failureFlash: true, failureRedirect: "/login", keepSessionInfo: true }), users.Login)
 
-router.get("/logout", isLoggedIn, catchAsync(users.logout))
+router.get("/logout", isLoggedIn, catchAsync(users.Logout))
 
 router.route("/changePassword")
-    .get(isLoggedIn, users.renderChangePassowrdForm)
-    .patch(isLoggedIn, catchAsync(users.passwordChange))
+    .get(isLoggedIn, users.RenderChangePassowrdForm)
+    .patch(isLoggedIn, catchAsync(users.PasswordChange))
 
-router.patch("/changePassword/:id", isLoggedIn, isSuper, catchAsync(users.passwordSet))
+router.patch("/changePassword/:id", isLoggedIn, isSuper, catchAsync(users.PasswordSet))
 
-router.patch("/updatePermissions/:id", isLoggedIn, isSuper, catchAsync(users.updatePermissions))
+router.patch("/updatePermissions/:id", isLoggedIn, isSuper, catchAsync(users.UpdatePermissions))
 
 
-module.exports = router;
+export default router;

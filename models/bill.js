@@ -1,18 +1,18 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const billSchema = new Schema({
 	date: {
 		type: Date,
-		required: true
+		required: [true, "Date can't be blank..."]
 	},
 	value: {
 		type: Number,
-		required: true
+		required: [true, "Value can't be blank..."]
 	},
 	description: {
 		type: String,
-		required: true
+		required: [true, "Description can't be blank..."]
 	},
 	extraNotes: {
 		type: String,
@@ -25,4 +25,4 @@ const billSchema = new Schema({
 })
 const Bill = mongoose.model("Bill", billSchema);
 
-module.exports = Bill;
+export default Bill;

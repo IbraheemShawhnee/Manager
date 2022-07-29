@@ -1,6 +1,6 @@
-const Bill = require("../models/bill");
-const { billsPaginatedResult } = require("../middlewares/middleware");
-module.exports.all = async (req, res) => {
+import Bill from "../models/bill.js";
+import { billsPaginatedResult } from "../middlewares/middleware.js";
+export const All = async (req, res) => {
 	let page = parseInt(req.query.page);
 	if (!page) {
 		page = 1
@@ -26,7 +26,7 @@ module.exports.all = async (req, res) => {
 	})
 }
 
-module.exports.renderNewForm = (req, res) => {
+export const RenderNewForm = (req, res) => {
 	const date = new Date();
 	const defaultDate = String(date.getFullYear()) + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
 	res.render("bills/new", {
@@ -35,7 +35,7 @@ module.exports.renderNewForm = (req, res) => {
 	});
 }
 
-module.exports.create = async (req, res, next) => {
+export const Create = async (req, res, next) => {
 	if (req.body.bill.value < 0)
 		req.body.bill.isExpenses = false;
 	const bill = new Bill(req.body.bill)
@@ -44,7 +44,7 @@ module.exports.create = async (req, res, next) => {
 	res.redirect("/bills")
 }
 
-module.exports.view = async (req, res, next) => {
+export const View = async (req, res, next) => {
 	const { id } = req.params
 	const bill = await Bill.findById(id)
 	if (!bill) {
@@ -57,7 +57,7 @@ module.exports.view = async (req, res, next) => {
 	})
 }
 
-module.exports.renderEditForm = async (req, res, next) => {
+export const RenderEditForm = async (req, res, next) => {
 	const id = req.params.id;
 	const bill = await Bill.findById(id)
 	if (!bill) {
@@ -70,7 +70,7 @@ module.exports.renderEditForm = async (req, res, next) => {
 	});
 }
 
-module.exports.update = async (req, res, next) => {
+export const Update = async (req, res, next) => {
 	const { id } = req.params;
 	if (req.body.bill.value < 0)
 		req.body.bill.isExpenses = false;
@@ -83,7 +83,7 @@ module.exports.update = async (req, res, next) => {
 	res.redirect("/bills/" + id)
 }
 
-module.exports.delete = async (req, res, next) => {
+export const Delete = async (req, res, next) => {
 	const { id } = req.params;
 	const bill = await Bill.findByIdAndDelete(id)
 	if (!bill) {

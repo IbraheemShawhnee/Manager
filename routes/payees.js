@@ -1,28 +1,28 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const catchAsync = require("../utils/catchAsync");
-const { validatePayee } = require("../middlewares/validations");
-const payees = require("../controllers/payees");
+import catchAsync from "../utils/catchAsync.js";
+import { validatePayee } from "../middlewares/validations.js";
+import * as payees from "../controllers/payees.js";
 
 router.route('/')
     //	Index - GET
-    .get(catchAsync(payees.all))
+    .get(catchAsync(payees.All))
     //	Create - POST
-    .post(validatePayee, catchAsync(payees.create))
+    .post(validatePayee, catchAsync(payees.Create))
 
 //	New - GET
-router.get("/new", payees.renderNewForm)
+router.get("/new", payees.RenderNewForm)
 
 router.route("/:payeeID")
     //	Show - GET
-    .get(catchAsync(payees.view))
+    .get(catchAsync(payees.View))
     //	Update - PUT
-    .put(validatePayee, catchAsync(payees.update))
+    .put(validatePayee, catchAsync(payees.Update))
     //	Destory - DELETE
-   .delete (catchAsync(payees.delete))
+    .delete(catchAsync(payees.Delete))
 
 //	Edit - GET
-router.get("/:payeeID/edit", catchAsync(payees.renderEditForm))
+router.get("/:payeeID/edit", catchAsync(payees.RenderEditForm))
 
 
-module.exports = router;
+export default router;
