@@ -6,7 +6,7 @@ const { Schema } = mongoose;
 const userSchema = new Schema({
     name: {
         type: String,
-        required: [true, "Worker must have a name"],
+        required: [true, "Name can't be blank..."],
         unique: true,
     },
     email: {
@@ -46,5 +46,3 @@ userSchema.plugin(passportLocalMongoose);
 const User = mongoose.model("User", userSchema);
 
 export default User;
-
-

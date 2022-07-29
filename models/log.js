@@ -4,21 +4,21 @@ const { Schema } = mongoose;
 const logSchema = new Schema({
 	date: {
 		type: Date,
-		required: [true, "Log must have a date!"]
+		required: [true, "Date can't be blank..."]
 	},
 	isAbsence: {
 		type: Boolean,
 		default: false
 	},
-	time: {
+	startingTime: {
 		type: String,
-		required: false
+		required: false,
 	},
-	overtime: {
+	finishingTime:{
 		type: String,
-		required: false
+		required: false,
 	},
-	overtimeValue: {
+	OTV: {
 		type: String,
 		required: false
 	},
@@ -34,9 +34,14 @@ const logSchema = new Schema({
 	worker: {
 		type: Schema.Types.ObjectId,
 		ref: "User",
-		required: [true, "Log must have a worker!"],
+		required: [true, "You must specify a worker..."],
 	}
 })
+
+//	Date-Worker Composite Unique Value
+logSchema.index({ date: 1, worker: 1 }, { unique: true });
+
 const Log = mongoose.model("Log", logSchema);
+
 
 export default Log;
