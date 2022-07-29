@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const chequeSchema = new Schema({
@@ -39,4 +39,4 @@ const chequeSchema = new Schema({
 
 const Cheque = mongoose.model("Cheque", chequeSchema);
 
-module.exports = Cheque;
+export default Cheque;

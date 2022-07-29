@@ -1,6 +1,6 @@
-const Payee = require("../models/payee");
+import Payee from "../models/payee.js";
 
-module.exports.all = async (req, res, next) => {
+export const All = async (req, res, next) => {
 	const payees = await Payee.find({})
 	res.render("payees/index", {
 		pageTitle: "Manager - Payees",
@@ -8,20 +8,20 @@ module.exports.all = async (req, res, next) => {
 	})
 }
 
-module.exports.renderNewForm = (req, res) => {
+export const RenderNewForm = (req, res) => {
 	res.render("payees/new", {
 		pageTitle: "Manager - Insert New Payee"
 	})
 }
 
-module.exports.create = async (req, res, next) => {
+export const Create = async (req, res, next) => {
 	const payee = new Payee(req.body.payee)
 	await payee.save();
 	req.flash("success", "Payee Added Successfully");
 	res.redirect("/payees")
 }
 
-module.exports.view = async (req, res, next) => {
+export const View = async (req, res, next) => {
 	const { payeeID } = req.params;
 	const payee = await Payee.findById(payeeID).populate("cheques")
 	if (!payee) {
@@ -34,7 +34,7 @@ module.exports.view = async (req, res, next) => {
 	})
 }
 
-module.exports.renderEditForm = async (req, res, next) => {
+export const RenderEditForm = async (req, res, next) => {
 	const { payeeID } = req.params;
 	const payee = await Payee.findById(payeeID)
 	if (!payee) {
@@ -47,7 +47,7 @@ module.exports.renderEditForm = async (req, res, next) => {
 	});
 }
 
-module.exports.update = async (req, res, next) => {
+export const Update = async (req, res, next) => {
 	const { payeeID } = req.params;
 	const payee = await Payee.findByIdAndUpdate(payeeID, { ...req.body.payee }, { new: true, runValidators: true })
 	if (!payee) {
@@ -58,7 +58,7 @@ module.exports.update = async (req, res, next) => {
 	res.redirect("/payees/" + payeeID)
 }
 
-module.exports.delete = async (req, res, next) => {
+export const Delete = async (req, res, next) => {
 	const { payeeID } = req.params;
 	const payee = await Payee.findByIdAndDelete(payeeID)
 	if (!payee) {

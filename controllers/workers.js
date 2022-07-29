@@ -1,15 +1,15 @@
-const User = require("../models/user");
+import User from "../models/user.js";
 
-module.exports.all = async (req, res, next) => {
+export const All = async (req, res, next) => {
 	const workers = await User.find({})
 	res.render("workers/index", { workers: workers, pageTitle: "Manager - Worker" })
 }
 
-module.exports.renderNewForm = (req, res) => {
+export const RenderNewForm = (req, res) => {
 	res.redirect("/register")
 }
 
-module.exports.view = async (req, res, next) => {
+export const View = async (req, res, next) => {
 	const { id } = req.params;
 	const worker = await User.findById(id).populate("logs")
 	if (!worker) {
@@ -22,7 +22,7 @@ module.exports.view = async (req, res, next) => {
 	})
 }
 
-module.exports.renderEditForm = async (req, res, next) => {
+export const RenderEditForm = async (req, res, next) => {
 	const { id } = req.params;
 	const worker = await User.findById(id)
 	if (!worker) {
@@ -35,7 +35,7 @@ module.exports.renderEditForm = async (req, res, next) => {
 	});
 }
 
-module.exports.update = async (req, res, next) => {
+export const Update = async (req, res, next) => {
 	const { id } = req.params;
 	const worker = await User.findByIdAndUpdate(id, { name: req.body.name, email: req.body.email, phoneNumber: req.body.phoneNumber }, { new: true, runValidators: true })
 	if (!worker) {
@@ -46,7 +46,7 @@ module.exports.update = async (req, res, next) => {
 	res.redirect("/workers/" + id)
 }
 
-module.exports.delete = async (req, res, next) => {
+export const Delete = async (req, res, next) => {
 	const { id } = req.params;
 	const user = await User.findByIdAndDelete(id)
 	if (!user) {

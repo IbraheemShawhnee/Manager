@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Cheque = require("./cheque");
+import mongoose from "mongoose";
+import Cheque from "./cheque.js";
 const { Schema } = mongoose;
 
 const payeeSchema = new Schema({
@@ -36,4 +36,4 @@ payeeSchema.post("findOneAndDelete", async function (payee) {
 
 const Payee = mongoose.model("Payee", payeeSchema);
 
-module.exports = Payee;
+export default Payee;
