@@ -2,9 +2,7 @@ import dotenv from "dotenv"
 if (process.env.NODE_ENV !== "production") {
 	dotenv.config();
 }
-const PORT = process.env.PORT || 5000;
-const FRONTEND_PORT = process.env.FRONTEND_PORT || 3000;
-const CLIENT = `http://localhost:${FRONTEND_PORT}`;
+const PORT = process.env.PORT || 80;
 const MONGOD_PORT = process.env.DB_PORT || 27017;
 
 //	PACKAGES
@@ -50,9 +48,9 @@ mongoose.connect(dbUrl, {
 	.then(() => {
 		console.log("Connection to the Database was established successfully!")
 	})
-	.catch(error => {
+	.catch(err => {
 		console.log("An ERROR occurred while attempting to connect to the Database")
-		console.log(error)
+		console.log(err)
 	})
 mongoose.connection.once("open", async () => {
 	if (await User.countDocuments().exec() < 1) {
@@ -103,41 +101,18 @@ app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 
-//	Middlewares
-
-//	Parsing JSON
 app.use(express.urlencoded({ extended: true }));
-//	Serving files
 app.use(express.static(path.join(__dirname, "/public")));
-//	Method Overriding
 app.use(methodOverride("_method"));
-//	Configuring Session
 app.use(session(sessionConfig));
-//	Flash
 app.use(flash());
-//	Helmet
 app.use(helmet());
-//	Mongo Sanitize
 app.use(mongoSanitize({
 	replaceWith: '_'
 }));
-//	--
-app.use(express.json());
-app.use(cors({
-	origin: CLIENT,
-	methods: "GET,POST,PUT,PATCH,DELETE",
-	credentials: true,
-}));
 
-//	Passport session manager
 app.use(passport.initialize());
 app.use(passport.session());
-//	Passport Configuration
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-
-// Configuring Helemt's Content Security Policy
 
 const scriptSrcUrls = [
 	"https://stackpath.bootstrapcdn.com",
@@ -145,7 +120,7 @@ const scriptSrcUrls = [
 ];
 const styleSrcUrls = [
 	"https://stackpath.bootstrapcdn.com",
-	"https://cdn.jsdelivr.net/",
+	"https://cdn.jsdelivr.net/"
 ];
 const connectSrcUrls = [
 
@@ -167,8 +142,6 @@ app.use(
 				"'self'",
 				"blob:",
 				"data:",
-				"https://www.transparenttextures.com",
-				"https://www.transparenttextures.com/patterns/carbon-fibre-big.png",
 				"https://images.unsplash.com",
 			],
 			fontSrc: ["'self'", ...fontSrcUrls],
@@ -176,18 +149,19 @@ app.use(
 	})
 );
 
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 //	Main Middleware
 app.use((req, res, next) => {
 	res.locals.currentUser = req.user;
-	//	Flasing
 	res.locals.success = req.flash("success");
 	res.locals.error = req.flash("error");
 	next();
 });
 
-//	Routes and Authorizations
-app.use("/api", APIRoutes)
+//	Routes and their Authorizations
 app.use("/bills", isLoggedIn, isAdmin, billsRoutes);
 app.use("/payees", isLoggedIn, isAdmin, payeesRoutes);
 app.use("/workers", isLoggedIn, isAdmin, workersRoutes);
@@ -201,17 +175,15 @@ app.get("/", (req, res) => {
 })
 
 app.all('*', (req, res, next) => {
-	console.log(`(404)Request at: ${req.originalUrl}`);
 	next(new ExpressError("Page  Not Found", 404));
 })
-
 
 app.use((err, req, res, next) => {
 	const { statusCode = 500 } = err;
 	if (!err.message) err.message = "Oh No, Something Went Wrong!"
 	return res.status(statusCode).render("error", { pageTitle: "Error", err: err })
 })
-// Start server
+
 app.listen(PORT, () => {
-	console.log(`Server has started on PORT: ${PORT}`);
+	console.log("Server has started on PORT:" + PORT);
 })
