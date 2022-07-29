@@ -1,8 +1,8 @@
-const Payee = require("../models/payee");
-const Cheque = require("../models/cheque");
-const { chequesPaginatedResult } = require("../middlewares/middleware");
+import Payee from "../models/payee.js";
+import Cheque from "../models/cheque.js";
+import { chequesPaginatedResult } from "../middlewares/middleware.js";
 
-module.exports.all = async (req, res, next) => {
+export const All = async (req, res, next) => {
 	// const dates = {
 	// 	null: false,
 	// 	since: req.query.since,
@@ -63,7 +63,7 @@ module.exports.all = async (req, res, next) => {
 	})
 }
 
-module.exports.cancelled = async (req, res, next) => {
+export const Cancelled = async (req, res, next) => {
 	const cheques = await Cheque.find({ isCancelled: true }).sort({ serial: -1 })
 	res.render("cheques/cancelled", {
 		pageTitle: "Manager - Cancelled Cheques",
@@ -71,7 +71,7 @@ module.exports.cancelled = async (req, res, next) => {
 	})
 }
 
-module.exports.deleted = async (req, res, next) => {
+export const Deleted = async (req, res, next) => {
 	const cheques = await Cheque.find({ isDeleted: true }).sort({ serial: -1 })
 	res.render("cheques/deleted", {
 		pageTitle: "Manager - Cheques",
@@ -79,7 +79,7 @@ module.exports.deleted = async (req, res, next) => {
 	})
 }
 
-module.exports.renderNewForm = async (req, res, next) => {
+export const RenderNewForm = async (req, res, next) => {
 	const date = new Date();
 	const payees = await Payee.find({})
 	const defaultDate = String(date.getFullYear()) + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + 30;
@@ -90,7 +90,7 @@ module.exports.renderNewForm = async (req, res, next) => {
 	})
 }
 
-module.exports.create = async (req, res, next) => {
+export const Create = async (req, res, next) => {
 	const { cheque } = req.body;
 	const payeeID = cheque.payee;
 	cheque.isCancelled = !!cheque.isCancelled;
@@ -109,7 +109,7 @@ module.exports.create = async (req, res, next) => {
 	res.redirect("/cheques/" + newCheque._id)
 }
 
-module.exports.view = async (req, res, next) => {
+export const View = async (req, res, next) => {
 	const { chequeID } = req.params;
 	const cheque = await Cheque.findById(chequeID).populate("payee")
 	if (!cheque) {
@@ -122,7 +122,7 @@ module.exports.view = async (req, res, next) => {
 	})
 }
 
-module.exports.renderEditForm = async (req, res, next) => {
+export const RenderEditForm = async (req, res, next) => {
 	const { chequeID } = req.params;
 	const cheque = await Cheque.findById(chequeID).populate("payee")
 	const payees = await Payee.find({})
@@ -137,7 +137,7 @@ module.exports.renderEditForm = async (req, res, next) => {
 	});
 }
 
-module.exports.update = async (req, res, next) => {
+export const Update = async (req, res, next) => {
 	const { chequeID } = req.params;
 	req.body.cheque.isCancelled = !!req.body.cheque.isCancelled;
 	const cheque = await Cheque.findById(chequeID);
@@ -162,7 +162,7 @@ module.exports.update = async (req, res, next) => {
 	res.redirect("/cheques/" + chequeID)
 }
 
-module.exports.delete = async (req, res, next) => {
+export const Delete = async (req, res, next) => {
 	const { chequeID } = req.params;
 	const cheque = await Cheque.findByIdAndDelete(chequeID)
 	if (!cheque) {

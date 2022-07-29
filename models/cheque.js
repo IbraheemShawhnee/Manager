@@ -1,19 +1,20 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const chequeSchema = new Schema({
 	serial: {
 		type: Number,
 		unique: true,
-		required: [true, "Cheque Serial-Number is required!"]
+		required: [true, "Cheque Serial-Number can't be blank..."]
 	},
 	dueDate: {
 		type: Date,
-		required: [true, "Cheque Due Date is required!"]
+		required: [true, "Cheque Due Date can't be blank..."]
 	},
 	value: {
 		type: Number,
-		required: [true, "Cheque Value is required!"]
+		min: 0,
+		required: [true, "Cheque Value can't be blank..."]
 	},
 	description: {
 		type: String,
@@ -22,7 +23,6 @@ const chequeSchema = new Schema({
 	payee: {
 		type: Schema.Types.ObjectId,
 		ref: "Payee",
-		// required: [true, "Cheque must have a Payee!"],
 	},
 	isCancelled: {
 		type: Boolean,
@@ -39,4 +39,4 @@ const chequeSchema = new Schema({
 
 const Cheque = mongoose.model("Cheque", chequeSchema);
 
-module.exports = Cheque;
+export default Cheque;

@@ -1,12 +1,12 @@
-const mongoose = require("mongoose");
-const passportLocalMongoose = require("passport-local-mongoose");
-const Log = require("./log")
+import mongoose from "mongoose";
+import passportLocalMongoose from "passport-local-mongoose";
+import Log from "./log.js";
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
     name: {
         type: String,
-        required: [true, "Worker must have a name"],
+        required: [true, "Name can't be blank..."],
         unique: true,
     },
     email: {
@@ -45,6 +45,4 @@ userSchema.plugin(passportLocalMongoose);
 
 const User = mongoose.model("User", userSchema);
 
-module.exports = User;
-
-
+export default User;

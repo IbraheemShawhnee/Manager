@@ -1,5 +1,6 @@
+import dotenv from "dotenv"
 if (process.env.NODE_ENV !== "production") {
-	require('dotenv').config();
+	dotenv.config();
 }
 const PORT = process.env.PORT || 5000;
 const FRONTEND_PORT = process.env.FRONTEND_PORT || 3000;
@@ -7,42 +8,41 @@ const CLIENT = `http://localhost:${FRONTEND_PORT}`;
 const MONGOD_PORT = process.env.DB_PORT || 27017;
 
 //	PACKAGES
-const express = require("express");
-const path = require("path");
-const ejsMate = require("ejs-mate");
-const methodOverride = require("method-override");
-const mongoose = require("mongoose");
-//	Session
-const session = require("express-session");
-const MongoStore = require("connect-mongo");
+import express from "express"
+import path from "path"
+import ejsMate from "ejs-mate"
+import methodOverride from "method-override"
+import mongoose from "mongoose"
+import session from "express-session"
+import flash from "connect-flash"
+import passport from "passport"
+import LocalStrategy from "passport-local"
+import mongoSanitize from "express-mongo-sanitize"
+import helmet from "helmet"
+import MongoStore from "connect-mongo"
+import User from "./models/user.js"
 
-const flash = require("connect-flash")
+//	Path
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const passport = require("passport");
-const LocalStrategy = require("passport-local")
-const mongoSanitize = require("express-mongo-sanitize");
-
-const helmet = require("helmet");
-const cors = require("cors");
-const User = require("./models/user");
-
-// Routes and Authorizations
-const { isLoggedIn, isAdmin } = require("./middlewares/middleware");
-const APIRoutes = require("./API/api")
-const billsRoutes = require("./routes/bills")
-const workersRoutes = require("./routes/workers")
-const logsRoutes = require("./routes/logs")
-const payeesRoutes = require("./routes/payees")
-const chequesRoutes = require("./routes/cheques")
-const usersRoutes = require("./routes/users")
+// Routes
+import { isLoggedIn, isAdmin } from "./middlewares/middleware.js"
+import billsRoutes from "./routes/bills.js"
+import workersRoutes from "./routes/workers.js"
+import logsRoutes from "./routes/logs.js"
+import payeesRoutes from "./routes/payees.js"
+import chequesRoutes from "./routes/cheques.js"
+import usersRoutes from "./routes/users.js"
 
 // Error handling
-const ExpressError = require("./utils/ExpressError");
-const catchAsync = require("./utils/catchAsync");
+import ExpressError from "./utils/ExpressError.js"
+import catchAsync from "./utils/catchAsync.js"
 
 //	DB CONNECTION
 
-dbUrl = process.env.DB_URL || "mongodb://localhost:" + MONGOD_PORT + "/managerDB"
+const dbUrl = process.env.DB_URL || "mongodb://localhost:" + MONGOD_PORT + "/managerDB"
 mongoose.connect(dbUrl, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true

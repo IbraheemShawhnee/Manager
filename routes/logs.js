@@ -1,31 +1,31 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const catchAsync = require("../utils/catchAsync");
-const { validateLog } = require("../middlewares/validations");
-const { isAdmin } = require("../middlewares/middleware");
-const logs = require("../controllers/logs");
+import catchAsync from "../utils/catchAsync.js";
+import { validateLog } from "../middlewares/validations.js";
+import { isAdmin } from "../middlewares/middleware.js";
+import * as logs from "../controllers/logs.js";
 
 
 router.route('/')
     //	Index - GET
-    .get(catchAsync(logs.all))
+    .get(catchAsync(logs.All))
     //	Create - POST
-    .post(validateLog, isAdmin, catchAsync(logs.create))
+    .post(validateLog, isAdmin, catchAsync(logs.Create))
 
-router.get("/myLogs", catchAsync(logs.mine))
+router.get("/myLogs", catchAsync(logs.Mine))
 
 //	New - GET
-router.get("/new", isAdmin, catchAsync(logs.renderNewForn))
+router.get("/new", isAdmin, catchAsync(logs.RenderNewForn))
 
 router.route("/:logID")
     //	Show - GET
-    .get(catchAsync(logs.view))
+    .get(catchAsync(logs.View))
     //	Update - PUT
-    .put(isAdmin, validateLog, catchAsync(logs.update))
+    .put(isAdmin, validateLog, catchAsync(logs.Update))
     //	Destory - DELETE
-    .delete(isAdmin, catchAsync(logs.delete))
+    .delete(isAdmin, catchAsync(logs.Delete))
 
 //	Edit - GET
-router.get("/:logID/edit", isAdmin, catchAsync(logs.renderEditForm))
+router.get("/:logID/edit", isAdmin, catchAsync(logs.RenderEditForm))
 
-module.exports = router;
+export default router;

@@ -1,27 +1,27 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const catchAsync = require("../utils/catchAsync");
-const bills = require("../controllers/bills");
-const { validateBill } = require("../middlewares/validations");
+import catchAsync from "../utils/catchAsync.js";
+import * as bills from "../controllers/bills.js";
+import { validateBill } from "../middlewares/validations.js";
 
 router.route('/')
     //	Index - GET
-    .get(catchAsync(bills.all))
+    .get(catchAsync(bills.All))
     //	Create - POST
-    .post(validateBill, catchAsync(bills.create))
+    .post(validateBill, catchAsync(bills.Create))
 
 //	New - GET
-router.get("/new", (bills.renderNewForm))
+router.get("/new", (bills.RenderNewForm))
 
 router.route("/:id")
     //	Show - GET
-    .get(catchAsync(bills.view))
+    .get(catchAsync(bills.View))
     //	Update - PUT
-    .put(validateBill, catchAsync(bills.update))
+    .put(validateBill, catchAsync(bills.Update))
     //	Destory - DELETE
-    .delete(catchAsync(bills.delete))
+    .delete(catchAsync(bills.Delete))
 
 //	Edit - GET
-router.get("/:id/edit", catchAsync(bills.renderEditForm))
+router.get("/:id/edit", catchAsync(bills.RenderEditForm))
 
-module.exports = router;
+export default router;

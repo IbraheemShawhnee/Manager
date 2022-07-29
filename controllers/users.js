@@ -1,10 +1,10 @@
-const User = require("../models/user");
+import User from "../models/user.js";
 
-module.exports.renderRegisterForm = ((req, res) => {
+export const RenderRegisterForm = ((req, res) => {
     res.render("users/register", { pageTitle: "Manager - Register" })
 })
 
-module.exports.create = async (req, res, next) => {
+export const Create = async (req, res, next) => {
     try {
         let { name, email, phoneNumber, username, password } = req.body;
         if (email && !email.length) {
@@ -27,7 +27,7 @@ module.exports.create = async (req, res, next) => {
     }
 }
 
-module.exports.renderLoginPage = (req, res) => {
+export const RenderLoginPage = (req, res) => {
     if (req.user && req.isAuthenticated()) {
         req.flash('success', "You are already logged in!");
         return res.redirect("/")
@@ -37,20 +37,20 @@ module.exports.renderLoginPage = (req, res) => {
     })
 }
 
-module.exports.login = (req, res) => {
+export const Login = (req, res) => {
     req.flash("success", "Welcome Back!");
     const redirectUrl = req.session.returnTo || "/";
     delete req.session.returnTo
     res.redirect(redirectUrl);
 }
 
-module.exports.renderChangePassowrdForm = ((req, res) => {
+export const RenderChangePassowrdForm = ((req, res) => {
     res.render("users/changePassword", {
         pageTitle: "Manager - Change Password"
     })
 })
 
-module.exports.passwordChange = async (req, res, next) => {
+export const PasswordChange = async (req, res, next) => {
     User.findOne({ _id: req.user._id }, (err, user) => {
         if (err) {
             req.flash("error", err.message);
@@ -75,7 +75,7 @@ module.exports.passwordChange = async (req, res, next) => {
     });
 }
 
-module.exports.passwordSet = async (req, res, next) => {
+export const PasswordSet = async (req, res, next) => {
     const { id } = req.params;
     const user = await User.findOne({ _id: id });
     if (!user) {
@@ -93,7 +93,7 @@ module.exports.passwordSet = async (req, res, next) => {
     }
 }
 
-module.exports.updatePermissions = async (req, res, next) => {
+export const UpdatePermissions = async (req, res, next) => {
     const { id } = req.params;
     let { permissions } = req.body;
     if (!permissions) {
@@ -114,7 +114,7 @@ module.exports.updatePermissions = async (req, res, next) => {
     res.redirect("/workers/" + id)
 }
 
-module.exports.logout = async (req, res, next) => {
+export const Logout = async (req, res, next) => {
     req.logout((err) => {
         if (err) {
             return next(err);
