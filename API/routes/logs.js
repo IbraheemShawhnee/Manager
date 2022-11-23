@@ -7,10 +7,8 @@ import * as logs from "../controllers/logs.js";
 
 
 router.route('/')
-    .get(isAdmin, catchAsync(logs.All))
+    .get(catchAsync(logs.All))
     .post(validateLog, isAdmin, catchAsync(logs.Create))
-
-router.get("/myLogs", (logs.Mine))
 
 router.route("/:logID")
     .get(catchAsync(logs.View))

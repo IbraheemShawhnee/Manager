@@ -9,9 +9,9 @@ const initialState = {
     message: "",
 };
 
-export const fetchBills = createAsyncThunk("bills/fetchBills", () => {
+export const fetchBills = createAsyncThunk("bills/fetchBills", (page) => {
     return axios
-        .get("/api/bills")
+        .get(`/api/bills?page=${page}`)
         .then(response => {
             const { bills, sum } = response.data;
             return { bills, sum };

@@ -3,7 +3,23 @@ import Log from "../../models/log.js";
 
 
 export const All = async (req, res, next) => {
-	const workers = await User.find({})
+	const search = req.query.search || "";
+	const workers = await User
+		.find({
+			name: { $regex: search, $options: "i" }
+		})
+		// filter the result data
+	workers.forEach(worker => {
+		worker.logs = undefined;
+		delete worker.logs;
+		worker.__v = undefined;
+		delete worker.__v;
+		worker.isAdmin = undefined;
+		delete worker.isAdmin;
+		worker.isSuper = undefined;
+		delete worker.isSuper;
+	});
+	
 	return res.status(200).json({
 		workers: workers,
 	});
@@ -19,7 +35,7 @@ export const View = async (req, res, next) => {
 		});
 	}
 	const logs = await Log.find({
-		worker: id
+		worker: id,
 	})
 	const _id = logs.map(({ _id }) => _id)
 	//	Count the number of non-absence days in a given period of time

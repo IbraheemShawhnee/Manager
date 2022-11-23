@@ -3,7 +3,11 @@ import Payee from "../../models/payee.js";
 
 
 export const All = async (req, res, next) => {
-	const payees = await Payee.find({})
+	const search = req.query.search || "";
+	const payees = await Payee
+		.find({
+			name: { $regex: search, $options: "i" }
+		})
 	return res.status(200).json({
 		payees: payees
 	});
@@ -25,10 +29,12 @@ export const Create = async (req, res, next) => {
 }
 
 export const View = async (req, res, next) => {
+	// When viewing a payee we need date search after populating!
 	const { payeeID } = req.params;
 	const payee = await Payee.findById(payeeID)
 	const cheques = await Cheque.find({
-		payee: payeeID
+		payee: payeeID,
+
 	})
 	const _id = cheques.map(({ _id }) => _id)
 	//	find the total sum of cheques'a values for that payee
@@ -47,10 +53,6 @@ export const View = async (req, res, next) => {
 			}
 		}
 	])
-	//	find the sum of cheques' values for that payee ina given period of time
-	//	.
-	//	.
-	//	.
 	if (!payee) {
 		return res.status(404).json({
 			message: "Cannot find that payee!"

@@ -2,33 +2,44 @@ import Bill from "../../models/bill.js";
 // const { billsPaginatedResult } = require("../middlewares/middleware");
 
 export const All = async (req, res) => {
-	// let page = parseInt(req.query.page);
-	// if (!page) {
-	// 	page = 1
-	// }
-	// const limit = 10;
-	// const startIndex = (page - 1) * limit;
-	// const endInex = page * limit;
-	// const pages = await billsPaginatedResult(page, startIndex, endInex)
+	const page = parseInt(req.query.page) - 1 || 0;
+	const limit = parseInt(req.query.limit) <= 0 ? parseInt(req.query.limit) : 40;
+	// date format: YYYY-MM-DD
+	const since = req.query.since || "2000-01-01";
+	const till = req.query.till || "3000-01-01";
+	const sinceDate = new Date(`<${since}>`);
+	const tillDate = new Date(`<${till}>`);
 	const bills = await Bill
-		.find({})
-		// .skip(startIndex)
-		// .limit(limit)
+		.find({
+			date: { $gte: sinceDate, $lte: tillDate }
+		})
 		.sort({ date: -1 })
-	let sum = await Bill.aggregate([{ $group: { _id: null, total: { $sum: "$value" } } }])
+		.skip(page * limit)
+		.limit(limit)
+	let sum = await Bill.aggregate([
+		{
+			$match: {
+				$and: [
+					{ date: { $gte: sinceDate } },
+					{ date: { $lte: tillDate } }
+				]
+			}
+		},
+		{
+			$group: {
+				_id: null, total: { $sum: "$value" }
+			}
+		}
+	])
 	if (sum.length < 1) {
 		sum = [{ total: 0 }];
 	}
 	return res.status(200).json({
+		page: page,
+		limit: limit,
 		bills: bills,
 		sum: sum[0].total,
 	});
-	// res.render("bills/index", {
-	// 	pageTitle: "Manager - Bills",
-	// 	bills: bills,
-	// 	sum: sum[0].total,
-	// 	pages: pages,
-	// })
 }
 
 export const Create = async (req, res, next) => {

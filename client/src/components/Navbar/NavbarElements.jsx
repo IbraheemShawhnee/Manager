@@ -33,10 +33,10 @@ export const NavbarContainer = styled.div`
 
 export const NavLogo = styled(Link)`
     color: #fff;
-    justify-self: flex-start;
     cursor: pointer;
     font-size: 1.5rem;
     display: flex;
+    justify-self: flex-start;
     align-items: center;
     margin-left: 24px;
     font-weight: bold;

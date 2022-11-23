@@ -4,53 +4,44 @@ import Log from "../../models/log.js";
 
 
 export const All = async (req, res, next) => {
-	// let page = parseInt(req.query.page)
-	// if (!page) {
-	// 	page = 1
-	// }
-	// const date = new Date();
-	// const limit = req.query.limit || date.getDate();
-	// const startIndex = (page - 1) * limit;
-	// const endInex = page * limit;
-	// const pages = await logsPaginatedResult(page, startIndex, endInex)
+	const page = parseInt(req.query.page) - 1 || 0;
+	const limit = parseInt(req.query.limit) <= 0 ? parseInt(req.query.limit) : 30;
+	let id = req.query.id || "";
+	// missing a feature where we need to populate the worker and search by name
+	// const search = req.query.search || "";
+	// date format: YYYY-MM-DD
+	const since = req.query.since || "2000-01-01";
+	const till = req.query.till || "3000-01-01";
+	const sinceDate = new Date(`<${since}>`);
+	const tillDate = new Date(`<${till}>`);
 	if (!await isAdminV(req)) {
-		return res.redirect("/logs/myLogs")
+		id = req.user._id;
 	}
-	const logs = await Log
-		.find({})
-		// .skip(startIndex)
-		// .limit(limit)
-		.sort({ date: -1 })
-		.populate("worker")
+	let logs;
+	if (id === "") {
+		logs = await Log
+			.find({
+				date: { $gte: sinceDate, $lte: tillDate }
+			})
+			.sort({ date: -1 })
+			.skip(page * limit)
+			.limit(limit)
+			.populate("worker", "name")
+	} else {
+		logs = await Log
+			.find({
+				worker: { $eq: id },
+				date: { $gte: sinceDate, $lte: tillDate }
+			})
+			.sort({ date: -1 })
+			.skip(page * limit)
+			.limit(limit)
+			.populate("worker", "name")
+	}
 	return res.status(200).json({
 		logs: logs
 	})
-	// return res.render("logs/index", {
-	// 	pageTitle: "Manager - Logs",
-	// 	logs: logs,
-	// 	pages: pages,
-	// })
 
-}
-
-export const Mine = async (req, res, next) => {
-	// let page = parseInt(req.query.page)
-	// if (!page) {
-	// 	page = 1
-	// }
-	// const date = new Date();
-	// const limit = req.query.limit || date.getDate();
-	// const startIndex = (page - 1) * limit;
-	// const endInex = page * limit;
-	// const pages = logsPaginatedResult(page, startIndex, endInex)
-	const { user } = req;
-	await user.populate("logs")
-	// .skip(startIndex)
-	// .limit(limit)
-	const logs = user.logs
-	return res.status(200).json({
-		logs: logs
-	});
 }
 
 export const Create = async (req, res, next) => {

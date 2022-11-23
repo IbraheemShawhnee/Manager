@@ -4,38 +4,27 @@ import Cheque from "../../models/cheque.js";
 
 
 export const All = async (req, res, next) => {
-	// const dates = {
-	// 	null: false,
-	// 	since: req.query.since,
-	// 	till: req.query.till
-	// };
-	// if (!dates.since && !dates.till) {
-	// 	dates.null = true;
-	// 	dates.since = "1980-01-01"
-	// 	dates.till = "3000-12-31"
-	// }else if (!dates.till) {
-	// 	dates.till = dates.since;
-	// }
-	// let page = parseInt(req.query.page);
-	// if (!page) {
-	// 	page = 1
-	// }
-	// const limit = 10;
-	// const startIndex = (page - 1) * limit;
-	// const endInex = page * limit;
-	// const pages = await chequesPaginatedResult(page, startIndex, endInex)
+	// missing searchable names after populating
+	const page = parseInt(req.query.page) - 1 || 0;
+	const limit = parseInt(req.query.limit) <= 0 ? parseInt(req.query.limit) : 30;
+	let id = req.query.id || "";
+	// missing a feature where we need to populate the worker and search by name
+	// const search = req.query.search || "";
+	// date format: YYYY-MM-DD
+	const since = req.query.since || "2000-01-01";
+	const till = req.query.till || "3000-01-01";
+	const sinceDate = new Date(`<${since}>`);
+	const tillDate = new Date(`<${till}>`);
+	// since date takes one day earlier?!
 	const cheques = await Cheque
 		.find({
 			isCancelled: false,
-			// dueDate: {
-			// 	$gte: dates.since,
-			// 	$lte: dates.till,
-			// }
+			dueDate: { $gte: sinceDate, $lte: tillDate }
 		})
-		// .skip(startIndex)
-		// .limit(limit)
-		.sort({ serial: -1 })
-		.populate("payee")
+		.skip(page * limit)
+		.limit(limit)
+		.sort({ dueDate: -1, serial: 1 })
+		.populate("payee", "name")
 	const _id = cheques.map(({ _id }) => _id)
 	let sum = await Cheque.aggregate([
 		{
