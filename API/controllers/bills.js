@@ -4,12 +4,12 @@ import Bill from "../../models/bill.js";
 export const All = async (req, res) => {
 	const search = req.query.search || "";
 	const page = parseInt(req.query.page) - 1 || 0;
-	const limit = parseInt(req.query.limit) <= 0 ? parseInt(req.query.limit) : 40;
+	const limit = parseInt(req.query.limit) >= 0 ? parseInt(req.query.limit) : 40;
 	// date format: YYYY-MM-DD
 	const since = req.query.since || "2000-01-01";
 	const till = req.query.till || "3000-01-01";
-	const sinceDate = new Date(`<${since}>`);
-	const tillDate = new Date(`<${till}>`);
+	const sinceDate = new Date(`${since}`);
+	const tillDate = new Date(`${till}`);
 	const bills = await Bill
 		.find({
 			date: { $gte: sinceDate, $lte: tillDate },

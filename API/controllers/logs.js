@@ -5,15 +5,16 @@ import Log from "../../models/log.js";
 
 export const All = async (req, res, next) => {
 	const page = parseInt(req.query.page) - 1 || 0;
-	const limit = parseInt(req.query.limit) <= 0 ? parseInt(req.query.limit) : 30;
+	const limit = parseInt(req.query.limit) >= 0 ? parseInt(req.query.limit) : 30;
+	console.log(limit);
 	let id = req.query.id || "";
 	// missing a feature where we need to populate the worker and search by name
 	// const search = req.query.search || "";
 	// date format: YYYY-MM-DD
 	const since = req.query.since || "2000-01-01";
 	const till = req.query.till || "3000-01-01";
-	const sinceDate = new Date(`<${since}>`);
-	const tillDate = new Date(`<${till}>`);
+	const sinceDate = new Date(`${since}`);
+	const tillDate = new Date(`${till}`);
 	if (!await isAdminV(req)) {
 		id = req.user._id;
 	}
@@ -39,7 +40,7 @@ export const All = async (req, res, next) => {
 			.populate("worker", "name")
 	}
 	return res.status(200).json({
-		logs: logs
+		logs: logs,
 	})
 
 }
