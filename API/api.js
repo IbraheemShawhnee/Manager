@@ -27,7 +27,7 @@ router.use("/", usersRoutes);
 router.route("*")
     .all((req, res)=>{
         return res.status(404).json({
-            message: "This page doesn't exisit!"
+            message: "This page doesn't exist!"
         });
     })
 
