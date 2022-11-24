@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchLogs, fetchMyLogs } from "../../features/Logs/logsSlice";
+import { fetchLogs } from "../../features/Logs/logsSlice";
 
 import { UserContext } from "../../App";
 import Row from "./row";
@@ -11,12 +11,7 @@ function Logs() {
     const dispatch = useDispatch();
     const { user } = useContext(UserContext);
     useEffect(() => {
-        if (user && (user.isAdmin || user.isSuper)) {
-            dispatch(fetchLogs());
-        }
-        else {
-            dispatch(fetchMyLogs());
-        }
+        dispatch(fetchLogs());
     }, [])
     const response = useSelector((state) => state.logs);
     function createRow(log) {
