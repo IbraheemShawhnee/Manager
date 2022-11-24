@@ -8,8 +8,8 @@ export const All = async (req, res) => {
 	// date format: YYYY-MM-DD
 	const since = req.query.since || "2000-01-01";
 	const till = req.query.till || "3000-01-01";
-	const sinceDate = new Date(`${since}`);
-	const tillDate = new Date(`${till}`);
+	const sinceDate = new Date(`${since}`).toLocaleDateString();
+	const tillDate = new Date(`${till}`).toLocaleDateString();
 	const bills = await Bill
 		.find({
 			date: { $gte: sinceDate, $lte: tillDate },
