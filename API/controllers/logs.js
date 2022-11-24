@@ -6,7 +6,6 @@ import Log from "../../models/log.js";
 export const All = async (req, res, next) => {
 	const page = parseInt(req.query.page) - 1 || 0;
 	const limit = parseInt(req.query.limit) >= 0 ? parseInt(req.query.limit) : 30;
-	console.log(limit);
 	let id = req.query.id || "";
 	// missing a feature where we need to populate the worker and search by name
 	// const search = req.query.search || "";
