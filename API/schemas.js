@@ -27,10 +27,12 @@ const Joi = BaseJoi;
 
 
 export const billSchema = new Joi.object({
-	date: Joi.date().required(),
-	value: Joi.number().required(),
-	description: Joi.string().required(),
-	extraNotes: Joi.string().allow('')
+	bill: Joi.object({
+		date: Joi.date().required(),
+		value: Joi.number().required(),
+		description: Joi.string().required(),
+		extraNotes: Joi.string().allow('')
+	}).required()
 });
 
 export const userSchema = new Joi.object({
@@ -48,7 +50,7 @@ export const logSchema = new Joi.object({
 		finishingTime: Joi.string().allow(''),
 		OTV: Joi.number().allow(''),
 		payment: Joi.number(),
-		extraNotes: Joi.string().allow('')	
+		extraNotes: Joi.string().allow('')
 	}).required()
 });
 

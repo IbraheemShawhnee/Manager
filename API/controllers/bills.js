@@ -46,14 +46,16 @@ export const All = async (req, res) => {
 }
 
 export const Create = async (req, res, next) => {
-	if (req.body.value < 0)
-		req.body.isExpenses = false;
-	const bill = new Bill(req.body)
+	const { bill } = req.body;
+	if (bill.value < 0)
+		bill.isExpenses = false;
+	console.log(bill.isExpenses);
+	const newBill = new Bill(bill)
 	try {
-		await bill.save();
+		await newBill.save();
 		return res.status(201).json({
 			message: "Bill Added Successfully",
-			bill: bill
+			bill: newBill
 		});
 	} catch (error) {
 		return res.status(409).json({
@@ -80,7 +82,7 @@ export const Update = async (req, res, next) => {
 	const { id } = req.params;
 	if (req.body.value < 0)
 		req.body.isExpenses = false;
-	const bill = await Bill.findByIdAndUpdate(id, { ...req.body }, { new: true, runValidators: true })
+	const bill = await Bill.findByIdAndUpdate(id, { ...req.body.bill }, { new: true, runValidators: true })
 	if (!bill) {
 		return res.status(404).json({
 			message: "Cannot find that bill!"
