@@ -2,6 +2,7 @@ import Bill from "../../models/bill.js";
 // const { billsPaginatedResult } = require("../middlewares/middleware");
 
 export const All = async (req, res) => {
+	const search = req.query.search || "";
 	const page = parseInt(req.query.page) - 1 || 0;
 	const limit = parseInt(req.query.limit) <= 0 ? parseInt(req.query.limit) : 40;
 	// date format: YYYY-MM-DD
@@ -11,18 +12,20 @@ export const All = async (req, res) => {
 	const tillDate = new Date(`<${till}>`);
 	const bills = await Bill
 		.find({
-			date: { $gte: sinceDate, $lte: tillDate }
+			date: { $gte: sinceDate, $lte: tillDate },
+			$or: [
+				{ description: { $regex: search, $options: "i" } },
+				{ extraNotes: { $regex: search, $options: "i" } },
+			]
 		})
 		.sort({ date: -1 })
 		.skip(page * limit)
 		.limit(limit)
+	const _id = bills.map(({ _id }) => _id)
 	let sum = await Bill.aggregate([
 		{
 			$match: {
-				$and: [
-					{ date: { $gte: sinceDate } },
-					{ date: { $lte: tillDate } }
-				]
+				_id: { "$in": _id }
 			}
 		},
 		{
