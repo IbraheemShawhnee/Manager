@@ -17,10 +17,6 @@ const billSchema = new Schema({
 	extraNotes: {
 		type: String,
 		required: false
-	},
-	isExpenses: {
-		type: Boolean,
-		default: true,
 	}
 })
 const Bill = mongoose.model("Bill", billSchema);
