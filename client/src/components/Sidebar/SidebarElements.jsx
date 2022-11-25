@@ -7,8 +7,10 @@ export const SidebarContainer = styled.aside`
     z-index: 999;
     width: 100%;
     height: 100%;
-    background: transparent;
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(6px);;
+    background: rgba(10, 10, 10, .65);
+    /* background: transparent;
+    backdrop-filter: blur(20px); */
     /* background: #0d0d0d; */
     display: grid;
     align-items: center;

@@ -3,9 +3,13 @@ import { NavLink as Link } from 'react-router-dom';
 
 
 export const Nav = styled.nav`
-    box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(20px);
-    background: transparent;
+    /* box-shadow: 0 0 36px 1px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(20px); */
+    /* background: transparent; */
+    backdrop-filter: blur(6px);;
+    background: rgba(10, 10, 10, .65);
+    border-bottom: 2px solid rgba(255, 255, 255, .09);
+    box-shadow: 0 8px 32px rgb(2, 4, 24);
     height: 80px;
     display: flex;
     justify-content: center;
