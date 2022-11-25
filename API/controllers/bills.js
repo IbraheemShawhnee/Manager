@@ -75,7 +75,7 @@ export const View = async (req, res, next) => {
 	const { id } = req.params
 	const bill = await Bill
 		.findById(id)
-		.select('_id date value description extraNotes')
+		.select("_id date value description extraNotes")
 	if (!bill) {
 		return res
 			.status(404)

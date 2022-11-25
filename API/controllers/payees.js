@@ -45,7 +45,7 @@ export const View = async (req, res, next) => {
 	const tillDate = new Date(`${till}`).toLocaleDateString();
 	const payee = await Payee
 		.findById(payeeID)
-		.select('name email phoneNumber extraNotes')
+		.select("name email phoneNumber extraNotes")
 	if (!payee) {
 		return res
 			.status(404)

@@ -8,7 +8,7 @@ export const All = async (req, res, next) => {
 		.find({
 			name: { $regex: search, $options: "i" }
 		})
-		.select('_id username name email phoneNumber')
+		.select("_id username name email phoneNumber")
 	return res
 		.status(200)
 		.json({

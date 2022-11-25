@@ -126,7 +126,7 @@ export const PasswordChange = async (req, res, next) => {
         } else {
             user.changePassword(req.body.oldPassword, req.body.password, function (err) {
                 if (err) {
-                    if (err.name === 'IncorrectPasswordError') {
+                    if (err.name === "IncorrectPasswordError") {
                         return res
                             .status(401)
                             .json({
@@ -183,7 +183,7 @@ export const PasswordSet = async (req, res, next) => {
 export const UpdatePermissions = async (req, res, next) => {
     const { id } = req.params;
     const { permission } = req.body;
-    const isAdmin = (permission === 'Admin' || permission === "Super");
+    const isAdmin = (permission === "Admin" || permission === "Super");
     const isSuper = (permission === "Super");
     const worker = await User.findByIdAndUpdate(id, {
         isAdmin,
