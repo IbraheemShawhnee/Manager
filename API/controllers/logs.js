@@ -57,6 +57,7 @@ export const All = async (req, res, next) => {
 }
 
 export const Create = async (req, res, next) => {
+	// Log is expected to be received as an Object called log
 	const { log } = req.body;
 	const worker = await User.findById(log.worker);
 	const newLog = new Log(log)
@@ -107,6 +108,7 @@ export const View = async (req, res, next) => {
 
 
 export const Update = async (req, res, next) => {
+	// Log is expected to be received as an Object called log
 	const { logID } = req.params;
 	const log = await Log.findByIdAndUpdate(logID, { ...req.body.log }, { new: true, runValidators: true })
 	if (!log) {

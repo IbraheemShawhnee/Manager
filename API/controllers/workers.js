@@ -72,6 +72,7 @@ export const View = async (req, res, next) => {
 }
 
 export const Update = async (req, res, next) => {
+	// User data are not expected to be received as one object!
 	const { id } = req.params;
 	const worker = await User.findByIdAndUpdate(id, { name: req.body.name, email: req.body.email, phoneNumber: req.body.phoneNumber }, { new: true, runValidators: true })
 	if (!worker) {

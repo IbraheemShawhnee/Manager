@@ -180,6 +180,7 @@ app.get("*", (req, res) => {
 	res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
 });
 
+// E R R O R
 app.use((err, req, res, next) => {
 	console.log("! ! ! E R R O R ! ! !");
 	const { statusCode = 500 } = err;
@@ -189,6 +190,7 @@ app.use((err, req, res, next) => {
 	return res.status(statusCode).json({ error: err.message });
 });
 
+// Start Listening 
 app.listen(PORT, () => {
 	console.log(`Server has started on PORT: ${PORT}`);
 })

@@ -1,6 +1,7 @@
 import User from "../../models/user.js";
 
 export const Create = async (req, res, next) => {
+    // User data are not expected to be received as one object!
     try {
         let { name, email, phoneNumber, username, password } = req.body;
         const user = new User({ name, email, phoneNumber, username });

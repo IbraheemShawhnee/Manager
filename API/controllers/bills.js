@@ -1,6 +1,7 @@
 import Bill from "../../models/bill.js";
 
 export const All = async (req, res) => {
+	// Read Queries
 	const search = req.query.search || "";
 	const page = parseInt(req.query.page) - 1 || 0;
 	const limit = parseInt(req.query.limit) >= 0 ? parseInt(req.query.limit) : 40;
@@ -52,6 +53,7 @@ export const All = async (req, res) => {
 }
 
 export const Create = async (req, res, next) => {
+	// Bill is expected to be received as an Object called bill
 	const { bill } = req.body;
 	const newBill = new Bill(bill)
 	try {
@@ -92,6 +94,7 @@ export const View = async (req, res, next) => {
 
 
 export const Update = async (req, res, next) => {
+	// Bill is expected to be received as an Object called bill
 	const { id } = req.params;
 	const bill = await Bill.findByIdAndUpdate(id, { ...req.body.bill }, { new: true, runValidators: true })
 	if (!bill) {

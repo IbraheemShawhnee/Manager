@@ -78,6 +78,7 @@ export const Deleted = async (req, res, next) => {
 }
 
 export const Create = async (req, res, next) => {
+	// Cheque is expected to be received as an Object called cheque
 	const { cheque } = req.body;
 	const payeeID = cheque.payee;
 	const newCheque = new Cheque(cheque)
@@ -124,6 +125,7 @@ export const View = async (req, res, next) => {
 }
 
 export const Update = async (req, res, next) => {
+	// Cheque is expected to be received as an Object called cheque
 	const { chequeID } = req.params;
 	req.body.cheque.isCancelled = !!req.body.cheque.isCancelled;
 	const cheque = await Cheque.findById(chequeID);

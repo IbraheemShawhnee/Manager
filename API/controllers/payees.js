@@ -17,6 +17,7 @@ export const All = async (req, res, next) => {
 }
 
 export const Create = async (req, res, next) => {
+	// Payee is expected to be received as an Object called payee
 	const payee = new Payee(req.body)
 	try {
 		await payee.save();
@@ -90,6 +91,7 @@ export const View = async (req, res, next) => {
 }
 
 export const Update = async (req, res, next) => {
+	// Payee is expected to be received as an Object called payee
 	const { payeeID } = req.params;
 	const payee = await Payee.findByIdAndUpdate(payeeID, { ...req.body }, { new: true, runValidators: true })
 	if (!payee) {
