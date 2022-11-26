@@ -35,9 +35,9 @@ export const All = async (req, res, next) => {
 				$unwind: '$payee' // this picks the only object in the field payee: [ { payeeDoc } ] --> { payeeDoc }
 			}
 		])
+		.sort({ dueDate: -1, serial: 1 })
 		.skip(page * limit)
 		.limit(limit)
-		.sort({ dueDate: -1, serial: 1 })
 
 	const _id = cheques.map(({ _id }) => _id)
 	let sum = await Cheque.aggregate([

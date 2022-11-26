@@ -5,7 +5,7 @@ import Log from "../../models/log.js";
 
 export const All = async (req, res, next) => {
 	const page = parseInt(req.query.page) - 1 || 0;
-	const limit = parseInt(req.query.limit) >= 0 ? parseInt(req.query.limit) : 30;
+	const limit = parseInt(req.query.limit) >= 0 ? parseInt(req.query.limit) : 40;
 	const search = req.query.search || "";
 	let id = req.query.id || "";
 
@@ -44,9 +44,9 @@ export const All = async (req, res, next) => {
 				$unwind: '$worker'
 			}
 		])
+		.sort({ date: -1 })
 		.skip(page * limit)
 		.limit(limit)
-		.sort({ date: -1 })
 	}
 	else {
 		logs = await Log
