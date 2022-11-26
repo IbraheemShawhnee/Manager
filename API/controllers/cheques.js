@@ -4,24 +4,40 @@ import Cheque from "../../models/cheque.js";
 export const All = async (req, res, next) => {
 	const page = parseInt(req.query.page) - 1 || 0;
 	const limit = parseInt(req.query.limit) >= 0 ? parseInt(req.query.limit) : 30;
-	// missing a feature where we need to populate the worker and search by name
-	// const search = req.query.search || "";
-	// date format: YYYY-MM-DD
+	const search = req.query.search || "";
+	// date format: YYYY/MM/DD
 	const since = req.query.since || "2000-01-01";
 	const till = req.query.till || "3000-01-01";
-	const sinceDate = new Date(`${since}`).toLocaleDateString();
-	const tillDate = new Date(`${till}`).toLocaleDateString();
+	const sinceDate = new Date(`${since}`);
+	const tillDate = new Date(`${till}`);
 
 	const cheques = await Cheque
-		.find({
-			isCancelled: false,
-			dueDate: { $gte: sinceDate, $lte: tillDate }
-		})
-		.select("_id serial dueDate value payee")
+		.aggregate([
+			{
+				$lookup: { // similar to .populate() in mongoose
+					from: "payees", // the other collection name
+					localField: "payee", // the field referencing the other collection in the current collection
+					foreignField: "_id", // the name of the column where the cell in the current collection can be found in the other collection
+					as: "payee" // the field you want to place the db response in. this will overwrite payee id with the actual document in the response (it only writes to the response, not on the database, no worries)
+				}
+			},
+			{ // this is where you'll place your filter object you used to place inside .find()
+				$match: {
+					"isCancelled": false,
+					"dueDate": { $gte: sinceDate, $lte: tillDate },
+					"payee.name" :  { $regex: search, $options: "i" } , // this is how you access the actual object from the other collection after population, using the dot notation but inside a string.
+				}
+			},
+			{ // this is similar to .select()
+				$project: { _id: 1, serial: 1, dueDate: 1, value: 1, "payee.name": 1, "payee._id": 1 }
+			},
+			{
+				$unwind: '$payee' // this picks the only object in the field payee: [ { payeeDoc } ] --> { payeeDoc }
+			}
+		])
 		.skip(page * limit)
 		.limit(limit)
 		.sort({ dueDate: -1, serial: 1 })
-		.populate("payee", "name")
 
 	const _id = cheques.map(({ _id }) => _id)
 	let sum = await Cheque.aggregate([

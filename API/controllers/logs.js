@@ -6,16 +6,14 @@ import Log from "../../models/log.js";
 export const All = async (req, res, next) => {
 	const page = parseInt(req.query.page) - 1 || 0;
 	const limit = parseInt(req.query.limit) >= 0 ? parseInt(req.query.limit) : 30;
+	const search = req.query.search || "";
 	let id = req.query.id || "";
-
-	// missing a feature where we need to populate the worker and search by name
-	// const search = req.query.search || "";
 
 	// date format: YYYY-MM-DD
 	const since = req.query.since || "2000-01-01";
 	const till = req.query.till || "3000-01-01";
-	const sinceDate = new Date(`${since}`).toLocaleDateString();
-	const tillDate = new Date(`${till}`).toLocaleDateString();
+	const sinceDate = new Date(`${since}`);
+	const tillDate = new Date(`${till}`);
 	// if Not an Admin (or Super) then only return the logged in user logs
 	if (!await isAdminV(req)) {
 		id = req.user._id;
@@ -24,14 +22,31 @@ export const All = async (req, res, next) => {
 	let logs;
 	if (id === "") {
 		logs = await Log
-			.find({
-				date: { $gte: sinceDate, $lte: tillDate }
-			})
-			.select("_id date isAbsence startingTime finishingTime OTV payment extraNotes worker")
-			.sort({ date: -1 })
-			.skip(page * limit)
-			.limit(limit)
-			.populate("worker", "name")
+		.aggregate([
+			{
+				$lookup: { 
+					from: "users", 
+					localField: "worker", 
+					foreignField: "_id", 
+					as: "worker" 
+				}
+			},
+			{ 
+				$match: {
+					"date": { $gte: sinceDate, $lte: tillDate },
+					"worker.name" :  { $regex: search, $options: "i" } , 
+				}
+			},
+			{ 
+				$project: { _id: 1, date: 1, isAbsence: 1, startingTime: 1, finishingTime: 1, OTV: 1, payment: 1, extraNotes: 1, "worker.name": 1, "worker._id": 1 }
+			},
+			{
+				$unwind: '$worker'
+			}
+		])
+		.skip(page * limit)
+		.limit(limit)
+		.sort({ date: -1 })
 	}
 	else {
 		logs = await Log
